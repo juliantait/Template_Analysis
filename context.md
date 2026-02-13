@@ -72,6 +72,10 @@ All parts use **lowercase** with **underscores** as separators. No spaces, no ca
 - The `{descriptor}` should be readable enough that you can identify the content from the filename alone.
 - Use the same naming in the `save_graph()`, `save_table()`, and `save_text()` calls — the function appends the file extension automatically.
 
+## Research Plan
+
+See `research_plan.md` for the research idea, design, hypotheses, and project timeline.
+
 ## Task-Specific Context
 
 ### Graphs

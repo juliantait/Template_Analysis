@@ -77,6 +77,17 @@
 
 \newpage
 \appendix
-\input{appendix.tex}
+\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+\renewcommand{\thetable}{\thesection.\arabic{table}}
+
+\newpage
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\include{app_tables}
+
+\newpage
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\include{app_figures}
 
 \end{document}
