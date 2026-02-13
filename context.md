@@ -14,25 +14,6 @@ This is a self-contained empirical analysis project. All scripts are sourced in 
 - Data preparation: `Scripts/02_cleaning.R` → `Scripts/03_variable_generation.R` → `Scripts/04_sample_restrictions.R`
 - Analysis: `Scripts/05_balance_table.R` through `Scripts/09_exploratory.R`
 
-## Study
-
-[Describe the study here. Include: research question, design, treatments, main outcome variables, and hypotheses.]
-
-### Hypotheses
-
-- H1:
-- H2:
-- H3:
-- H4:
-
-### Outcomes
-
-[Describe the main outcome variables and how they are measured.]
-
-### Treatments
-
-[Describe the treatment arms, within/between-subject variation, and matching/randomisation structure.]
-
 ## Analysis Conventions
 
 - Non-parametric tests use group-level analysis by collapsing on the group variable.
