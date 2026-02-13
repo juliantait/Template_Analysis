@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+
+% --- Page layout -------------------------------------------------------------
+\usepackage[margin=1.25in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+
+% --- Mathematics & theorem environments --------------------------------------
+\usepackage{amsmath,amssymb,amsthm}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{assumption}{Assumption}
+\newtheorem{result}{Result}
+\newtheorem{main}{Take-away}
+
+% --- Figures -----------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{xcolor}
+
+% --- Tables ------------------------------------------------------------------
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{siunitx}
+\sisetup{group-digits=false, detect-weight=true, detect-family=true}
+
+% --- Bibliography ------------------------------------------------------------
+\usepackage{natbib}
+
+% --- Spacing -----------------------------------------------------------------
+\linespread{1.25}
+
+% --- Headers / footers -------------------------------------------------------
+\usepackage{fancyhdr}
+\fancyhf{}
+\cfoot{\thepage}
+
+% =============================================================================
+
+\title{Paper Title}
+\author{Author Names}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+% Abstract
+\smallskip
+\noindent
+{\textbf{ABSTRACT.}
+\input{abstract.tex}
+}
+
+\medskip
+\noindent
+
+\newpage
+\pagenumbering{arabic}
+
+\input{introduction.tex}
+\input{theory.tex}
+\input{experiment.tex}
+\input{results.tex}
+\input{discussion.tex}
+
+\newpage
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\newpage
+\appendix
+\input{appendix.tex}
+
+\end{document}
