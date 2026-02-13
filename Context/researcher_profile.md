@@ -1,17 +1,24 @@
-# Researcher Profile
+# Researcher Profile (Shared)
 
 ## Background
 
 - PhD researcher in behavioural economics.
 - Target journal: **Journal of Economic Behavior & Organization (JEBO)**.
-- Research area: experimental and behavioural economics (lab experiments, incentivised decisions, team behaviour).
+
+## Research Personality
+
+This shared profile contains conventions common to all projects. Choose one of the two personalities below based on the type of study, and load it alongside this file:
+
+| Personality | Profile | When to use |
+|---|---|---|
+| **Experimentalist** | [`profile_experimentalist.md`](profile_experimentalist.md) | Lab, online, or field experiments with randomised treatment assignment. Causal identification via randomisation. Non-parametric tests are the primary evidence; regressions are robustness. |
+| **Empiricist** | [`profile_empiricist.md`](profile_empiricist.md) | Observational, survey, or administrative data. Causal identification via quasi-experimental methods (IV, DiD, RDD, matching). Regressions are the primary evidence; robustness via alternative specifications and placebo tests. |
 
 ## Writing Style
 
 - British English spelling throughout (behaviour, organisation, labour, analyse, etc.).
 - Concise academic prose. No filler language.
 - Results sections should lead with the finding, then the evidence (statistic, p-value).
-- Hypotheses are stated directionally and tested with the appropriate one-sided or two-sided tests as pre-registered.
 
 ## JEBO Conventions
 
@@ -19,8 +26,7 @@
 - All figures must be greyscale-robust and colorblind-safe.
 - Tables use booktabs style (no vertical lines).
 - Report exact p-values to 3 decimal places (not stars, unless in regression tables where convention applies).
-- Non-parametric tests are preferred for primary results; regressions serve as robustness.
-- Always specify: test type, pairing structure, direction of comparison, and sidedness.
+- Always specify: test type, direction of comparison, and sidedness.
 
 ## LaTeX
 
@@ -71,16 +77,6 @@
     \end{minipage}
 \end{figure}
 ```
-
-## Analysis Methodology
-
-- Primary results use non-parametric tests wherever possible (e.g. Wilcoxon rank-sum, Wilcoxon signed-rank, permutation tests).
-- Non-parametric tests are conducted at the group level: collapse individual-level data to one observation per independent group before testing.
-- Parametric tests (OLS, logit, etc.) serve as robustness checks, replicating the same predictions tested non-parametrically.
-- Standard errors in all parametric models are clustered at the group level.
-- The hypotheses script reports non-parametric results as the primary evidence; the robustness script re-tests the same predictions with regressions and controls.
-- Always report: test type, number of observations/groups, test statistic, and exact p-value (to 3 decimal places).
-- Specify sidedness (one-sided or two-sided) consistent with the directional or non-directional nature of each hypothesis.
 
 ## R Coding Preferences
 

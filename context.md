@@ -14,10 +14,19 @@ This is a self-contained empirical analysis project. All scripts are sourced in 
 - Data preparation: `Scripts/02_cleaning.R` → `Scripts/03_variable_generation.R` → `Scripts/04_sample_restrictions.R`
 - Analysis: `Scripts/05_balance_table.R` through `Scripts/09_exploratory.R`
 
+## Decision Log
+
+See `Context/research_log.md` for a chronological record of all design and analytical decisions with rationale.
+
+## Process Documentation
+
+See `Context/processes.md` for an explanation of what gets documented where and how to maintain it.
+
 ## Analysis Conventions
 
-- Non-parametric tests use group-level analysis by collapsing on the group variable.
-- Parametric tests always cluster standard errors at the group level.
+- Non-parametric tests run at the **individual level** (each respondent is an independent observation). This is observational survey data, not a lab experiment.
+- Parametric tests use **heteroskedasticity-robust standard errors** (HC1 or equivalent).
+- All hypothesis tests are **two-sided** (exploratory framing).
 - British English spelling throughout all output.
 
 ## Output Naming Convention
