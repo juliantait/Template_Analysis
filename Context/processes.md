@@ -12,6 +12,7 @@ How this project's documentation is structured, what gets recorded where, and wh
 | `Context/researcher_profile.md` | Background on the researcher, target journal (JEBO), writing style, LaTeX templates, R coding preferences. | Rarely changes. Reference material for writing and formatting. |
 | `Context/graphs.md` | Conventions for producing graphs (colours, themes, labelling). | Reference material. Update if graph style changes. |
 | `Context/tables.md` | Conventions for producing tables (booktabs, formatting). | Reference material. Update if table style changes. |
+| `Context/profile_referee.md` | Persona and instructions for the simulated referee. Defines who the referee is, what they care about, and how the report should be structured. | Reference material. Rarely changes. |
 | `Context/processes.md` (this file) | Meta-documentation: explains what each file does and how information flows between them. | Update when the documentation structure itself changes. |
 
 ## What Goes Where
@@ -38,7 +39,13 @@ How this project's documentation is structured, what gets recorded where, and wh
 
 **After making a decision**: Add an entry to `Context/research_log.md` (date, decision, rationale, action). If it changes the study design, also update `research_plan.md`.
 
+**First session on a new project**: Check the Timeline checkbox in `research_plan.md`. If it is unticked, you are the first agent. Replace the placeholder phases with the actual tasks for this study, fill in known target dates, and tick the checkbox. This must happen before any other work begins.
+
 **After completing a task**: Update the Timeline table in `research_plan.md` — set Status to `Done`, fill in the Date Done, and add any relevant notes. If the completed work revealed new tasks, add them as new rows.
+
+**After all analyses are complete, before writing**: You must complete the Results Review gate described in `research_plan.md`. Read all output, critically evaluate the empirical strategy in light of the actual results, make any necessary adjustments to scripts or the research plan, and log decisions. Do not begin writing until this review is done and the timeline marks it as complete.
+
+**After writing is complete, before submission**: Spawn a dedicated referee agent. It must read `Context/profile_referee.md`, adopt that persona, read the full manuscript and output, and write a critical referee report. Follow the instructions in the "Referee report" section of `research_plan.md`. Then begin a Revise & Resubmit session to address all comments — this may require changes to analysis, not just prose. See the "Revise and resubmit" section of `research_plan.md` for the full process.
 
 **When you learn something non-obvious**: Add a dated entry to the "Notes for Future Agents" table at the bottom of `research_plan.md`. This includes data quirks, package behaviour, things that nearly went wrong, or context that isn't captured anywhere else. The goal is that a fresh agent reading this section can avoid repeating mistakes and get up to speed quickly.
 

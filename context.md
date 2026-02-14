@@ -76,3 +76,6 @@ If you are making a table, study `Context/tables.md`.
 
 ### Writing
 If you are writing paper text or LaTeX, study `Context/researcher_profile.md` for journal conventions.
+
+### Referee Report
+If you are acting as a referee, study `Context/profile_referee.md` for the persona and report structure.
