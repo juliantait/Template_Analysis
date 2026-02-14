@@ -38,4 +38,8 @@ How this project's documentation is structured, what gets recorded where, and wh
 
 **After making a decision**: Add an entry to `Context/research_log.md` (date, decision, rationale, action). If it changes the study design, also update `research_plan.md`.
 
+**After completing a task**: Update the Timeline table in `research_plan.md` — set Status to `Done`, fill in the Date Done, and add any relevant notes. If the completed work revealed new tasks, add them as new rows.
+
+**When you learn something non-obvious**: Add a dated entry to the "Notes for Future Agents" table at the bottom of `research_plan.md`. This includes data quirks, package behaviour, things that nearly went wrong, or context that isn't captured anywhere else. The goal is that a fresh agent reading this section can avoid repeating mistakes and get up to speed quickly.
+
 **If conventions change**: Update `context.md` and note the change in `Context/research_log.md`.
