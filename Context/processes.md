@@ -7,7 +7,7 @@ How this project's documentation is structured, what gets recorded where, and wh
 | File | Purpose | When it gets updated |
 |------|---------|---------------------|
 | `context.md` (project root) | Entry point for any agent. Points to all other context files, states project-wide conventions. | Updated when conventions change or new context files are added. |
-| `research_plan.md` (project root) | The authoritative description of the study: research question, hypotheses, variables, analysis strategy, timeline. | Updated when design decisions are finalised. Reflects the *current* plan, not the history of changes. |
+| `research_plan.md` (project root) | The authoritative description of the study: research question, hypotheses, variables, analysis strategy, timeline, and lessons for future agents. | Updated when design decisions are finalised, when tasks are completed (timeline), or when lessons are learned (notes). Reflects the *current* plan, not the history of changes. |
 | `Context/research_log.md` | Chronological log of every design and analytical decision, with rationale. | Append-only. A new entry is added every time a decision is made (variable choice, test selection, exclusion criterion, coding rule, etc.). |
 | `Context/researcher_profile.md` | Background on the researcher, target journal (JEBO), writing style, LaTeX templates, R coding preferences. | Rarely changes. Reference material for writing and formatting. |
 | `Context/graphs.md` | Conventions for producing graphs (colours, themes, labelling). | Reference material. Update if graph style changes. |
