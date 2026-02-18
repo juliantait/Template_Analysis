@@ -16,9 +16,11 @@
 - Parametric tests (OLS, logit, etc.) serve as **robustness checks**, replicating the same predictions tested non-parametrically.
 - Standard errors in all parametric models are clustered at the group level.
 - The hypotheses script reports non-parametric results as the primary evidence; the robustness script re-tests the same predictions with regressions and controls.
-- Always report: test type, number of observations/groups, test statistic, and exact p-value (to 3 decimal places).
+- In prose, report only: test type, p-value, and sidedness in parentheses — e.g. `(rank-sum test, $p=.71$, one-sided)`. Do **not** include test statistics ($z$, $W$, etc.).
+- Embed core numbers (percentages, means, monetary amounts, differences) directly in the sentence. State the comparison plainly before the parenthetical test.
 - Specify sidedness (one-sided or two-sided) consistent with the directional or non-directional nature of each hypothesis.
 - Specify the pairing structure of every test (independent samples or matched pairs).
+- Number of independent observations/groups should be reported once per analysis (e.g. in the methods section or table notes), not repeated with every test.
 
 ## JEBO Additions
 
@@ -28,8 +30,11 @@
 
 ## Typical Script Pipeline
 
-1. `02_clean.R` — import raw experimental data, apply exclusions, construct variables.
-2. `03_descriptives.R` — summary statistics and balance checks across treatments.
-3. `04_hypotheses.R` — non-parametric tests of pre-registered hypotheses.
-4. `05_robustness.R` — OLS/logit regressions with controls replicating the same predictions.
-5. `06_exploratory.R` — additional analyses not covered by pre-registration.
+1. `02_cleaning.R` — import raw experimental data, apply exclusions, recode variables.
+2. `03_variable_generation.R` — construct derived variables (treatment indicators, composite scores).
+3. `04_sample_restrictions.R` — apply sample restrictions and exclusion criteria.
+4. `05_balance_table.R` — randomisation balance checks across treatment groups.
+5. `06_descriptives.R` — summary statistics and key values referenced in the paper.
+6. `07_hypotheses.R` — non-parametric tests of pre-registered hypotheses.
+7. `08_robustness.R` — OLS/logit regressions with controls replicating the same predictions.
+8. `09_exploratory.R` — additional analyses not covered by pre-registration.

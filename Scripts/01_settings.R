@@ -39,6 +39,25 @@ save_text <- function(text, filename) {
   }
 }
 
+# --- CHECKPOINTS -------------------------------------------------------------
+# Save/load prepared data so analysis scripts (05-09) can run without
+# re-running the full pipeline from 02. Checkpoint is saved after 04.
+
+checkpoint_path <- file.path(getwd(), "Data", "checkpoint_prepared.RData")
+
+save_checkpoint <- function(envir = parent.frame()) {
+  save(list = ls(envir = envir), file = checkpoint_path, envir = envir)
+  cat(sprintf("  -> Checkpoint saved: %s\n", checkpoint_path))
+}
+
+load_checkpoint <- function(envir = parent.frame()) {
+  if (!file.exists(checkpoint_path)) {
+    stop("No checkpoint found. Run the full pipeline (00_main.R) first.")
+  }
+  load(checkpoint_path, envir = envir)
+  cat(sprintf("  -> Checkpoint loaded: %s\n", checkpoint_path))
+}
+
 # --- COLOUR PALETTE ----------------------------------------------------------
 # High contrast, grayscale-friendly, colorblind-safe
 # Based on Paul Tol's bright scheme and ColorBrewer recommendations

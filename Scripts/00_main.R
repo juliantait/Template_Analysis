@@ -10,8 +10,8 @@ cat("\n=== ANALYSIS STARTING ===\n")
 # Clear environment
 rm(list = ls())
 
-# Set working directory to project root (where this file lives)
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+# Set working directory to project root (parent of Scripts/)
+setwd(file.path(dirname(rstudioapi::getActiveDocumentContext()$path), ".."))
 
 # --- SETUP -------------------------------------------------------------------
 cat("Section: Setup\n")
@@ -23,6 +23,11 @@ cat("Section: Data preparation\n")
 source("Scripts/02_cleaning.R")
 source("Scripts/03_variable_generation.R")
 source("Scripts/04_sample_restrictions.R")
+
+# --- CHECKPOINT --------------------------------------------------------------
+# Save prepared data so analysis scripts (05-09) can be re-run independently.
+cat("  -> Saving checkpoint\n")
+save_checkpoint()
 
 # --- ANALYSIS ----------------------------------------------------------------
 cat("Section: Analysis\n")

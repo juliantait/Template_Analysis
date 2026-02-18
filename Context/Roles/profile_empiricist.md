@@ -14,7 +14,8 @@
 - Primary results use **regression-based methods** (OLS, IV, DiD, RDD, logit/probit) as the main evidence.
 - Standard errors are clustered at the appropriate level dictated by the identification strategy (e.g. individual, firm, region).
 - Non-parametric and semi-parametric methods (e.g. local polynomial regression, kernel density estimation) supplement the main results where appropriate.
-- Always report: estimation method, number of observations, number of clusters, key coefficient(s), standard error, and exact p-value (to 3 decimal places).
+- In tables, report: estimation method, number of observations, number of clusters, key coefficient(s), and standard errors in parentheses.
+- In prose, embed core numbers (coefficients, percentage-point changes, magnitudes) directly in the sentence. Test details follow in parentheses — e.g. `($p=.03$, one-sided)`. Do **not** report $t$-statistics in running text.
 - Specify sidedness (one-sided or two-sided) consistent with the directional or non-directional nature of each hypothesis.
 - Robustness checks include: alternative specifications, placebo tests, sensitivity to bandwidth/functional form, and sample restrictions.
 - Identification assumptions must be discussed and, where possible, tested (e.g. parallel-trends plots for DiD, first-stage F-statistics for IV, density tests for RDD).
@@ -27,8 +28,11 @@
 
 ## Typical Script Pipeline
 
-1. `02_clean.R` — import raw data, merge sources, apply sample restrictions, construct variables.
-2. `03_descriptives.R` — summary statistics, distributions, and descriptive figures.
-3. `04_main_results.R` — primary regression specifications testing the main hypotheses.
-4. `05_robustness.R` — alternative specifications, placebo tests, sensitivity analyses.
-5. `06_mechanisms.R` — heterogeneity analysis, mediation, or subgroup decompositions.
+1. `02_cleaning.R` — import raw data, merge sources, recode variables.
+2. `03_variable_generation.R` — construct derived variables and instrument definitions.
+3. `04_sample_restrictions.R` — apply sample restrictions and exclusion criteria.
+4. `05_balance_table.R` — summary statistics and covariate balance across groups.
+5. `06_descriptives.R` — descriptive statistics, distributions, and key values.
+6. `07_hypotheses.R` — primary regression specifications testing the main hypotheses.
+7. `08_robustness.R` — alternative specifications, placebo tests, sensitivity analyses.
+8. `09_exploratory.R` — heterogeneity analysis, mediation, or subgroup decompositions.

@@ -25,7 +25,7 @@ All figures must be publication-ready for the Journal of Economic Behavior & Org
 - Avoid redundancy (do not repeat "Mean" in both title and axis).
 
 ## Data presentation
-- Plot means with +/- 1 SE (controlled by `ci_mult` in `Scripts/01_settings.R`).
+- Plot means with +/- 1 SE (controlled by `se_plot` in `Scripts/01_settings.R`).
 - Use points with error bars for cross-sectional comparisons.
 - Use lines only for time trends or ordered rounds.
 

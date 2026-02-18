@@ -18,15 +18,16 @@ This shared profile contains conventions common to all projects. Choose one of t
 
 - British English spelling throughout (behaviour, organisation, labour, analyse, etc.).
 - Concise academic prose. No filler language.
-- Results sections should lead with the finding, then the evidence (statistic, p-value).
+- Results sections lead with the finding and embed core numbers (percentages, means, differences) directly in the prose. Test details follow in parentheses: `(test type, $p=.XX$, sidedness)`. Do not report test statistics (no $z$, $W$, $\chi^2$, etc.) — only the test name and p-value.
 
 ## JEBO Conventions
 
 - Figures and tables must be interpretable in isolation (a referee should understand the result without the main text).
 - All figures must be greyscale-robust and colorblind-safe.
 - Tables use booktabs style (no vertical lines).
-- Report exact p-values to 3 decimal places (not stars, unless in regression tables where convention applies).
-- Always specify: test type, direction of comparison, and sidedness.
+- Report exact p-values to two decimal places with no leading zero (`$p=.34$`, not `$p=0.340$`). Use three decimal places only when $p<.01$ (e.g. `$p=.003$`). Use `$p<.001$` as the floor.
+- In regression tables, significance stars follow journal convention; in prose and non-parametric results, report only the p-value.
+- Always specify: test type, sidedness, and pairing structure. Do **not** report test statistics in prose — only the test name and p-value.
 
 ## LaTeX
 

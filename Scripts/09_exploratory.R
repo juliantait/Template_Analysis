@@ -24,8 +24,8 @@ cat("    -> Running exploratory analyses\n")
 # Example:
 # p_learning <- ggplot(learning_data, aes(x = round, y = mean_outcome)) +
 #   geom_line(colour = palette1, linewidth = 0.8) +
-#   geom_errorbar(aes(ymin = mean_outcome - ci_mult * se_outcome,
-#                     ymax = mean_outcome + ci_mult * se_outcome),
+#   geom_errorbar(aes(ymin = mean_outcome - se_plot * se_outcome,
+#                     ymax = mean_outcome + se_plot * se_outcome),
 #                 width = 0.3) +
 #   common_theme +
 #   labs(x = "Round", y = "Outcome")
