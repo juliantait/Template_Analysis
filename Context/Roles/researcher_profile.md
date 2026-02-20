@@ -86,3 +86,4 @@ Choose one of the personalities below based on the type of study. Load the selec
 - All output saved via `save_graph()`, `save_table()`, `save_text()` — never with hardcoded paths in analysis scripts.
 - Use `cat()` messages to track execution progress.
 - Commented scaffolding preferred over empty files.
+- **Script separation**: the main pipeline (`05`–`09`) contains only analyses reported in the paper. Anything beyond what is mentioned in the manuscript — extended robustness, diagnostics, researcher-only checks — goes in `Scripts/Further Analysis/`. See the "Script separation" section in `Context/context.md`.

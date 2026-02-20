@@ -33,6 +33,21 @@ See `Context/Flow/research_log.md` for a chronological record of all design and 
 - British English spelling throughout all output.
 - Statistical methodology, test conventions, and standard-error choices are defined in the active researcher personality profile. See `Context/Roles/researcher_profile.md` and the linked personality file.
 
+### Script separation: main pipeline vs. further analysis
+
+The main analysis scripts (`05_balance_table.R` through `09_exploratory.R`) must contain **only analyses that are reported in the paper** — anything the reader will see in the main text or standard appendix tables. If a result is mentioned, cited, or displayed in the manuscript, the code that produces it lives in the main pipeline.
+
+Analyses that go beyond what is reported — additional robustness checks, sensitivity tests, supplementary explorations, or anything that is primarily for the researchers' own confidence rather than the reader — belong in `Scripts/Further Analysis/`. This includes:
+
+- Extended robustness tests beyond the core set reported in the paper
+- Sanity checks and diagnostic analyses that inform the researchers but are not cited
+- Supplementary appendix material that is "available upon request" rather than included
+- Exploratory analyses that did not make the final manuscript
+
+The Further Analysis folder is commented out in `main.R` by default and must be explicitly enabled. It uses the same save functions and naming conventions as the main pipeline, but its output is kept separate from paper-critical results.
+
+**Rule of thumb**: if it is in the paper, it is in the main scripts. If it is just for us, it is in Further Analysis.
+
 ## Output Naming Convention
 
 All saved output files follow the pattern:
@@ -210,7 +225,9 @@ Template/
 │   ├── 06_descriptives.R            # Summary statistics and key values
 │   ├── 07_hypotheses.R              # Main hypothesis tests / primary regressions
 │   ├── 08_robustness.R              # Robustness checks
-│   └── 09_exploratory.R             # Exploratory analyses / counterfactuals
+│   ├── 09_exploratory.R             # Exploratory analyses / counterfactuals
+│   └── Further Analysis/
+│       └── further_analysis.R       # Beyond-paper robustness, diagnostics, researcher-only checks
 │
 ├── Data/                            # Raw data files (+ any shipped codebook)
 ├── Output/
