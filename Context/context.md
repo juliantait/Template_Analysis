@@ -4,7 +4,17 @@ Read this file first. Study the relevant linked context files depending on your 
 
 ## Researcher
 
-See `Context/Roles/researcher_profile.md` for background on the researcher, field, and target journal.
+See `Context/Roles/researcher_profile.md` for general background on the researcher and universal conventions (writing style, LaTeX, R coding, statistical reporting).
+
+The researcher profile links to three **personality profiles** — one must be selected at project setup:
+
+| Personality | Profile | Field | Target journal |
+|---|---|---|---|
+| **Experimentalist** | `Context/Roles/profile_experimentalist.md` | Experimental / behavioural economics | JEBO |
+| **Empiricist** | `Context/Roles/profile_empiricist.md` | Empirical behavioural economics | JEBO |
+| **Industrial Organisation** | `Context/Roles/profile_io.md` | Industrial organisation | RAND, JIE, IJIO, JEMS |
+
+The selected personality determines the target journal, analysis methodology, primary evidence type, and script pipeline conventions. Check `research_plan.md` for which personality is active.
 
 ## Project Structure
 
@@ -60,13 +70,31 @@ All parts use **lowercase** with **underscores** as separators. No spaces, no ca
 
 See `Context/Flow/codebook.md` for variable-level documentation of the dataset: raw variables, generated variables, recoding decisions, and exclusions. Populated as needed during data preparation.
 
-## Pre-Analysis Plan
+## Research Basis Documents
 
-See `pre_analysis_plan.md` for the pre-registered core commitments: main hypotheses, dependent variables, conditions, planned analyses, exclusion rules, and sample size. This is the **starting point** for any new project — it must be completed before the research plan.
+Every project starts with a research basis document before moving to `research_plan.md`. Which document depends on the personality. **These documents do not exist in the project root until generated or uploaded** — templates are stored in `Context/Templates/`.
+
+| Personality | Document | Template location | Purpose |
+|---|---|---|---|
+| **Experimentalist** | Pre-analysis plan | `Context/Templates/pre_analysis_plan.md` | Pre-registered commitments: hypotheses, DVs, conditions, analyses, exclusions, sample size |
+| **Empiricist** | Research intention | `Context/Templates/research_intention.md` | Planned empirical strategy: research question, identification, data, specifications |
+| **IO** | Research intention | `Context/Templates/research_intention.md` | Planned empirical strategy: research question, model/identification, data, specifications |
+
+### Experimentalist flow
+1. Check if the user has uploaded a PAP (from AsPredicted, OSF, or elsewhere).
+2. Copy the template from `Context/Templates/pre_analysis_plan.md` to the project root as `pre_analysis_plan.md`.
+3. If a PAP was uploaded, populate from it. If not, guide the user through creating one using `Context/Agents/researcher_interview.md`.
+4. Once the PAP is complete, proceed to `research_plan.md`.
+
+### Empiricist / IO flow
+1. Ask the user if they have an existing document (grant proposal, working paper draft, planning document).
+2. Copy the template from `Context/Templates/research_intention.md` to the project root as `research_intention.md`.
+3. If a document was uploaded, extract into it. If not, guide the user through creating one using `Context/Agents/researcher_interview.md`.
+4. Once the research intention is complete, proceed to `research_plan.md`.
 
 ## Research Plan
 
-See `research_plan.md` for the full study design. It builds on the pre-analysis plan, adding theoretical framework, detailed variable definitions, codebook references, timeline, and review gates.
+See `research_plan.md` for the full study design. It builds on the research basis document (`pre_analysis_plan.md` or `research_intention.md`), adding theoretical framework, detailed variable definitions, codebook references, timeline, and review gates.
 
 ## Agent Guidance
 
@@ -74,7 +102,7 @@ The `Context/Agents/` folder contains operational protocols for AI agents workin
 
 | File | Purpose |
 |------|---------|
-| `Context/Agents/researcher_interview.md` | Decision-tree questionnaire for eliciting the PAP from a researcher with minimal input |
+| `Context/Agents/researcher_interview.md` | Decision-tree questionnaire for eliciting a PAP or research intention from a user with no existing document |
 | `Context/Agents/results_review_checklist.md` | Item-by-item checklist for the results review gate (replaces vague "stress-test" instruction) |
 | `Context/Agents/subagent_protocol.md` | Rules for when/how to spawn subagents, output format, handoff, and context isolation |
 | `Context/Agents/revision_protocol.md` | Multi-cycle revision protocol: when to re-run scripts, output versioning, cascade rules |
@@ -88,7 +116,7 @@ If you are making a graph, study `Context/Tasks/graphs.md`.
 If you are making a table, study `Context/Tasks/tables.md`.
 
 ### Writing
-If you are writing paper text or LaTeX, study `Context/Roles/researcher_profile.md` for journal conventions.
+If you are writing paper text or LaTeX, study `Context/Roles/researcher_profile.md` and the active personality profile for journal conventions.
 
 ### Referee Report
 If you are acting as a referee, study `Context/Roles/profile_referee.md` for the persona and report structure.
@@ -118,7 +146,9 @@ If you are acting as a referee, study `Context/Roles/profile_referee.md` for the
 
 **Starting a new session**: Read `Context/context.md` first. It will direct you to everything else.
 
-**First session on a new project**: Start with `pre_analysis_plan.md`. If it is still in placeholder form, follow the decision-tree interview script in `Context/Agents/researcher_interview.md` to guide the user through completing it with minimal input. If the user uploads a PAP file, extract the content and populate the template. Only once the PAP readiness checklist (at the bottom of `pre_analysis_plan.md`) is fully ticked should you move on to `research_plan.md` — use the PAP plus the bridge questions in the interview script to fill in the research plan's additional sections (theoretical framework, detailed variable definitions, control variables, robustness strategy, etc.). After the research plan is drafted, check the Timeline checkbox in `Context/Flow/timeline.md` and set up the project phases.
+**First session on a new project**: Start by selecting the research personality. Then create the research basis document from the template in `Context/Templates/`:
+- **Experimentalist**: Ask if the user has a PAP to upload. Copy `Context/Templates/pre_analysis_plan.md` to root as `pre_analysis_plan.md`. If a PAP was uploaded, populate from it. If not, guide the user through creating one. Once complete, proceed to `research_plan.md`.
+- **Empiricist / IO**: Ask if the user has a research intention document (grant proposal, working paper, planning doc). Copy `Context/Templates/research_intention.md` to root as `research_intention.md`. If a document was uploaded, extract into it. If not, guide the user through creating one. Once complete, proceed to `research_plan.md` — use the intention plus the bridge questions in the interview script to fill in the additional sections.
 
 **Before making a decision**: Check `Context/Flow/research_log.md` to see if it's already been decided.
 
@@ -139,23 +169,28 @@ If you are acting as a referee, study `Context/Roles/profile_referee.md` for the
 ```
 Template/
 ├── CLAUDE.md                        # Agent entry point
-├── pre_analysis_plan.md             # Pre-registered commitments (PAP) — complete first
-├── research_plan.md                 # Full study design, built from the PAP
+├── research_plan.md                 # Full study design, built from PAP or research intention
 ├── README.md
 ├── Template.Rproj
 │
 ├── Context/
 │   ├── context.md                   # This file — index linking everything
+│   ├── Templates/
+│   │   ├── pre_analysis_plan.md     # Clean PAP template (experimentalist)
+│   │   └── research_intention.md    # Clean research intention template (empiricist/IO)
 │   ├── Agents/
-│   │   ├── researcher_interview.md  # Decision-tree PAP elicitation script
+│   │   ├── researcher_interview.md  # Decision-tree PAP / research intention elicitation script
 │   │   ├── results_review_checklist.md # Item-by-item results review gate checklist
 │   │   ├── subagent_protocol.md     # Subagent spawning, output, and handoff rules
 │   │   └── revision_protocol.md     # Multi-cycle revision and re-analysis protocol
 │   ├── Roles/
-│   │   ├── researcher_profile.md    # Background, journal, writing style, R prefs
-│   │   ├── profile_experimentalist.md  # Experiment-specific conventions
-│   │   ├── profile_empiricist.md    # Observational-data conventions
-│   │   └── profile_referee.md       # Simulated referee persona
+│   │   ├── researcher_profile.md    # General: background, writing style, LaTeX, R prefs
+│   │   ├── profile_experimentalist.md  # Experimental economics — targets JEBO
+│   │   ├── profile_empiricist.md    # Observational behavioural economics — targets JEBO
+│   │   ├── profile_io.md            # Industrial organisation — targets RAND, JIE, IJIO, JEMS
+│   │   ├── profile_referee.md       # Simulated referee persona (orchestration)
+│   │   ├── profile_referee_cycle1.md  # Referee Cycle 1: Theory & Framework
+│   │   └── profile_referee_cycle2.md  # Referee Cycle 2: Results & Integration
 │   ├── Tasks/
 │   │   ├── graphs.md                # Graph style guidelines
 │   │   └── tables.md                # Table style guidelines
@@ -171,11 +206,11 @@ Template/
 │   ├── 02_cleaning.R                # Data loading and cleaning
 │   ├── 03_variable_generation.R     # Derived/computed variables
 │   ├── 04_sample_restrictions.R     # Exclusion criteria and subsetting
-│   ├── 05_balance_table.R           # Randomisation balance checks
+│   ├── 05_balance_table.R           # Balance checks / summary statistics
 │   ├── 06_descriptives.R            # Summary statistics and key values
-│   ├── 07_hypotheses.R              # Main hypothesis tests
-│   ├── 08_robustness.R              # Regression robustness checks
-│   └── 09_exploratory.R             # Exploratory analyses
+│   ├── 07_hypotheses.R              # Main hypothesis tests / primary regressions
+│   ├── 08_robustness.R              # Robustness checks
+│   └── 09_exploratory.R             # Exploratory analyses / counterfactuals
 │
 ├── Data/                            # Raw data files (+ any shipped codebook)
 ├── Output/
@@ -187,7 +222,7 @@ Template/
     ├── abstract.tex
     ├── introduction.tex
     ├── theory.tex
-    ├── experiment.tex
+    ├── experiment.tex               # Rename for IO: data.tex or institutional_background.tex
     ├── results.tex
     ├── discussion.tex
     ├── appendix.tex

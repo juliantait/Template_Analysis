@@ -2,11 +2,15 @@
 
 > Extends `researcher_profile.md`. Read the shared profile first; this file adds experiment-specific conventions.
 
+## Target Journal
+
+**Journal of Economic Behavior & Organization (JEBO)**.
+
 ## Research Orientation
 
 - Research area: experimental and behavioural economics (lab experiments, online experiments, incentivised decisions, team behaviour).
 - Causal identification comes from **randomisation** into treatment and control conditions.
-- Studies are **pre-registered**; hypotheses are stated directionally and tested with the appropriate one-sided or two-sided tests as pre-registered.
+- Studies use a **pre-analysis plan** (PAP). If the researcher has an existing PAP (from AsPredicted, OSF, or elsewhere), it should be uploaded and populated in `pre_analysis_plan.md`. If no PAP exists, one is created with the user before proceeding to `research_plan.md`. Hypotheses are stated directionally and tested with the appropriate one-sided or two-sided tests as pre-registered.
 - Design features to document: number of sessions, subjects per session, randomisation procedure, payment scheme, and any deception policy.
 
 ## Analysis Methodology
@@ -22,8 +26,11 @@
 - Specify the pairing structure of every test (independent samples or matched pairs).
 - Number of independent observations/groups should be reported once per analysis (e.g. in the methods section or table notes), not repeated with every test.
 
-## JEBO Additions
+## JEBO Conventions
 
+- Figures and tables must be interpretable in isolation (a referee should understand the result without the main text).
+- All figures must be greyscale-robust and colorblind-safe.
+- Tables use booktabs style (no vertical lines).
 - Non-parametric tests are preferred for primary results; regressions serve as robustness.
 - Treatment-effect figures (e.g. bar charts with error bars, CDFs by treatment) are the main visual evidence.
 - Always label treatments clearly in figures and tables; a referee must understand the comparison without the main text.
@@ -35,6 +42,6 @@
 3. `04_sample_restrictions.R` — apply sample restrictions and exclusion criteria.
 4. `05_balance_table.R` — randomisation balance checks across treatment groups.
 5. `06_descriptives.R` — summary statistics and key values referenced in the paper.
-6. `07_hypotheses.R` — non-parametric tests of pre-registered hypotheses.
+6. `07_hypotheses.R` — non-parametric tests of hypotheses.
 7. `08_robustness.R` — OLS/logit regressions with controls replicating the same predictions.
-8. `09_exploratory.R` — additional analyses not covered by pre-registration.
+8. `09_exploratory.R` — additional analyses not covered by the main hypotheses.

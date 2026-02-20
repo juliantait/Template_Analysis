@@ -1,6 +1,8 @@
 # Pre-Analysis Plan
 
-**Project title:** [How nice people give more to charity]
+> **This template is for experimentalist projects only.** If the project uses an empiricist or IO personality, use `research_intention.md` instead.
+
+**Project title:** [Title]
 
 **Author(s):** [Author A, Author B, Author C]
 
@@ -58,21 +60,17 @@
 
 ## How this file is used
 
-This pre-analysis plan (PAP) is the **starting point** for the project. It captures the core commitments of the study before analysis begins.
+This pre-analysis plan (PAP) captures the core pre-registered commitments of an experimental study. It is the **starting point** for experimentalist projects.
 
-### If you are the first agent on a new project:
+### Agent instructions
 
-1. **Check whether this file has been filled in** (i.e. the placeholders above have been replaced with real content).
-   - **If yes**: Read it carefully. Use the information here to populate `research_plan.md` — the PAP answers inform the Research Idea, Hypotheses, Variables, Design, Sample, and Analysis Strategy sections. Ask the user targeted follow-up questions to fill in gaps (e.g. theoretical framework, control variables, specific statistical tests, robustness strategies) that the PAP doesn't cover but the research plan needs.
-   - **If no (still placeholders)**: Guide the user through completing the PAP by asking questions that follow this template's structure (main hypothesis, DVs, conditions, analyses, exclusions, sample size, secondary analyses, existing data). Only move on to `research_plan.md` once every section has real content.
-
-2. **If the user uploads a PAP file** (e.g. from AsPredicted, OSF, or a PDF): Read the uploaded file, extract the relevant information, and populate this template with that content. Then proceed as above.
-
-3. **Only once this PAP is complete** should you begin filling in `research_plan.md`. The research plan is a superset of the PAP — it adds theoretical framework, detailed variable definitions, codebook references, timeline, and gate descriptions that the PAP doesn't cover.
+1. **Check whether the user has a PAP to upload** (from AsPredicted, OSF, or a PDF). If yes, extract the content and populate this template.
+2. **If no PAP exists**, guide the user through creating one by asking questions that follow this template's structure. Use the experimentalist sections of the interview script in `Context/Agents/researcher_interview.md`.
+3. **Once this PAP is complete**, proceed to `research_plan.md`. The research plan expands the PAP with theoretical framework, detailed variable definitions, codebook references, timeline, and review gates.
 
 ### PAP Readiness Checklist
 
-Before moving on to `research_plan.md`, every item below must be ticked. If any item is unticked, the PAP is incomplete — go back and fill in the missing section.
+Before moving on to `research_plan.md`, every item below must be ticked.
 
 - [ ] **Section 1 — Hypothesis**: Contains a falsifiable prediction with expected direction, not just a research question
 - [ ] **Section 2 — DVs**: Every dependent variable is named, operationalised (units, scale, measurement method), and unambiguous
@@ -83,8 +81,6 @@ Before moving on to `research_plan.md`, every item below must be ticked. If any 
 - [ ] **Section 7 — Other**: Secondary/exploratory analyses listed, or explicitly stated as "none planned"
 - [ ] **Section 8 — Existing data**: Answered yes or no; if yes, explained what data exist and how they relate to this study
 - [ ] **No placeholders remain**: Every `[bracketed placeholder]` has been replaced with real content
-
-Only once all boxes are ticked should the agent proceed to `research_plan.md`.
 
 ### Relationship to `research_plan.md`
 

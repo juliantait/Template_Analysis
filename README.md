@@ -1,6 +1,6 @@
 # Empirical Analysis Template
 
-A self-contained template for single-study empirical analysis papers in behavioural economics, designed to be operated by [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Target journal: Journal of Economic Behavior & Organization (JEBO).
+A self-contained template for single-study empirical analysis papers in economics, designed to be operated by [Claude Code](https://docs.anthropic.com/en/docs/claude-code). It is field-agnostic — the researcher profile and field-specific conventions are set per project.
 
 ## What this is
 
@@ -18,40 +18,44 @@ Claude will read `CLAUDE.md`, which points it to `Context/context.md` and `Conte
 
 ## How it works
 
-### Phase 1: Pre-analysis plan
+### Phase 1: Research basis document
 
-The first document Claude completes is `pre_analysis_plan.md`. This captures your pre-registered commitments: hypotheses, dependent variables, conditions, analyses, exclusion rules, and sample size.
+The first step is selecting a research personality (experimentalist, empiricist, or IO). Claude then creates the appropriate research basis document from a template stored in `Context/Templates/`:
 
-- **If you have an existing PAP** (AsPredicted, OSF, PDF): Claude extracts the content and populates the template. It flags any gaps and asks targeted follow-up questions.
-- **If you have no PAP**: Claude runs a structured interview (defined in `Context/Agents/researcher_interview.md`) to walk you through each section. The interview is collaborative, not interrogative — Claude asks the right questions in the right order to build a complete plan with minimal effort on your part.
+- **Experimentalist** → `pre_analysis_plan.md` — pre-registered commitments (hypotheses, DVs, conditions, analyses, exclusion rules, sample size).
+- **Empiricist / IO** → `research_intention.md` — planned empirical strategy (research question, identification, data, specifications).
 
-The PAP has a readiness checklist at the bottom. Claude will not move on until every item is ticked.
+These files do not exist in the project root until a project begins. Claude copies the template and either populates it from an uploaded document (AsPredicted, OSF, grant proposal, working paper) or guides you through creating one via a structured interview (`Context/Agents/researcher_interview.md`).
+
+The document has a readiness checklist at the bottom. Claude will not move on until every item is ticked.
 
 ### Phase 2: Research plan
 
-Once the PAP is complete, Claude expands it into `research_plan.md` — the full study design. This adds the theoretical framework, detailed variable definitions, control variable justifications, robustness strategy, power calculation details, and the analysis pipeline structure. The research plan is the living document that tracks the current state of the study design throughout the project.
+Once the research basis document is complete, Claude expands it into `research_plan.md` — the full study design. This adds the theoretical framework, detailed variable definitions, control variable justifications, robustness strategy, power calculation details, and the analysis pipeline structure. The research plan is the living document that tracks the current state of the study design throughout the project.
 
 ### Phase 3: Data preparation and analysis
 
-Claude writes and runs R scripts in numbered order from `Scripts/00_main.R`:
+Claude writes and runs R scripts from `main.R` in the project root:
 
 | Script | Purpose |
 |--------|---------|
-| `00_main.R` | Master script — run this to execute the full pipeline |
-| `00_packages.R` | Package loading |
-| `01_settings.R` | Colour palette, ggplot theme, output paths, save functions |
-| `02_cleaning.R` | Data loading and cleaning |
-| `03_variable_generation.R` | Derived and computed variables |
-| `04_sample_restrictions.R` | Exclusion criteria and subsetting |
-| `05_balance_table.R` | Randomisation balance checks |
-| `06_descriptives.R` | Summary statistics and key values |
-| `07_hypotheses.R` | Main pre-registered hypothesis tests |
-| `08_robustness.R` | Regression robustness checks |
-| `09_exploratory.R` | Exploratory analyses |
+| `main.R` | Entry point — run this to execute the full pipeline |
+| `Scripts/config_init.R` | Clear environment, set working directory, define output paths and sync destinations |
+| `Scripts/config_toolkit.R` | Packages, colour palette, ggplot theme, save functions, checkpoint, helpers |
+| `Scripts/config_cleaning.R` | Orchestrator: sources cleaning function, variable generation, saves cleaned data |
+| `Data/DataSets/cleaning.R` | oTree raw data → long format (called by config_cleaning.R) |
+| `Scripts/sample_restrictions.R` | Exclusion criteria and subsetting |
+| `Scripts/balance_table.R` | Randomisation balance checks |
+| `Scripts/descriptives.R` | Summary statistics and key values |
+| `Scripts/hypotheses.R` | Main pre-registered hypothesis tests |
+| `Scripts/robustness.R` | Regression robustness checks |
+| `Scripts/exploratory.R` | Exploratory analyses |
+| `Scripts/Further Analysis/` | Additional analyses beyond the core pipeline |
+| `Scripts/config_sync_to_folder.R` | Copy Output/ to external destinations (e.g. Overleaf) |
 
-Scripts 02-04 run sequentially (each depends on the previous). Scripts 05-09 can run in parallel where dependencies allow. Claude manages this automatically.
+Cleaning runs once to produce `Data/data_cleaned.RData`. Normal analysis loads the pre-cleaned data and runs the analysis scripts sequentially. Claude manages this automatically.
 
-All output goes to `Output/Graphs/` (.png), `Output/Tables/` (.tex), and `Output/Text/` (.txt) via helper functions in `01_settings.R`. Files follow a consistent naming convention: `{script}_{analysis}_{descriptor}.{ext}`.
+All output goes to `Output/Graphs/` (.png), `Output/Tables/` (.tex), and `Output/Text/` (.txt) via helper functions in `Scripts/config_toolkit.R`. Files follow a consistent naming convention: `{script}_{analysis}_{descriptor}.{ext}`.
 
 ### Phase 4: Results review (quality gate)
 
@@ -77,7 +81,7 @@ All writing follows JEBO conventions defined in `Context/Roles/researcher_profil
 
 Once the manuscript is complete, Claude spawns two independent referee agents with clean context windows (no memory of the writing process). These agents adopt the persona defined in `Context/Roles/profile_referee.md` — a sceptical senior researcher who evaluates against JEBO standards.
 
-- **Cycle 1** reviews theory, framing, and hypothesis consistency against the PAP.
+- **Cycle 1** reviews theory, framing, and hypothesis consistency against the research basis document.
 - **Cycle 2** reviews results, technical execution, and whether the paper delivers on its promises.
 
 Their reports are merged into a single referee report saved as `referee_report.md`.
@@ -95,16 +99,17 @@ Claude addresses every referee comment through a structured revision protocol (`
 
 After each revision, a fresh referee agent reviews the updated manuscript. The cycle repeats until the referee recommends minor revision or accept. All reports are numbered and immutable — nothing is overwritten.
 
-## Two analysis profiles
+## Research personalities
 
-The template supports two types of studies, each with its own analysis conventions:
+The template supports three research personalities, each with its own analysis conventions and target journals:
 
-| Profile | File | Primary evidence | Robustness | When to use |
-|---------|------|-----------------|------------|-------------|
-| **Experimentalist** | `Context/Roles/profile_experimentalist.md` | Non-parametric tests (Wilcoxon, permutation) | OLS/logit regressions with controls | Lab, online, or field experiments with randomised treatment |
-| **Empiricist** | `Context/Roles/profile_empiricist.md` | Regression-based methods (OLS, IV, DiD, RDD) | Alternative specifications, placebo tests | Observational, survey, or administrative data |
+| Personality | File | Primary evidence | Target journal | When to use |
+|-------------|------|-----------------|----------------|-------------|
+| **Experimentalist** | `Context/Roles/profile_experimentalist.md` | Non-parametric tests (Wilcoxon, permutation) | JEBO | Lab, online, or field experiments with randomised treatment |
+| **Empiricist** | `Context/Roles/profile_empiricist.md` | Regression-based methods (OLS, IV, DiD, RDD) | JEBO | Observational, survey, or administrative data |
+| **Industrial Organisation** | `Context/Roles/profile_io.md` | Structural estimation, reduced-form regressions | RAND, JIE, IJIO, JEMS | IO markets, competition, firm behaviour |
 
-Set the profile in the research plan before analysis begins. Claude applies the corresponding conventions throughout.
+Set the personality in the research plan before analysis begins. Claude applies the corresponding conventions throughout.
 
 ## Agent system
 
@@ -134,15 +139,17 @@ A third file, `Context/Flow/codebook.md`, documents every variable in the datase
 ```
 Template/
 ├── CLAUDE.md                        # Agent entry point
-├── pre_analysis_plan.md             # Pre-registered commitments (complete first)
-├── research_plan.md                 # Full study design (built from the PAP)
+├── research_plan.md                 # Full study design (built from PAP or research intention)
 ├── README.md
 ├── Template.Rproj
 │
 ├── Context/
 │   ├── context.md                   # Master index linking all context files
+│   ├── Templates/
+│   │   ├── pre_analysis_plan.md     # Clean PAP template (experimentalist)
+│   │   └── research_intention.md    # Clean research intention template (empiricist/IO)
 │   ├── Agents/
-│   │   ├── researcher_interview.md  # Decision-tree PAP elicitation script
+│   │   ├── researcher_interview.md  # Decision-tree PAP / research intention elicitation script
 │   │   ├── results_review_checklist.md  # 50+ item results review gate
 │   │   ├── subagent_protocol.md     # Agent spawning, output, and handoff rules
 │   │   └── revision_protocol.md     # Multi-cycle revision and re-analysis protocol
@@ -150,29 +157,40 @@ Template/
 │   │   ├── researcher_profile.md    # Background, journal, writing style, R prefs
 │   │   ├── profile_experimentalist.md  # Experiment-specific conventions
 │   │   ├── profile_empiricist.md    # Observational-data conventions
-│   │   └── profile_referee.md       # Simulated referee persona (two-cycle system)
+│   │   ├── profile_io.md            # Industrial organisation conventions
+│   │   ├── profile_referee.md       # Simulated referee persona (orchestration)
+│   │   ├── profile_referee_cycle1.md  # Referee Cycle 1: Theory & Framework
+│   │   └── profile_referee_cycle2.md  # Referee Cycle 2: Results & Integration
 │   ├── Tasks/
-│   │   ├── graphs.md                # JEBO graph style guidelines
-│   │   └── tables.md                # JEBO table style guidelines
+│   │   ├── graphs.md                # Graph style guidelines
+│   │   └── tables.md                # Table style guidelines
 │   └── Flow/
 │       ├── timeline.md              # Project progress tracker
 │       ├── codebook.md              # Variable-level data documentation
 │       └── research_log.md          # Chronological decision log
 │
-├── Scripts/
-│   ├── 00_main.R                    # Master script — run this
-│   ├── 00_packages.R                # Package loading
-│   ├── 01_settings.R                # Palette, theme, output paths, save functions
-│   ├── 02_cleaning.R                # Data loading and cleaning
-│   ├── 03_variable_generation.R     # Derived/computed variables
-│   ├── 04_sample_restrictions.R     # Exclusion criteria and subsetting
-│   ├── 05_balance_table.R           # Randomisation balance checks
-│   ├── 06_descriptives.R            # Summary statistics and key values
-│   ├── 07_hypotheses.R              # Main hypothesis tests
-│   ├── 08_robustness.R              # Regression robustness checks
-│   └── 09_exploratory.R             # Exploratory analyses
+├── main.R                              # Entry point — run this
 │
-├── Data/                            # Raw data files (+ any shipped codebook)
+├── Scripts/
+│   ├── config_init.R                   # Clear env, set wd, define paths
+│   ├── config_toolkit.R                # Packages, palette, theme, save functions, helpers
+│   ├── config_cleaning.R              # Orchestrator: cleaning + variable generation
+│   ├── config_sync_to_folder.R        # Copy Output/ to external destinations
+│   ├── sample_restrictions.R           # Exclusion criteria and subsetting
+│   ├── balance_table.R                 # Randomisation balance checks
+│   ├── descriptives.R                 # Summary statistics and key values
+│   ├── hypotheses.R                   # Main hypothesis tests
+│   ├── robustness.R                   # Regression robustness checks
+│   ├── exploratory.R                  # Exploratory analyses
+│   └── Further Analysis/
+│       └── further_analysis.R          # Additional analyses beyond core pipeline
+│
+├── Data/
+│   ├── DataSets/                       # Raw data storage
+│   │   ├── cleaning.R                  # oTree CSV → long format
+│   │   └── .gitkeep
+│   ├── [data_cleaned.RData]            # Output of cleaning pipeline
+│   └── [checkpoint_prepared.RData]     # Checkpoint after sample restrictions
 ├── Output/
 │   ├── Graphs/                      # .png files
 │   ├── Tables/                      # .tex files
@@ -191,18 +209,18 @@ Template/
 
 ## Output paths
 
-The save functions in `01_settings.R` write to every path in the `output_paths` vector. To send output to multiple locations (e.g., local + Overleaf), add paths:
+The save functions in `Scripts/config_toolkit.R` write to all paths in the `output_paths` vector. Sync destinations are configured in `Scripts/config_init.R` and applied automatically by `Scripts/config_sync_to_folder.R` at the end of each run. To send output to multiple locations (e.g., local + Overleaf), add paths to `SYNC_DESTINATIONS`:
 
 ```r
-output_paths <- c(
-  file.path(getwd(), "Output"),
-  "/path/to/Overleaf/project/Output"
+# In Scripts/config_init.R:
+SYNC_DESTINATIONS <- c(
+  path.expand("/path/to/Overleaf/project/Output")
 )
 ```
 
 ## Requirements
 
 - **Claude Code** (Anthropic CLI) — this template is designed to be operated through Claude Code.
-- **R** with tidyverse, ggplot2, and any packages required by your analysis (loaded in `Scripts/00_packages.R`).
+- **R** with tidyverse, ggplot2, and any packages required by your analysis (loaded in `Scripts/config_toolkit.R`).
 - **RStudio** (optional but recommended for interactive use via `Template.Rproj`).
 - **LaTeX** distribution with pdflatex + bibtex for compiling the paper.

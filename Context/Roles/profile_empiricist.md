@@ -2,11 +2,16 @@
 
 > Extends `researcher_profile.md`. Read the shared profile first; this file adds empirical/observational-specific conventions.
 
+## Target Journal
+
+**Journal of Economic Behavior & Organization (JEBO)**.
+
 ## Research Orientation
 
 - Research area: empirical behavioural economics (observational data, survey data, administrative records, field data).
 - Causal identification comes from **quasi-experimental variation** or **natural experiments** (e.g. instrumental variables, difference-in-differences, regression discontinuity, matching).
 - Pre-registration is not always applicable; clearly state whether hypotheses were pre-specified or exploratory.
+- A research intention document should be populated in `research_intention.md` before proceeding to `research_plan.md`. It captures the identification strategy, data sources, and planned specifications.
 - Data features to document: source, sample period, unit of observation, sample-selection criteria, and any linkage across datasets.
 
 ## Analysis Methodology
@@ -20,8 +25,11 @@
 - Robustness checks include: alternative specifications, placebo tests, sensitivity to bandwidth/functional form, and sample restrictions.
 - Identification assumptions must be discussed and, where possible, tested (e.g. parallel-trends plots for DiD, first-stage F-statistics for IV, density tests for RDD).
 
-## JEBO Additions
+## JEBO Conventions
 
+- Figures and tables must be interpretable in isolation (a referee should understand the result without the main text).
+- All figures must be greyscale-robust and colorblind-safe.
+- Tables use booktabs style (no vertical lines).
 - Regression tables are the primary evidence; present them with coefficient estimates, clustered standard errors in parentheses, and significance stars following journal convention.
 - Figures focus on **identification** (e.g. event-study plots, RDD scatter plots, binned scatter plots) and **descriptive patterns** (e.g. time series, distributions).
 - Always label variables, samples, and fixed effects clearly in tables; a referee must understand the specification without the main text.

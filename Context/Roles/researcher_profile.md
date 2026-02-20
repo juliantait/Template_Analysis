@@ -1,33 +1,32 @@
-# Researcher Profile (Shared)
+# Researcher Profile (General)
 
 ## Background
 
-- PhD researcher in behavioural economics.
-- Target journal: **Journal of Economic Behavior & Organization (JEBO)**.
+- PhD researcher in economics.
+- This is the shared profile containing conventions common to all projects regardless of field or methodology.
 
 ## Research Personality
 
-This shared profile contains conventions common to all projects. Choose one of the two personalities below based on the type of study, and load it alongside this file:
+Choose one of the personalities below based on the type of study. Load the selected personality file alongside this shared profile — it specifies the target journal, field-specific conventions, and analysis methodology.
 
 | Personality | Profile | When to use |
 |---|---|---|
-| **Experimentalist** | [`profile_experimentalist.md`](profile_experimentalist.md) | Lab, online, or field experiments with randomised treatment assignment. Causal identification via randomisation. Non-parametric tests are the primary evidence; regressions are robustness. |
-| **Empiricist** | [`profile_empiricist.md`](profile_empiricist.md) | Observational, survey, or administrative data. Causal identification via quasi-experimental methods (IV, DiD, RDD, matching). Regressions are the primary evidence; robustness via alternative specifications and placebo tests. |
+| **Experimentalist** | [`profile_experimentalist.md`](profile_experimentalist.md) | Lab, online, or field experiments with randomised treatment assignment. Causal identification via randomisation. Non-parametric tests are the primary evidence; regressions are robustness. Targets JEBO. |
+| **Empiricist** | [`profile_empiricist.md`](profile_empiricist.md) | Observational, survey, or administrative data with behavioural economics focus. Causal identification via quasi-experimental methods (IV, DiD, RDD, matching). Regressions are the primary evidence; robustness via alternative specifications and placebo tests. Targets JEBO. |
+| **Industrial Organisation** | [`profile_io.md`](profile_io.md) | Firm-level, market-level, or industry data. Competition, pricing, entry, mergers, regulation. Structural estimation or reduced-form identification. Targets RAND, JIE, IJIO, or JEMS. |
 
 ## Writing Style
 
 - British English spelling throughout (behaviour, organisation, labour, analyse, etc.).
 - Concise academic prose. No filler language.
-- Results sections lead with the finding and embed core numbers (percentages, means, differences) directly in the prose. Test details follow in parentheses: `(test type, $p=.XX$, sidedness)`. Do not report test statistics (no $z$, $W$, $\chi^2$, etc.) — only the test name and p-value.
+- Results sections lead with the finding and embed core numbers (percentages, means, differences) directly in the prose. Test details follow in parentheses. Do not report test statistics in running text — only the test name and p-value, or coefficient and p-value.
 
-## JEBO Conventions
+## General Statistical Conventions
 
-- Figures and tables must be interpretable in isolation (a referee should understand the result without the main text).
-- All figures must be greyscale-robust and colorblind-safe.
-- Tables use booktabs style (no vertical lines).
 - Report exact p-values to two decimal places with no leading zero (`$p=.34$`, not `$p=0.340$`). Use three decimal places only when $p<.01$ (e.g. `$p=.003$`). Use `$p<.001$` as the floor.
-- In regression tables, significance stars follow journal convention; in prose and non-parametric results, report only the p-value.
-- Always specify: test type, sidedness, and pairing structure. Do **not** report test statistics in prose — only the test name and p-value.
+- Always specify: test type, sidedness, and pairing/clustering structure.
+- In regression tables, significance stars follow journal convention; in prose, report only p-values.
+- Field-specific test conventions (which tests are primary, what to report in parentheses) are defined in the active personality profile.
 
 ## LaTeX
 

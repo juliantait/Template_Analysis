@@ -1,6 +1,10 @@
 # Research Plan
 
-> **Foundation:** This plan builds on `pre_analysis_plan.md`. Read the PAP first — it contains the core pre-registered commitments. The sections below expand on the PAP with theoretical detail, full variable definitions, and operational decisions. If the PAP is still in placeholder form, complete it before filling in this document.
+> **Foundation:** This plan builds on a research basis document that must be completed first:
+> - **Experimentalist**: `pre_analysis_plan.md` (the PAP captures pre-registered commitments)
+> - **Empiricist / IO**: `research_intention.md` (captures research question, identification, data, and planned specifications)
+>
+> The sections below expand on that document with theoretical detail, full variable definitions, and operational decisions.
 
 ## Research Idea
 
@@ -36,7 +40,7 @@ Address each of the following:
 
 ## Design
 
-**Personality profile:** [experimentalist / empiricist] — see `Context/Roles/researcher_profile.md` for details. Set this before any analysis begins.
+**Personality profile:** [experimentalist / empiricist / io] — see `Context/Roles/researcher_profile.md` for details. Set this before any analysis begins.
 
 [Describe the design using the following structure:]
 
