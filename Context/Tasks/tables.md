@@ -69,4 +69,27 @@ All tables must be publication-ready for the Journal of Economic Behavior & Orga
 - No manual spacing hacks beyond `\addlinespace`.
 - Same variable names and ordering across all tables.
 
+---
+
+## Provenance rule: R output → LaTeX
+
+When a table in `LaTeX/` is a direct, unmodified `\input` of an R-generated `.tex` file, keep the `\input` line as-is.
+
+**When you manually reformat or redesign an R-generated table for the paper**, you must:
+
+1. **Inline** the new table content directly in the LaTeX file.
+2. **Comment out** the original `\input` line immediately above the inlined table.
+
+Example:
+```latex
+% \input{../Output/Tables/balance_means_by_fee_level.tex}
+\begin{table}[htbp]
+... (reformatted table content) ...
+\end{table}
+```
+
+This ensures any future agent or collaborator can trace numbers back to the R source and uncomment the `\input` to restore the raw version.
+
+---
+
 **Rule of thumb:** if a referee can reconstruct the empirical comparison from the table alone, it is JEBO-ready.
