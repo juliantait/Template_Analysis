@@ -42,8 +42,9 @@ Claude writes and runs R scripts from `main.R` in the project root:
 | `main.R` | Entry point — run this to execute the full pipeline |
 | `Scripts/config_init.R` | Clear environment, set working directory, define output paths and sync destinations |
 | `Scripts/config_toolkit.R` | Packages, colour palette, ggplot theme, save functions, checkpoint, helpers |
-| `Scripts/config_cleaning.R` | Orchestrator: sources cleaning function, variable generation, saves cleaned data |
-| `Data/DataSets/cleaning.R` | oTree raw data → long format (called by config_cleaning.R) |
+| `Scripts/config_cleaning.R` | Orchestrator: selects data-source adapter, variable generation, saves cleaned data |
+| `Helper/otree.R` | oTree adapter: config + `load_data()` (wide → long reshape) |
+| `Helper/csv.R` | Generic CSV adapter: config + `load_data()` (already long format) |
 | `Scripts/sample_restrictions.R` | Exclusion criteria and subsetting |
 | `Scripts/balance_table.R` | Randomisation balance checks |
 | `Scripts/descriptives.R` | Summary statistics and key values |
@@ -51,7 +52,7 @@ Claude writes and runs R scripts from `main.R` in the project root:
 | `Scripts/robustness.R` | Regression robustness checks |
 | `Scripts/exploratory.R` | Exploratory analyses |
 | `Scripts/Further Analysis/` | Additional analyses beyond the core pipeline |
-| `Scripts/config_sync_to_folder.R` | Copy Output/ to external destinations (e.g. Overleaf) |
+| `Helper/config_sync_to_folder.R` | Copy Output/ to external destinations (e.g. Overleaf) |
 
 Cleaning runs once to produce `Data/data_cleaned.RData`. Normal analysis loads the pre-cleaned data and runs the analysis scripts sequentially. Claude manages this automatically.
 
@@ -174,8 +175,7 @@ Template/
 ├── Scripts/
 │   ├── config_init.R                   # Clear env, set wd, define paths
 │   ├── config_toolkit.R                # Packages, palette, theme, save functions, helpers
-│   ├── config_cleaning.R              # Orchestrator: cleaning + variable generation
-│   ├── config_sync_to_folder.R        # Copy Output/ to external destinations
+│   ├── config_cleaning.R              # Orchestrator: adapter selection + variable generation
 │   ├── sample_restrictions.R           # Exclusion criteria and subsetting
 │   ├── balance_table.R                 # Randomisation balance checks
 │   ├── descriptives.R                 # Summary statistics and key values
@@ -185,9 +185,13 @@ Template/
 │   └── Further Analysis/
 │       └── further_analysis.R          # Additional analyses beyond core pipeline
 │
+├── Helper/
+│   ├── otree.R                         # oTree adapter: config + load_data()
+│   ├── csv.R                           # Generic CSV adapter: config + load_data()
+│   └── config_sync_to_folder.R         # Copy Output/ to external destinations
+│
 ├── Data/
 │   ├── DataSets/                       # Raw data storage
-│   │   ├── cleaning.R                  # oTree CSV → long format
 │   │   └── .gitkeep
 │   ├── [data_cleaned.RData]            # Output of cleaning pipeline
 │   └── [checkpoint_prepared.RData]     # Checkpoint after sample restrictions
@@ -209,7 +213,7 @@ Template/
 
 ## Output paths
 
-The save functions in `Scripts/config_toolkit.R` write to all paths in the `output_paths` vector. Sync destinations are configured in `Scripts/config_init.R` and applied automatically by `Scripts/config_sync_to_folder.R` at the end of each run. To send output to multiple locations (e.g., local + Overleaf), add paths to `SYNC_DESTINATIONS`:
+The save functions in `Scripts/config_toolkit.R` write to all paths in the `output_paths` vector. Sync destinations are configured in `Scripts/config_init.R` and applied automatically by `Helper/config_sync_to_folder.R` at the end of each run. To send output to multiple locations (e.g., local + Overleaf), add paths to `SYNC_DESTINATIONS`:
 
 ```r
 # In Scripts/config_init.R:

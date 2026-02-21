@@ -53,6 +53,6 @@ source("Scripts/exploratory.R")
 
 # --- SYNC OUTPUTS -----------------------------------------------------------
 cat("Section: Sync\n")
-source("Scripts/config_sync_to_folder.R")
+source("Helper/config_sync_to_folder.R")
 
 cat("\n=== ANALYSIS COMPLETE ===\n")

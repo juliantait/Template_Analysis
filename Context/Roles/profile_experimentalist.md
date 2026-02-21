@@ -37,11 +37,11 @@
 
 ## Typical Script Pipeline
 
-1. `02_cleaning.R` — import raw experimental data, apply exclusions, recode variables.
-2. `03_variable_generation.R` — construct derived variables (treatment indicators, composite scores).
-3. `04_sample_restrictions.R` — apply sample restrictions and exclusion criteria.
-4. `05_balance_table.R` — randomisation balance checks across treatment groups.
-5. `06_descriptives.R` — summary statistics and key values referenced in the paper.
-6. `07_hypotheses.R` — non-parametric tests of hypotheses.
-7. `08_robustness.R` — OLS/logit regressions with controls replicating the same predictions.
-8. `09_exploratory.R` — additional analyses not covered by the main hypotheses.
+1. `config_cleaning.R` — import raw experimental data via the oTree adapter (`Helper/otree.R`), apply exclusions, recode variables.
+2. Variable generation (in `config_cleaning.R`) — construct derived variables (treatment indicators, composite scores).
+3. `sample_restrictions.R` — apply sample restrictions and exclusion criteria.
+4. `balance_table.R` — randomisation balance checks across treatment groups.
+5. `descriptives.R` — summary statistics and key values referenced in the paper.
+6. `hypotheses.R` — non-parametric tests of hypotheses.
+7. `robustness.R` — OLS/logit regressions with controls replicating the same predictions.
+8. `exploratory.R` — additional analyses not covered by the main hypotheses.

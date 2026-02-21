@@ -54,14 +54,14 @@ Select the specific target journal at the start of the project and note it in `r
 
 ## Typical Script Pipeline
 
-1. `02_cleaning.R` — import raw data (firm-level, product-level, market-level), merge sources, define market boundaries, recode variables.
-2. `03_variable_generation.R` — construct derived variables: market shares, concentration indices (HHI, CR4), price indices, instruments, cost proxies.
-3. `04_sample_restrictions.R` — apply sample restrictions (market definition, time period, minimum observations per firm/market).
-4. `05_balance_table.R` — summary statistics by market, time period, or treatment/control groups (if quasi-experimental).
-5. `06_descriptives.R` — descriptive patterns: market structure trends, price distributions, entry/exit rates, concentration dynamics.
-6. `07_hypotheses.R` — primary specifications: structural estimation or main reduced-form regressions.
-7. `08_robustness.R` — alternative specifications, alternative market definitions, instrument validity tests, sensitivity analyses.
-8. `09_exploratory.R` — counterfactual simulations (structural), heterogeneity by market type or time period, mechanism tests.
+1. `config_cleaning.R` — import raw data (firm-level, product-level, market-level) via the CSV adapter (`Helper/csv.R`), merge sources, define market boundaries, recode variables.
+2. Variable generation (in `config_cleaning.R`) — construct derived variables: market shares, concentration indices (HHI, CR4), price indices, instruments, cost proxies.
+3. `sample_restrictions.R` — apply sample restrictions (market definition, time period, minimum observations per firm/market).
+4. `balance_table.R` — summary statistics by market, time period, or treatment/control groups (if quasi-experimental).
+5. `descriptives.R` — descriptive patterns: market structure trends, price distributions, entry/exit rates, concentration dynamics.
+6. `hypotheses.R` — primary specifications: structural estimation or main reduced-form regressions.
+7. `robustness.R` — alternative specifications, alternative market definitions, instrument validity tests, sensitivity analyses.
+8. `exploratory.R` — counterfactual simulations (structural), heterogeneity by market type or time period, mechanism tests.
 
 ## Typical LaTeX Sections
 

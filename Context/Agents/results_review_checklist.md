@@ -40,7 +40,7 @@ These checks verify that the data behave as expected and that the descriptive st
 
 - [ ] **Summary statistics are plausible.** For each key variable, confirm that means, standard deviations, minima, and maxima fall within theoretically sensible ranges.
   - *What to look for:* Means outside plausible bounds, standard deviations of zero (no variation), negative values for variables that should be non-negative, values exceeding defined scale endpoints.
-  - *If this fails:* Trace the problem back to the data-preparation scripts (`02_cleaning.R`, `03_variable_generation.R`). Fix the variable construction and re-run. Log the correction in `Context/Flow/research_log.md`.
+  - *If this fails:* Trace the problem back to the data-preparation scripts (`config_cleaning.R` and the active adapter in `Helper/`). Fix the variable construction and re-run. Log the correction in `Context/Flow/research_log.md`.
 
 - [ ] **No floor or ceiling effects.** For bounded dependent variables, check whether the distribution is piled up at the boundary.
   - *What to look for:* More than 25% of observations at the minimum or maximum of the scale. Highly skewed distributions that would violate parametric assumptions.

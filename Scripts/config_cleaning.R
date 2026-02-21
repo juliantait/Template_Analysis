@@ -1,6 +1,6 @@
 # config_cleaning.R
-# Orchestrator: loads raw data via Data/DataSets/cleaning.R, generates derived
-# variables, and saves cleaned dataset(s) to Data/.
+# Orchestrator: loads raw data via a data-source adapter in Helper/,
+# generates derived variables, and saves cleaned dataset(s) to Data/.
 # Run once when starting analysis, then comment out in main.R.
 
 cat("  -> Cleaning: combining and cleaning datasets\n")
@@ -12,50 +12,14 @@ library(tidyr)
 library(dplyr)
 library(stringr)
 
-# Source the cleaning function
-source("Data/DataSets/cleaning.R")
+# === DATA SOURCE ===
+# Set to "otree" or "csv" to select the adapter in Helper/.
+data_source <- "otree"
 
-# === SESSION CONFIGURATION ===
-# List the session files to include (without .csv extension)
-# Example: file_names <- c("Session_01", "Session_02", "Session_03")
-file_names <- c()
-
-# Auto-detect if no sessions specified
-if (length(file_names) == 0) {
-  file_names <- sub("\\.csv$", "", list.files("Data/DataSets", pattern = "\\.csv$"))
-}
-if (length(file_names) == 0) stop("No CSV files found in Data/DataSets/")
-
-# === OTREE VARIABLE MAPPINGS ===
-# Map analysis variable names (left) to oTree column names (right)
-
-constant_variables <- c(
-  participant_id = "participant.code",
-  session        = "participant.session"
-  # treatment    = "participant.treatment_group",
-  # gender       = "outro.1.player.gender",
-  # age          = "outro.1.player.age"
-)
-
-variables_to_export <- c(
-  # "analysis_name" = "player.otree_column_name"
-  # mistake  = "player.mistake",
-  # report   = "player.report",
-  # payoff   = "group.payoff"
-)
-
-main_list <- c("main1")
+source(paste0("Helper/", data_source, ".R"))
 
 # === LOAD AND RESHAPE ===
-data <- clean_data(
-  working_directory    = getwd(),
-  subfolder            = "Data/DataSets/",
-  file_names           = file_names,
-  constant_variables   = constant_variables,
-  variables_to_export  = variables_to_export,
-  main_list            = main_list,
-  output_file          = "Data/compiled.Rdata"
-)
+data <- load_data(subfolder = "Data/DataSets/")
 
 # === VARIABLE GENERATION ===
 # Create derived variables here. Examples:

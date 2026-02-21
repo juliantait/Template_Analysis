@@ -1,7 +1,19 @@
 # =============================================================================
 # EXPLORATORY ANALYSES
 # =============================================================================
-# Exploratory analyses not covered by pre-registration.
+# Purpose: Interesting research that goes BEYOND the hypotheses.
+#
+# These are new questions suggested by the data — not tests of the primary
+# results. They may appear in the main text or appendix but are clearly
+# labelled as exploratory. This includes subgroup heterogeneity, mechanism
+# analyses, learning effects, additional outcomes, and data-driven patterns.
+#
+# If an exploratory analysis turns out to support or challenge a primary
+# finding, consider moving it to robustness.R instead.
+#
+# If an analysis is interesting but won't appear in the paper, it belongs
+# in Further Analysis/ (and gets a write-up in app_further.tex).
+#
 # Output: Graphs to Graphs/, Tables to Tables/
 # =============================================================================
 cat("    -> Running exploratory analyses\n")

@@ -12,14 +12,14 @@ A referee comment triggers re-analysis when it requires changing the code that p
 
 | Referee Request | Primary Script(s) | Cascade From | Codebook Update | Results Review Redo |
 |---|---|---|---|---|
-| Alternative specification (different model, different estimator) | `07_hypotheses.R` and/or `08_robustness.R` | No cascade if output-only; cascade if variable changes needed | No | Partial (affected analyses only) |
-| Questions sample restrictions (exclusion criteria, subsample definition) | `04_sample_restrictions.R` | Yes --- cascade to 05, 06, 07, 08, 09 | Yes (exclusion rules section) | Full |
-| Additional robustness checks (new tests, new controls, alternative SEs) | `08_robustness.R` | No cascade | No | Partial (robustness section only) |
-| Variable definition issue (recoding, measurement, composite construction) | `03_variable_generation.R` | Yes --- cascade to 04, 05, 06, 07, 08, 09 | Yes (variable definitions) | Full |
-| New exploratory analysis | `09_exploratory.R` | No cascade | No | Partial (exploratory section only) |
-| Data cleaning issue (raw data handling, missing value treatment, merging error) | `02_cleaning.R` | Yes --- cascade to 03, 04, 05, 06, 07, 08, 09 | Yes (raw variable descriptions) | Full |
-| Balance table concerns (different covariates, different test, stratification) | `05_balance_table.R` | No cascade | No | Partial (balance section only) |
-| Descriptive statistics changes (new summary, different grouping) | `06_descriptives.R` | No cascade | No | Partial (descriptives section only) |
+| Alternative specification (different model, different estimator) | `hypotheses.R` and/or `robustness.R` | No cascade if output-only; cascade if variable changes needed | No | Partial (affected analyses only) |
+| Questions sample restrictions (exclusion criteria, subsample definition) | `sample_restrictions.R` | Yes --- cascade to balance, descriptives, hypotheses, robustness, exploratory | Yes (exclusion rules section) | Full |
+| Additional robustness checks (new tests, new controls, alternative SEs) | `robustness.R` | No cascade | No | Partial (robustness section only) |
+| Variable definition issue (recoding, measurement, composite construction) | `config_cleaning.R` (variable generation section) | Yes --- cascade to sample_restrictions and all analysis scripts | Yes (variable definitions) | Full |
+| New exploratory analysis | `exploratory.R` | No cascade | No | Partial (exploratory section only) |
+| Data cleaning issue (raw data handling, missing value treatment, merging error) | `config_cleaning.R` + adapter in `Helper/` | Yes --- cascade to all downstream scripts | Yes (raw variable descriptions) | Full |
+| Balance table concerns (different covariates, different test, stratification) | `balance_table.R` | No cascade | No | Partial (balance section only) |
+| Descriptive statistics changes (new summary, different grouping) | `descriptives.R` | No cascade | No | Partial (descriptives section only) |
 | Different identification strategy | ESCALATE TO USER | --- | --- | --- |
 
 ### How to Read This Table
@@ -38,21 +38,19 @@ The analysis pipeline has a strict dependency chain. When a script changes, ever
 ### The Dependency Chain
 
 ```
-00_packages.R
+config_init.R
   |
-01_settings.R
+config_toolkit.R
   |
-02_cleaning.R
+config_cleaning.R  (sources Helper/{adapter}.R)
   |
-03_variable_generation.R
+sample_restrictions.R
   |
-04_sample_restrictions.R
-  |
-  +-- 05_balance_table.R
-  +-- 06_descriptives.R
-  +-- 07_hypotheses.R
-  +-- 08_robustness.R
-  +-- 09_exploratory.R
+  +-- balance_table.R
+  +-- descriptives.R
+  +-- hypotheses.R
+  +-- robustness.R
+  +-- exploratory.R
 ```
 
 Scripts 05--09 are all direct dependants of 04. They are not chained to each other unless one explicitly sources output from another.
@@ -61,16 +59,15 @@ Scripts 05--09 are all direct dependants of 04. They are not chained to each oth
 
 | Script Changed | Re-Run These Scripts | Rationale |
 |---|---|---|
-| `00_packages.R` | All (00--09) | Package changes can affect any downstream behaviour |
-| `01_settings.R` | All (01--09) | Theme, palette, or save function changes propagate everywhere |
-| `02_cleaning.R` | 02, 03, 04, 05, 06, 07, 08, 09 | Cleaned data is the foundation; everything downstream consumes it |
-| `03_variable_generation.R` | 03, 04, 05, 06, 07, 08, 09 | Generated variables flow into sample restrictions and all analyses |
-| `04_sample_restrictions.R` | 04, 05, 06, 07, 08, 09 | Sample definition determines every analytical result |
-| `05_balance_table.R` | 05 only | Terminal node; no other script depends on its output |
-| `06_descriptives.R` | 06 only | Terminal node |
-| `07_hypotheses.R` | 07 only | Terminal node |
-| `08_robustness.R` | 08 only | Terminal node |
-| `09_exploratory.R` | 09 only | Terminal node |
+| `config_init.R` | All scripts | Path and environment changes propagate everywhere |
+| `config_toolkit.R` | All analysis scripts | Theme, palette, or save function changes propagate everywhere |
+| `config_cleaning.R` or adapter in `Helper/` | config_cleaning, sample_restrictions, and all analysis scripts | Cleaned data is the foundation; everything downstream consumes it |
+| `sample_restrictions.R` | sample_restrictions and all analysis scripts | Sample definition determines every analytical result |
+| `balance_table.R` | balance_table only | Terminal node; no other script depends on its output |
+| `descriptives.R` | descriptives only | Terminal node |
+| `hypotheses.R` | hypotheses only | Terminal node |
+| `robustness.R` | robustness only | Terminal node |
+| `exploratory.R` | exploratory only | Terminal node |
 
 ### Exception: Cross-Dependencies Among 05--09
 
@@ -81,7 +78,7 @@ If any script from 05--09 reads an output file produced by another script in tha
 When a cascade is triggered:
 
 1. Identify the earliest changed script in the chain.
-2. Re-run `Scripts/00_main.R` from that script onward (or re-run the full pipeline --- the scripts are idempotent and the full pipeline is the safest option).
+2. Re-run `main.R` from that script onward (or re-run the full pipeline --- the scripts are idempotent and the full pipeline is the safest option).
 3. Do not re-run scripts upstream of the change unless they were also modified.
 
 ---
@@ -328,7 +325,7 @@ For each affected script:
 ### Step 6: Re-Run the Pipeline
 
 1. Identify the earliest script in the cascade.
-2. Re-run from that script onward (or run the full pipeline via `Scripts/00_main.R`).
+2. Re-run from that script onward (or run the full pipeline via `main.R`).
 3. Verify that the pipeline completes without errors.
 
 ### Step 7: Compare Outputs
@@ -471,8 +468,8 @@ These situations require deviation from the standard loop. Handle them as specif
 
 1. Stop the current revision loop.
 2. Document the error in `Context/Flow/research_log.md` with full detail.
-3. Fix `02_cleaning.R` (or whichever script contains the error).
-4. Re-run the entire pipeline from `02_cleaning.R` onward (full cascade).
+3. Fix `config_cleaning.R` or the adapter in `Helper/` (whichever contains the error).
+4. Re-run the entire pipeline from `config_cleaning.R` onward (full cascade).
 5. Produce a full results review redo (`results_review_v{N}.md`).
 6. Compare all outputs against the backup. If any substantive result changes (sign, significance, or large magnitude shift), ESCALATE TO USER before continuing with the revision response.
 7. If results are stable after fixing the error, resume the revision loop at Step 10 (rewriting paper sections).
@@ -508,7 +505,7 @@ These situations require deviation from the standard loop. Handle them as specif
 
 ### 7.5 Pipeline Fails to Run After Script Changes
 
-**Definition:** After modifying scripts to address referee comments, `00_main.R` throws an error.
+**Definition:** After modifying scripts to address referee comments, `main.R` throws an error.
 
 **Action:**
 

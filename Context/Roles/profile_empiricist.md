@@ -36,11 +36,11 @@
 
 ## Typical Script Pipeline
 
-1. `02_cleaning.R` — import raw data, merge sources, recode variables.
-2. `03_variable_generation.R` — construct derived variables and instrument definitions.
-3. `04_sample_restrictions.R` — apply sample restrictions and exclusion criteria.
-4. `05_balance_table.R` — summary statistics and covariate balance across groups.
-5. `06_descriptives.R` — descriptive statistics, distributions, and key values.
-6. `07_hypotheses.R` — primary regression specifications testing the main hypotheses.
-7. `08_robustness.R` — alternative specifications, placebo tests, sensitivity analyses.
-8. `09_exploratory.R` — heterogeneity analysis, mediation, or subgroup decompositions.
+1. `config_cleaning.R` — import raw data via the CSV adapter (`Helper/csv.R`), merge sources, recode variables.
+2. Variable generation (in `config_cleaning.R`) — construct derived variables and instrument definitions.
+3. `sample_restrictions.R` — apply sample restrictions and exclusion criteria.
+4. `balance_table.R` — summary statistics and covariate balance across groups.
+5. `descriptives.R` — descriptive statistics, distributions, and key values.
+6. `hypotheses.R` — primary regression specifications testing the main hypotheses.
+7. `robustness.R` — alternative specifications, placebo tests, sensitivity analyses.
+8. `exploratory.R` — heterogeneity analysis, mediation, or subgroup decompositions.

@@ -68,7 +68,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 - `Scripts/01_settings.R` (for output functions, palette, theme)
 - The active personality profile (`Context/Roles/profile_experimentalist.md` or `Context/Roles/profile_empiricist.md`)
 - If modifying an existing script: the current contents of that script
-- If the task depends on data structure: `Scripts/02_cleaning.R` and any relevant upstream scripts
+- If the task depends on data structure: `Scripts/config_cleaning.R`, the active adapter in `Helper/`, and any relevant upstream scripts
 
 **Produces:** Modified or new R script files saved to `Scripts/`. Output files saved to `Output/Graphs/`, `Output/Tables/`, or `Output/Text/` via the helper functions.
 
@@ -338,7 +338,7 @@ These are the standard parallelisation patterns for each project phase. The main
 
 **Agent count:** 2-3
 
-**Dependencies:** Data must be loaded. `Scripts/02_cleaning.R` should exist at minimum.
+**Dependencies:** Data must be loaded. `Scripts/config_cleaning.R` and the active adapter in `Helper/` should exist at minimum.
 
 **Integration:** Main agent reads all three summaries and decides what to populate in the codebook and what issues to log.
 

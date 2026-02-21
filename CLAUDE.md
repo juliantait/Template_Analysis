@@ -53,6 +53,35 @@ Use agents liberally for:
 
 Keep the main thread lean. Delegate freely.
 
+## Change Log Enforcement
+
+Every agent **must** update `Context/Flow/research_log.md` after any change — code, LaTeX, data, or documentation. This is a blocking requirement, not a suggestion. No change is complete until it is logged.
+
+Use the emoji-prefixed entry format so entries are scannable at a glance:
+
+| Emoji | Category      |
+| ----- | ------------- |
+| 🔧    | Code fix      |
+| 📊    | New analysis  |
+| ✏️     | Writing       |
+| 🧹    | Cleanup       |
+| 📋    | Documentation |
+| ⚙️     | Pipeline      |
+
+Entry format:
+
+```
+### YYYY-MM-DD — [emoji] [Short title]
+
+**Decision:** What was decided or changed.
+
+**Rationale:** Why this change was made.
+
+**Alternatives considered:** What other options were on the table and why they were rejected.
+
+**Action:** What changed in the codebase or documentation as a result.
+```
+
 ## Key Agent Resources
 
 

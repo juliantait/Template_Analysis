@@ -8,10 +8,10 @@ This codebook is a **gated dependency** — it must be kept current as a prerequ
 
 | Trigger | Action | Who |
 |---------|--------|-----|
-| Data arrives (before 02_cleaning.R) | Populate **Data Source** and **Raw Variables** sections from any shipped documentation in `Data/`, or by examining the data directly | Agent or researcher |
-| After 02_cleaning.R runs | Update **Raw Variables** with any cleaning notes; add entries to **Recoding Notes** and **Exclusions** if cleaning changed or dropped anything | Agent |
-| After 03_variable_generation.R runs | Populate **Generated Variables** for every new variable created | Agent |
-| After 04_sample_restrictions.R runs | Update **Exclusions** with every restriction applied and the N dropped | Agent |
+| Data arrives (before config_cleaning.R) | Populate **Data Source** and **Raw Variables** sections from any shipped documentation in `Data/`, or by examining the data directly | Agent or researcher |
+| After config_cleaning.R runs | Update **Raw Variables** with any cleaning notes; add entries to **Recoding Notes** and **Exclusions** if cleaning changed or dropped anything | Agent |
+| After variable generation (in config_cleaning.R) | Populate **Generated Variables** for every new variable created | Agent |
+| After sample_restrictions.R runs | Update **Exclusions** with every restriction applied and the N dropped | Agent |
 | Before any analysis script (05+) runs | **Gate check**: Raw Variables, Generated Variables, and Exclusions sections must all be populated. If they are empty, stop and populate them first. | Agent |
 | During analysis (05-09) | If any script creates new variables or recodes existing ones, update the relevant section | Agent |
 | During revision cycles | If any variable definition changes, update the codebook and log the change in `Context/Flow/research_log.md` | Agent |
@@ -40,7 +40,7 @@ Variables as they appear in the original dataset before any cleaning or recoding
 
 ## Generated Variables
 
-Variables created in `Scripts/03_variable_generation.R` or later scripts.
+Variables created in the variable generation section of `Scripts/config_cleaning.R` or later scripts.
 
 | Variable | Type | Description | Source / derivation | Created in |
 |----------|------|-------------|---------------------|------------|

@@ -18,11 +18,12 @@ The selected personality determines the target journal, analysis methodology, pr
 
 ## Project Structure
 
-This is a self-contained empirical analysis project. All scripts are sourced in numbered order from `Scripts/00_main.R`. Output is written to `Output/Graphs/`, `Output/Tables/`, and `Output/Text/` via the `save_graph()`, `save_table()`, and `save_text()` helper functions defined in `Scripts/01_settings.R`.
+This is a self-contained empirical analysis project. The entry point is `main.R` in the project root. Output is written to `Output/Graphs/`, `Output/Tables/`, and `Output/Text/` via the `save_graph()`, `save_table()`, and `save_text()` helper functions defined in `Scripts/config_toolkit.R`.
 
-- Settings, palette, and theme: `Scripts/01_settings.R`
-- Data preparation: `Scripts/02_cleaning.R` → `Scripts/03_variable_generation.R` → `Scripts/04_sample_restrictions.R`
-- Analysis: `Scripts/05_balance_table.R` through `Scripts/09_exploratory.R`
+- Settings, palette, and theme: `Scripts/config_toolkit.R`
+- Data preparation: `Scripts/config_cleaning.R` (uses a data-source adapter from `Helper/`) → variable generation → `Scripts/sample_restrictions.R`
+- Data-source adapters: `Helper/otree.R` (oTree), `Helper/csv.R` (generic CSV)
+- Analysis: `Scripts/balance_table.R` through `Scripts/exploratory.R`
 
 ## Decision Log
 
@@ -35,18 +36,52 @@ See `Context/Flow/research_log.md` for a chronological record of all design and 
 
 ### Script separation: main pipeline vs. further analysis
 
-The main analysis scripts (`05_balance_table.R` through `09_exploratory.R`) must contain **only analyses that are reported in the paper** — anything the reader will see in the main text or standard appendix tables. If a result is mentioned, cited, or displayed in the manuscript, the code that produces it lives in the main pipeline.
+The main analysis scripts (`balance_table.R` through `exploratory.R`) must contain **only analyses that are reported in the paper** — anything the reader will see in the main text or standard appendix tables. If a result is mentioned, cited, or displayed in the manuscript, the code that produces it lives in the main pipeline.
 
-Analyses that go beyond what is reported — additional robustness checks, sensitivity tests, supplementary explorations, or anything that is primarily for the researchers' own confidence rather than the reader — belong in `Scripts/Further Analysis/`. This includes:
+#### Robustness (`robustness.R`)
+
+Robustness analyses exist to **confirm or challenge the primary findings**. Every analysis in this script must be directly tied to a hypothesis or result from `hypotheses.R`. The question robustness asks is: "Does the main result hold (or break) when we change the specification?" This includes:
+
+- Alternative functional forms or control sets
+- Different standard-error clustering
+- Placebo and falsification tests
+- Subsample stability (e.g. dropping outliers, trimming tails)
+- Sensitivity to exclusion criteria
+
+If an analysis does not speak to an existing finding, it does not belong in `robustness.R`. It goes in `exploratory.R` or `Further Analysis/`.
+
+#### Exploratory (`exploratory.R`)
+
+Exploratory analyses are **interesting research that goes beyond the hypotheses**. These are not tests of the primary results — they are new questions suggested by the data. They may appear in the main text or appendix, but they are clearly labelled as exploratory and are not pre-registered (for experimentalist projects) or part of the core empirical strategy (for empiricist/IO projects). This includes:
+
+- Subgroup heterogeneity not implied by theory
+- Mechanism or mediation analyses
+- Learning effects, time dynamics, or additional outcome variables
+- Patterns that emerge from the data and are worth documenting
+
+If an exploratory analysis turns out to support or challenge a primary finding, consider moving it to `robustness.R` instead.
+
+#### Further Analysis (`Scripts/Further Analysis/`)
+
+Further Analysis is for work that **does not appear in the paper** but is nonetheless interesting to us as researchers. These are analyses we ran, found informative, but ultimately decided were not relevant for the manuscript. They belong in a separate supplementary appendix (`app_further.tex`) that is available upon request but not included in the main submission.
+
+Each further analysis gets a brief write-up in `app_further.tex` explaining:
+- What we looked at and why it seemed interesting on the face of it
+- What we found
+- Why it turned out not to be relevant for the paper
+
+This includes:
 
 - Extended robustness tests beyond the core set reported in the paper
 - Sanity checks and diagnostic analyses that inform the researchers but are not cited
-- Supplementary appendix material that is "available upon request" rather than included
+- Supplementary analyses that are "available upon request"
 - Exploratory analyses that did not make the final manuscript
 
 The Further Analysis folder is commented out in `main.R` by default and must be explicitly enabled. It uses the same save functions and naming conventions as the main pipeline, but its output is kept separate from paper-critical results.
 
 **Rule of thumb**: if it is in the paper, it is in the main scripts. If it is just for us, it is in Further Analysis.
+
+**Robustness vs. exploratory**: robustness tests the results we already have; exploratory investigates things we didn't hypothesise. Do not confuse the two.
 
 ## Output Naming Convention
 
@@ -214,18 +249,21 @@ Template/
 │       ├── codebook.md              # Variable-level data documentation
 │       └── research_log.md          # Chronological decision log
 │
+├── Helper/
+│   ├── otree.R                      # oTree adapter: config + load_data()
+│   ├── csv.R                        # Generic CSV adapter: config + load_data()
+│   └── config_sync_to_folder.R      # Copy Output/ to external destinations
+│
 ├── Scripts/
-│   ├── 00_main.R                    # Master script — run this
-│   ├── 00_packages.R                # Package loading
-│   ├── 01_settings.R                # Palette, theme, output paths, save functions
-│   ├── 02_cleaning.R                # Data loading and cleaning
-│   ├── 03_variable_generation.R     # Derived/computed variables
-│   ├── 04_sample_restrictions.R     # Exclusion criteria and subsetting
-│   ├── 05_balance_table.R           # Balance checks / summary statistics
-│   ├── 06_descriptives.R            # Summary statistics and key values
-│   ├── 07_hypotheses.R              # Main hypothesis tests / primary regressions
-│   ├── 08_robustness.R              # Robustness checks
-│   ├── 09_exploratory.R             # Exploratory analyses / counterfactuals
+│   ├── config_init.R                # Clear env, set wd, define paths
+│   ├── config_toolkit.R             # Packages, palette, theme, save functions, helpers
+│   ├── config_cleaning.R            # Orchestrator: adapter selection + variable generation
+│   ├── sample_restrictions.R        # Exclusion criteria and subsetting
+│   ├── balance_table.R              # Balance checks / summary statistics
+│   ├── descriptives.R               # Summary statistics and key values
+│   ├── hypotheses.R                 # Main hypothesis tests / primary regressions
+│   ├── robustness.R                 # Robustness checks
+│   ├── exploratory.R                # Exploratory analyses / counterfactuals
 │   └── Further Analysis/
 │       └── further_analysis.R       # Beyond-paper robustness, diagnostics, researcher-only checks
 │
@@ -242,6 +280,7 @@ Template/
     ├── experiment.tex               # Rename for IO: data.tex or institutional_background.tex
     ├── results.tex
     ├── discussion.tex
+    ├── app_further.tex              # Further analyses appendix (available upon request)
     ├── appendix.tex
     └── references.bib
 ```
