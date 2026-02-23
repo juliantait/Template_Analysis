@@ -1,6 +1,6 @@
 # Results Review Checklist
 
-> **When to use:** After all analysis scripts (05 through 09) have run and output has been generated in `Output/`. This checklist must be completed before any writing begins. It replaces the vague instruction to "stress-test the empirical strategy" with a concrete, item-by-item review protocol.
+> **When to use:** After all analysis scripts (`balance_table.R` through `exploratory.R`) have run and output has been generated in `Output/`. This checklist must be completed before any writing begins. It replaces the vague instruction to "stress-test the empirical strategy" with a concrete, item-by-item review protocol.
 >
 > **How to use:** Work through every item in order. For each check, tick the box when satisfied, or follow the failure action if the check does not pass. Record your findings as you go — they feed directly into the `results_review.md` artefact produced at the end.
 >
@@ -12,11 +12,11 @@
 
 These checks determine whether the identification strategy is credible. A failed randomisation check does not necessarily invalidate the study, but it must be addressed before writing.
 
-**Source:** `Output/Tables/balance_*.tex`, `Output/Text/balance_*.txt`, and any output from `05_balance_table.R`.
+**Source:** `Output/Tables/balance_*.tex`, `Output/Text/balance_*.txt`, and any output from `balance_table.R`.
 
 - [ ] **Treatment arms are balanced on observables.** Check each variable in the balance table. For each, confirm that the difference between arms is not statistically significant at the 5% level and that the magnitude of any difference is substantively small.
   - *What to look for:* p-values below .05, standardised mean differences above 0.25 SD, or patterns where multiple variables lean the same direction even if none is individually significant.
-  - *If this fails:* Log which variables are imbalanced and the magnitude. Assess whether the imbalance is severe enough to warrant adding controls in the robustness regressions. If severe (>0.5 SD or significant at 1%), flag as a concern that must be disclosed in the paper and add the imbalanced variable(s) as controls in `08_robustness.R`. Re-run robustness checks before proceeding. Record the decision in `Context/Flow/research_log.md`.
+  - *If this fails:* Log which variables are imbalanced and the magnitude. Assess whether the imbalance is severe enough to warrant adding controls in the robustness regressions. If severe (>0.5 SD or significant at 1%), flag as a concern that must be disclosed in the paper and add the imbalanced variable(s) as controls in `robustness.R`. Re-run robustness checks before proceeding. Record the decision in `Context/Flow/research_log.md`.
 
 - [ ] **No joint significance of imbalance.** If the balance table includes an omnibus test (joint F-test or chi-squared test across all baseline variables), confirm it is not significant.
   - *What to look for:* A joint test p-value below .10.
@@ -36,7 +36,7 @@ These checks determine whether the identification strategy is credible. A failed
 
 These checks verify that the data behave as expected and that the descriptive statistics support the rest of the analysis. Surprises here often signal data-quality problems or misspecified variables.
 
-**Source:** `Output/Tables/descriptives_*.tex`, `Output/Text/descriptives_*.txt`, `Output/Graphs/descriptives_*.png`, and any output from `06_descriptives.R`.
+**Source:** `Output/Tables/descriptives_*.tex`, `Output/Text/descriptives_*.txt`, `Output/Graphs/descriptives_*.png`, and any output from `descriptives.R`.
 
 - [ ] **Summary statistics are plausible.** For each key variable, confirm that means, standard deviations, minima, and maxima fall within theoretically sensible ranges.
   - *What to look for:* Means outside plausible bounds, standard deviations of zero (no variation), negative values for variables that should be non-negative, values exceeding defined scale endpoints.
@@ -52,7 +52,7 @@ These checks verify that the data behave as expected and that the descriptive st
 
 - [ ] **Full-sample and subgroup descriptives are consistent.** Where descriptives are reported for the full sample and for subgroups (e.g., by treatment arm), verify that the subgroup statistics aggregate correctly to the full-sample statistics.
   - *What to look for:* Weighted averages of subgroup means should approximate the overall mean. Subgroup sample sizes should sum to the total N.
-  - *If this fails:* This typically signals a coding error in sample restrictions or subsetting. Trace back to `04_sample_restrictions.R` and `06_descriptives.R`. Fix and re-run.
+  - *If this fails:* This typically signals a coding error in sample restrictions or subsetting. Trace back to `sample_restrictions.R` and `descriptives.R`. Fix and re-run.
 
 - [ ] **Key values referenced in subsequent analyses match.** Confirm that any numbers cited in hypothesis-test output or robustness tables (e.g., group means, sample sizes) are consistent with what appears in the descriptive output.
   - *What to look for:* Discrepant means, percentages, or Ns between descriptive and analytical output files.
@@ -64,11 +64,11 @@ These checks verify that the data behave as expected and that the descriptive st
 
 This is the core of the review. For each pre-registered hypothesis, determine whether the evidence supports it, partially supports it, or does not support it. Be honest — do not shade verdicts to make the story tidier.
 
-**Source:** `Output/Tables/hypotheses_*.tex`, `Output/Text/hypotheses_*.txt`, `Output/Graphs/hypotheses_*.png`, and any output from `07_hypotheses.R`. Cross-reference against the hypotheses listed in `pre_analysis_plan.md` (Section 1) and `research_plan.md`.
+**Source:** `Output/Tables/hypotheses_*.tex`, `Output/Text/hypotheses_*.txt`, `Output/Graphs/hypotheses_*.png`, and any output from `hypotheses.R`. Cross-reference against the hypotheses listed in `pre_analysis_plan.md` (Section 1) and `research_plan.md`.
 
 - [ ] **Every pre-registered hypothesis has a corresponding test.** Map each hypothesis in the PAP to a specific test in the output. No hypothesis should be left untested.
   - *What to look for:* Hypotheses in the PAP that have no matching output, or tests in the output that do not correspond to any pre-registered hypothesis.
-  - *If this fails:* If a hypothesis was not tested, add the test to `07_hypotheses.R` and re-run. If a test appears that is not pre-registered, it belongs in `09_exploratory.R` and must be labelled as exploratory. Log any moves in `Context/Flow/research_log.md`.
+  - *If this fails:* If a hypothesis was not tested, add the test to `hypotheses.R` and re-run. If a test appears that is not pre-registered, it belongs in `exploratory.R` and must be labelled as exploratory. Log any moves in `Context/Flow/research_log.md`.
 
 - [ ] **Direction of each effect matches the prediction.** For each hypothesis, check whether the observed effect goes in the predicted direction.
   - *What to look for:* Effects in the opposite direction from what was hypothesised. Also note null effects where a strong directional prediction was made.
@@ -76,7 +76,7 @@ This is the core of the review. For each pre-registered hypothesis, determine wh
 
 - [ ] **Statistical significance is assessed correctly.** For each test, confirm: (a) the correct test was used (as specified in the PAP), (b) sidedness matches the directional nature of the hypothesis, (c) the p-value is reported to the correct precision (per JEBO conventions: two decimal places, three if p < .01, floor at p < .001).
   - *What to look for:* One-sided tests used for non-directional hypotheses (or vice versa). Wrong test type (e.g., paired test on independent samples). Rounding errors in p-values.
-  - *If this fails:* Fix the test specification in `07_hypotheses.R` and re-run. Log the correction.
+  - *If this fails:* Fix the test specification in `hypotheses.R` and re-run. Log the correction.
 
 - [ ] **Effect sizes are meaningful, not just statistically significant.** For each significant result, assess the practical magnitude of the effect. Compare to relevant benchmarks from the literature if available.
   - *What to look for:* Statistically significant effects that are trivially small in magnitude (e.g., a 0.5 percentage point difference in a donation task). Also flag large effect sizes that seem implausible for the context.
@@ -92,7 +92,7 @@ This is the core of the review. For each pre-registered hypothesis, determine wh
 
 These checks determine whether the main findings hold up under alternative analytical choices. Results that survive only one specification are fragile and must be flagged.
 
-**Source:** `Output/Tables/robustness_*.tex`, `Output/Text/robustness_*.txt`, and any output from `08_robustness.R`.
+**Source:** `Output/Tables/robustness_*.tex`, `Output/Text/robustness_*.txt`, and any output from `robustness.R`.
 
 - [ ] **Results survive alternative specifications.** For each main finding, check whether the corresponding robustness regression produces the same qualitative conclusion (same direction, similar magnitude, still significant or at least pointing the same way).
   - *What to look for:* Sign flips, large changes in magnitude (e.g., coefficient halves when controls are added), or loss of significance in robustness specifications.
@@ -120,7 +120,7 @@ These checks determine whether the main findings hold up under alternative analy
 
 Exploratory results are not pre-registered and must be presented as such. But strong exploratory findings can add value to the paper if handled correctly.
 
-**Source:** `Output/Tables/exploratory_*.tex`, `Output/Text/exploratory_*.txt`, `Output/Graphs/exploratory_*.png`, and any output from `09_exploratory.R`.
+**Source:** `Output/Tables/exploratory_*.tex`, `Output/Text/exploratory_*.txt`, `Output/Graphs/exploratory_*.png`, and any output from `exploratory.R`.
 
 - [ ] **Strong exploratory results identified.** Scan all exploratory output for results that are statistically significant, meaningful in magnitude, and theoretically interpretable.
   - *What to look for:* Effect sizes comparable to or larger than the main pre-registered findings. Patterns that illuminate mechanisms or heterogeneity.
@@ -136,7 +136,7 @@ Exploratory results are not pre-registered and must be presented as such. But st
 
 - [ ] **Exploratory results are clearly separated from confirmatory results.** Verify that the output file naming and structure make clear which analyses are exploratory.
   - *What to look for:* Exploratory output files should follow the naming convention `exploratory_*`. No exploratory results should appear in the hypotheses or robustness output files.
-  - *If this fails:* Move misplaced analyses to the correct script. If an exploratory analysis has been run in `07_hypotheses.R` or `08_robustness.R`, relocate it to `09_exploratory.R` and re-run.
+  - *If this fails:* Move misplaced analyses to the correct script. If an exploratory analysis has been run in `hypotheses.R` or `robustness.R`, relocate it to `exploratory.R` and re-run.
 
 ---
 
@@ -168,7 +168,7 @@ These checks address the mechanical correctness of the statistical implementatio
 
 - [ ] **Standard errors are correctly clustered.** Verify that standard errors in all regression output are clustered at the level specified in the PAP and researcher profile (typically the group/session level for experiments).
   - *What to look for:* Unclustered standard errors in models where clustering is required. Clustering at the wrong level (e.g., individual level when the randomisation was at the session level).
-  - *If this fails:* Fix the clustering in `08_robustness.R` (and `07_hypotheses.R` if parametric tests are used there). Re-run and check whether any significance conclusions change. Log the correction.
+  - *If this fails:* Fix the clustering in `robustness.R` (and `hypotheses.R` if parametric tests are used there). Re-run and check whether any significance conclusions change. Log the correction.
 
 - [ ] **Multiple testing corrections applied correctly.** Cross-reference the correction method used against what the PAP specifies.
   - *What to look for:* The PAP specifies Holm but the scripts apply Bonferroni (or no correction at all). Corrections applied to the wrong family of tests.
@@ -180,7 +180,7 @@ These checks address the mechanical correctness of the statistical implementatio
 
 - [ ] **Sample sizes match across analyses.** Compare the total N and per-arm Ns reported in: (a) the balance table, (b) the descriptive statistics, (c) the hypothesis tests, (d) the robustness regressions.
   - *What to look for:* Any discrepancy that is not explained by the analytical design.
-  - *If this fails:* Identify where the leak occurs. Check `04_sample_restrictions.R` for exclusions that may be applied inconsistently. Fix and re-run affected scripts.
+  - *If this fails:* Identify where the leak occurs. Check `sample_restrictions.R` for exclusions that may be applied inconsistently. Fix and re-run affected scripts.
 
 - [ ] **Output files are complete and correctly named.** Verify that all expected output files exist in `Output/Graphs/`, `Output/Tables/`, and `Output/Text/`, and that they follow the naming convention defined in `Context/context.md`.
   - *What to look for:* Missing files that should have been generated. Files with incorrect naming patterns. Empty files.

@@ -126,6 +126,15 @@ Claude uses specialised subagents to parallelise work and maintain fresh perspec
 
 Reviewer agents are always spawned with clean context windows — they never see the writing process. This ensures genuinely independent evaluation.
 
+## Feedback
+
+The `Feedback/` folder stores all external feedback: referee reports, seminar comments, committee feedback, and other external input. Files follow a naming convention with a prefix indicating the source type:
+
+- **`referee_report_`** — formal journal referee reports (e.g., `referee_report_jebo_r1.md`)
+- **`comments_`** — everything else: seminars, conferences, committee members, co-authors (e.g., `comments_esa_2026.md`, `comments_committee_smith.md`)
+
+Files are immutable — new rounds of feedback get new files. These feed into the revision protocol when addressing comments.
+
 ## Project tracking
 
 Two files track project state:
@@ -190,6 +199,8 @@ Template/
 │   ├── csv.R                           # Generic CSV adapter: config + load_data()
 │   └── config_sync_to_folder.R         # Copy Output/ to external destinations
 │
+├── Feedback/                           # Referee reports, committee comments, external feedback
+│   └── .gitkeep
 ├── Data/
 │   ├── DataSets/                       # Raw data storage
 │   │   └── .gitkeep

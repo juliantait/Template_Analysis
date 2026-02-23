@@ -64,7 +64,7 @@ All tables must be publication-ready for the Journal of Economic Behavior & Orga
 ---
 
 ## Export
-- Use `save_table(content, filename)` from `Scripts/01_settings.R`.
+- Use `save_table(content, filename)` from `Scripts/config_toolkit.R`.
 - Output as `.tex` files to `Output/Tables/`.
 - No manual spacing hacks beyond `\addlinespace`.
 - Same variable names and ordering across all tables.

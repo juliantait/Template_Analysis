@@ -13,13 +13,13 @@ Subagents exist to parallelise independent work and to isolate context when fres
 ### Always Parallel
 
 - **Independent file exploration.** Reading and summarising multiple context files, data files, or script files that do not depend on each other. Example: one agent reads the codebook while another reads the research plan.
-- **Independent analysis sections.** Scripts 05 through 09 can often run concurrently once data preparation (02-04) is complete, because they read from the same cleaned dataset and write to separate output files.
+- **Independent analysis sections.** Analysis scripts (`balance_table.R` through `exploratory.R`) can often run concurrently once data preparation (`config_cleaning.R` through `sample_restrictions.R`) is complete, because they read from the same cleaned dataset and write to separate output files.
 - **Independent paper sections.** Introduction and Methods can be drafted concurrently because they draw on different source material. Theory and Experiment Design can be concurrent for the same reason.
 - **Referee cycles.** The two referee subagents (Cycle 1: Theory & Framework, Cycle 2: Results & Integration) always run in parallel. See `Context/Roles/profile_referee.md` for their specific spawning rules.
 
 ### Never Parallel
 
-- **Sequential data pipeline.** Scripts 02 (cleaning) -> 03 (variable generation) -> 04 (sample restrictions) must run in strict order. Each depends on the output of the previous.
+- **Sequential data pipeline.** `config_cleaning.R` (cleaning + variable generation) -> `sample_restrictions.R` (exclusion criteria) must run in strict order. Each depends on the output of the previous.
 - **Results before writing.** No drafting agent may begin the Results section until all analysis scripts have run and the results review gate is complete (`results_review.md` exists).
 - **Discussion before Results.** The Discussion section depends on what the Results section reports. Draft Results first.
 - **Referee before revision.** The referee report must be complete before the revise-and-resubmit cycle begins.
@@ -27,8 +27,8 @@ Subagents exist to parallelise independent work and to isolate context when fres
 
 ### Judgement Calls
 
-- **Robustness checks.** If the robustness script (08) tests specifications that depend on the main hypothesis results (07), run them sequentially. If the robustness checks are pre-specified in the PAP and independent of the exact hypothesis results, they can run in parallel.
-- **Exploratory analyses.** Script 09 is often informed by what 05-08 reveal. If the exploratory analysis is pre-specified, run it in parallel. If it responds to patterns found in the main results, it must wait.
+- **Robustness checks.** If `robustness.R` tests specifications that depend on the main hypothesis results (`hypotheses.R`), run them sequentially. If the robustness checks are pre-specified in the PAP and independent of the hypothesis results, they can run in parallel.
+- **Exploratory analyses.** `exploratory.R` is often informed by what `balance_table.R` through `robustness.R` reveal. If the exploratory analysis is pre-specified, run it in parallel. If it responds to patterns found in the main results, it must wait.
 - **Appendix drafting.** Can run in parallel with main paper sections if it covers pre-specified material. Must wait if it documents post-hoc analyses.
 
 ---
@@ -65,7 +65,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 - `Context/context.md`
 - `research_plan.md` (for variable definitions, hypotheses, analysis strategy)
 - `Context/Flow/codebook.md` (for variable-level documentation)
-- `Scripts/01_settings.R` (for output functions, palette, theme)
+- `Scripts/config_toolkit.R` (for output functions, palette, theme)
 - The active personality profile (`Context/Roles/profile_experimentalist.md` or `Context/Roles/profile_empiricist.md`)
 - If modifying an existing script: the current contents of that script
 - If the task depends on data structure: `Scripts/config_cleaning.R`, the active adapter in `Helper/`, and any relevant upstream scripts
@@ -75,7 +75,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 **Output format:** Uses the standard subagent report format (Section 3 below). The "Output" field must list every file written or modified, with the full path.
 
 **Constraints:**
-- All packages must be loaded in `Scripts/00_packages.R`, never mid-script.
+- All packages must be loaded in `Scripts/config_toolkit.R`, never mid-script.
 - All output must use `save_graph()`, `save_table()`, `save_text()` -- never hardcoded paths.
 - File naming follows the `{script}_{analysis}_{descriptor}.{ext}` convention in `Context/context.md`.
 - Must add `cat()` progress messages.
@@ -291,8 +291,9 @@ File conflicts are the most common coordination failure in multi-agent work. The
 
 ### Document Files
 
-- Research documents (`results_review.md`, `referee_report.md`, `referee_response.md`, etc.) go in the project root.
-- Referee reports are numbered and must never overwrite previous versions. Check what exists and increment.
+- Research documents (`results_review.md`, `referee_response.md`, etc.) go in the project root.
+- External feedback (referee reports, seminar comments, committee feedback) goes in `Feedback/` using the naming convention in `Context/context.md`.
+- Feedback files are immutable — never overwrite. New rounds of feedback get new files.
 - Context files go in their designated subdirectory under `Context/`.
 
 ---
@@ -344,11 +345,11 @@ These are the standard parallelisation patterns for each project phase. The main
 
 ---
 
-### Data Preparation (Scripts 02-04)
+### Data Preparation (`config_cleaning.R` -> `sample_restrictions.R`)
 
 **Pattern:** Strictly sequential. Single agent (Analyst type).
 
-**Why:** Each script depends on the output of the previous one. 02 produces the cleaned data, 03 creates derived variables from it, 04 applies exclusions. No parallelism possible.
+**Why:** Each script depends on the output of the previous one. `config_cleaning.R` orchestrates adapter selection, variable generation, and produces the cleaned data. `sample_restrictions.R` applies exclusion criteria and subsetting. No parallelism possible.
 
 **Agent count:** 1
 
@@ -356,20 +357,20 @@ These are the standard parallelisation patterns for each project phase. The main
 
 ---
 
-### Analysis Scripts (Scripts 05-09)
+### Analysis Scripts (`balance_table.R` through `exploratory.R`)
 
 **Pattern:** Parallel for independent scripts, sequential where dependencies exist.
 
 **Standard approach:**
-- Script 05 (Balance table): Independent. Can run as soon as 04 is complete.
-- Script 06 (Descriptives): Independent. Can run as soon as 04 is complete.
-- Script 07 (Hypotheses): Independent. Can run as soon as 04 is complete.
-- Script 08 (Robustness): May depend on 07 if robustness checks are designed to probe the main results. If robustness specs are pre-registered and independent of 07's output, can run in parallel.
-- Script 09 (Exploratory): Often depends on what 05-08 reveal. If pre-specified, can run in parallel. If responsive, must wait.
+- `balance_table.R`: Independent. Can run as soon as `sample_restrictions.R` is complete.
+- `descriptives.R`: Independent. Can run as soon as `sample_restrictions.R` is complete.
+- `hypotheses.R`: Independent. Can run as soon as `sample_restrictions.R` is complete.
+- `robustness.R`: May depend on `hypotheses.R` if robustness checks are designed to probe the main results. If robustness specs are pre-registered and independent of hypothesis output, can run in parallel.
+- `exploratory.R`: Often depends on what `balance_table.R` through `robustness.R` reveal. If pre-specified, can run in parallel. If responsive, must wait.
 
 **Agent count:** Up to 4 parallel Analyst agents (one per independent script), plus 1 sequential for dependent scripts.
 
-**Dependencies:** Scripts 02-04 must be complete. Research plan must define the analyses.
+**Dependencies:** Data preparation (`config_cleaning.R` through `sample_restrictions.R`) must be complete. Research plan must define the analyses.
 
 **Integration:** Main agent collects all output, checks for consistency, and prepares for the results review.
 

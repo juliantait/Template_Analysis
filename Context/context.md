@@ -104,12 +104,12 @@ All parts use **lowercase** with **underscores** as separators. No spaces, no ca
 
 | File                                                  | Script              | Analysis        | Descriptor              |
 |-------------------------------------------------------|----------------------|-----------------|-------------------------|
-| `balance_demographics.tex`                            | 05_balance_table     | —               | demographics            |
-| `descriptives_values.txt`                             | 06_descriptives      | —               | values                  |
-| `hypotheses_h1_hiding_by_stakes.png`                  | 07_hypotheses        | h1              | hiding_by_stakes        |
-| `robustness_regression_treatment_with_controls.tex`   | 08_robustness        | regression      | treatment_with_controls |
-| `exploratory_learning_mistake_hiding_rates.png`       | 09_exploratory       | learning        | mistake_hiding_rates    |
-| `exploratory_manager_types_mean_outcomes_matched.tex` | 09_exploratory       | manager_types   | mean_outcomes_matched   |
+| `balance_demographics.tex`                            | balance_table        | —               | demographics            |
+| `descriptives_values.txt`                             | descriptives         | —               | values                  |
+| `hypotheses_h1_hiding_by_stakes.png`                  | hypotheses           | h1              | hiding_by_stakes        |
+| `robustness_regression_treatment_with_controls.tex`   | robustness           | regression      | treatment_with_controls |
+| `exploratory_learning_mistake_hiding_rates.png`       | exploratory          | learning        | mistake_hiding_rates    |
+| `exploratory_manager_types_mean_outcomes_matched.tex` | exploratory          | manager_types   | mean_outcomes_matched   |
 
 ### Rules
 - If a script has only one output, the `{analysis}` part can be omitted (e.g. `balance_demographics.tex`).
@@ -119,6 +119,43 @@ All parts use **lowercase** with **underscores** as separators. No spaces, no ca
 ## Codebook
 
 See `Context/Flow/codebook.md` for variable-level documentation of the dataset: raw variables, generated variables, recoding decisions, and exclusions. Populated as needed during data preparation.
+
+## Feedback
+
+The `Feedback/` folder stores all external feedback received during the project: referee reports from journal submissions, comments from seminar or conference presentations, thesis committee feedback, and any other external input.
+
+### Naming convention
+
+Files use a descriptive prefix indicating the source type, followed by the origin and an optional descriptor. All lowercase with underscores.
+
+```
+{source_type}_{origin}_{descriptor}.md
+```
+
+| Component | Description | Examples |
+|---|---|---|
+| `{source_type}` | The kind of feedback | `referee_report`, `comments` |
+| `{origin}` | Who provided it or where it came from | `jebo_r1`, `jebo_r2`, `esa_2026`, `committee_smith`, `seminar_lse` |
+| `{descriptor}` | Optional further detail | `major_revision`, `poster_session` |
+
+### Examples
+
+| File | Source |
+|---|---|
+| `referee_report_jebo_r1.md` | First referee, JEBO R&R round 1 |
+| `referee_report_jebo_r2.md` | Second referee, JEBO R&R round 1 |
+| `referee_report_jebo_r1_round2.md` | First referee, JEBO R&R round 2 |
+| `comments_esa_2026.md` | Comments received at ESA 2026 conference |
+| `comments_committee_smith.md` | Thesis committee feedback from Smith |
+| `comments_seminar_lse.md` | Feedback from LSE seminar presentation |
+| `comments_coauthor_jones.md` | Written comments from a co-author |
+
+### Rules
+
+- Use `referee_report_` for formal journal referee reports.
+- Use `comments_` for everything else: seminars, conferences, committee members, co-authors, informal reviews.
+- Files are **immutable** — never edit a feedback file after it is saved. If a new round of feedback arrives, create a new file.
+- Feedback files are inputs to the revision protocol (`Context/Agents/revision_protocol.md`). When starting a revision cycle, read all files in `Feedback/` to identify the full set of comments to address.
 
 ## Research Basis Documents
 
@@ -267,6 +304,8 @@ Template/
 │   └── Further Analysis/
 │       └── further_analysis.R       # Beyond-paper robustness, diagnostics, researcher-only checks
 │
+├── Feedback/                        # Referee reports, committee comments, external feedback
+│   └── .gitkeep
 ├── Data/                            # Raw data files (+ any shipped codebook)
 ├── Output/
 │   ├── Graphs/                      # .png files

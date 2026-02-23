@@ -1,6 +1,6 @@
 # JEBO Graph Style Guidelines
 
-All figures must be publication-ready for the Journal of Economic Behavior & Organization (JEBO) and must use the shared `common_theme` object defined in `Scripts/01_settings.R`.
+All figures must be publication-ready for the Journal of Economic Behavior & Organization (JEBO) and must use the shared `common_theme` object defined in `Scripts/config_toolkit.R`.
 
 ---
 
@@ -11,7 +11,7 @@ All figures must be publication-ready for the Journal of Economic Behavior & Org
 - Economics conventions: show means with uncertainty and explicit treatment contrasts.
 
 ## Visual design
-- Always apply `common_theme` (defined in `Scripts/01_settings.R`):
+- Always apply `common_theme` (defined in `Scripts/config_toolkit.R`):
     - `theme_minimal()` with visible axes re-added.
     - Light major gridlines only (`grey95`), no minor gridlines.
     - Axis lines and ticks visible but subtle (`grey30`).
@@ -25,7 +25,7 @@ All figures must be publication-ready for the Journal of Economic Behavior & Org
 - Avoid redundancy (do not repeat "Mean" in both title and axis).
 
 ## Data presentation
-- Plot means with +/- 1 SE (controlled by `se_plot` in `Scripts/01_settings.R`).
+- Plot means with +/- 1 SE (controlled by `se_plot` in `Scripts/config_toolkit.R`).
 - Use points with error bars for cross-sectional comparisons.
 - Use lines only for time trends or ordered rounds.
 
@@ -35,13 +35,13 @@ All figures must be publication-ready for the Journal of Economic Behavior & Org
 - Treatment labels must match paper terminology exactly.
 
 ## Colour
-- Use colours from `palette_lots` (defined in `Scripts/01_settings.R`).
+- Use colours from `palette_lots` (defined in `Scripts/config_toolkit.R`).
 - Restrained, high-contrast, colorblind-safe (Paul Tol bright scheme).
 - Must remain interpretable in greyscale.
 - Colour should encode treatment only.
 
 ## Export
-- Use `save_graph(plot, filename)` from `Scripts/01_settings.R`.
+- Use `save_graph(plot, filename)` from `Scripts/config_toolkit.R`.
 - Default: 300 DPI, PNG format, 10x6 inches.
 - Captions and notes are added in LaTeX, not in the .png file.
 - Figures must be exportable at journal resolution without manual edits.

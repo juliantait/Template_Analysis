@@ -53,7 +53,7 @@ sample_restrictions.R
   +-- exploratory.R
 ```
 
-Scripts 05--09 are all direct dependants of 04. They are not chained to each other unless one explicitly sources output from another.
+The analysis scripts (`balance_table.R` through `exploratory.R`) are all direct dependants of `sample_restrictions.R`. They are not chained to each other unless one explicitly sources output from another.
 
 ### Cascade Rules
 
@@ -69,9 +69,9 @@ Scripts 05--09 are all direct dependants of 04. They are not chained to each oth
 | `robustness.R` | robustness only | Terminal node |
 | `exploratory.R` | exploratory only | Terminal node |
 
-### Exception: Cross-Dependencies Among 05--09
+### Exception: Cross-Dependencies Among Analysis Scripts
 
-If any script from 05--09 reads an output file produced by another script in that range (e.g., 08 reads a model object saved by 07), then changing the upstream script cascades to the downstream one. The agent must check for such cross-dependencies before concluding that a script is a terminal node. Grep for `readRDS`, `load`, `read_csv`, or `source` calls that reference other scripts' outputs.
+If any analysis script (`balance_table.R` through `exploratory.R`) reads an output file produced by another script in that group (e.g., `robustness.R` reads a model object saved by `hypotheses.R`), then changing the upstream script cascades to the downstream one. The agent must check for such cross-dependencies before concluding that a script is a terminal node. Grep for `readRDS`, `load`, `read_csv`, or `source` calls that reference other scripts' outputs.
 
 ### Executing a Cascade
 
@@ -159,12 +159,12 @@ The results review (`results_review.md`) is the quality gate between analysis an
 
 | What Changed | Results Review Action | Scope |
 |---|---|---|
-| Any script from 02--04 was modified | Full redo | All sections of the results review |
-| Any script from 05--07 was modified | Full redo | All sections of the results review |
+| `config_cleaning.R` or `sample_restrictions.R` was modified | Full redo | All sections of the results review |
+| `balance_table.R`, `descriptives.R`, or `hypotheses.R` was modified | Full redo | All sections of the results review |
 | Sample changed (different N, different exclusions) | Full redo | All sections of the results review |
-| Only `08_robustness.R` changed | Partial redo | Review only the robustness section |
-| Only `09_exploratory.R` changed | Partial redo | Review only the exploratory section |
-| Only `08_robustness.R` AND `09_exploratory.R` changed | Partial redo | Review robustness and exploratory sections |
+| Only `robustness.R` changed | Partial redo | Review only the robustness section |
+| Only `exploratory.R` changed | Partial redo | Review only the exploratory section |
+| Only `robustness.R` AND `exploratory.R` changed | Partial redo | Review robustness and exploratory sections |
 | Only LaTeX/writing changes, no analysis modifications | Skip | No results review needed |
 | Only cosmetic script changes (comments, formatting, no output change) | Skip | No results review needed |
 
@@ -257,13 +257,13 @@ After triaging, group the comments into **independent task clusters** — sets o
 **Example:**
 
 ```
-Comment A: change variable definition → 03 → cascades to 04, 05, 06, 07, 08, 09
-Comment B: new robustness check → 08 only
-Comment C: different balance table test → 05 only
+Comment A: change variable definition → config_cleaning → cascades to sample_restrictions and all analysis scripts
+Comment B: new robustness check → robustness only
+Comment C: different balance table test → balance_table only
 Comment D: rewrite discussion section → writing only
 Comment E: clarify a claim → response only
 
-Cluster 1: {A, B, C} — all connected via the cascade from 03
+Cluster 1: {A, B, C} — all connected via the cascade from config_cleaning
 Cluster 2: {D} — writing only, independent
 Cluster 3: {E} — response only, independent
 ```
@@ -271,8 +271,8 @@ Cluster 3: {E} — response only, independent
 If Comment A did not exist:
 
 ```
-Cluster 1: {B} — 08 only
-Cluster 2: {C} — 05 only
+Cluster 1: {B} — robustness only
+Cluster 2: {C} — balance_table only
 Cluster 3: {D} — writing only
 Cluster 4: {E} — response only
 ```
@@ -510,7 +510,7 @@ These situations require deviation from the standard loop. Handle them as specif
 **Action:**
 
 1. Do not proceed with any other revision steps.
-2. Debug the error. Common causes: variable name changes in 03 not propagated to 07, removed columns in 04 that 06 still references, package version conflicts.
+2. Debug the error. Common causes: variable name changes in `config_cleaning.R` not propagated to `hypotheses.R`, removed columns in `sample_restrictions.R` that `descriptives.R` still references, package version conflicts.
 3. Fix the error and re-run the full pipeline.
 4. If the error is caused by a fundamental incompatibility (e.g., the referee's requested analysis requires a package that conflicts with the existing pipeline), document the issue and ESCALATE TO USER if no resolution is found within a reasonable scope.
 
@@ -578,8 +578,7 @@ Quick reference for all files produced or consumed during revision.
 
 | File | Location | Created By | Mutable? |
 |---|---|---|---|
-| `referee_report.md` | Project root | Referee agent (cycle 1) | No --- immutable |
-| `referee_report_{N}.md` | Project root | Referee agent (cycle N) | No --- immutable |
+| `referee_report_*.md` | `Feedback/` | Referee agent / external | No --- immutable |
 | `referee_response.md` | Project root | Revising agent (cycle 1) | No --- immutable |
 | `referee_response_{N}.md` | Project root | Revising agent (cycle N) | No --- immutable |
 | `results_review.md` | Project root | Results review (original) | No --- immutable |
