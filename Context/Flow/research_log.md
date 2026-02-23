@@ -43,11 +43,11 @@ Copy this template for each new decision. Prefix the title with the appropriate 
 
 **Decision:** Created a `Feedback/` directory for storing all external feedback received during the project. Established a naming convention using `referee_report_` and `comments_` prefixes to distinguish journal referee reports from other feedback sources.
 
-**Rationale:** The template had no structured location for incoming feedback. Referee reports, seminar comments, and committee feedback are key inputs to the revision protocol but had no defined home. A dedicated folder with clear naming conventions ensures feedback is easy to find, consistently organised, and feeds cleanly into `Context/Agents/revision_protocol.md`.
+**Rationale:** The template had no structured location for incoming feedback. Referee reports, seminar comments, and committee feedback are key inputs to the revision protocol but had no defined home. A dedicated folder with clear naming conventions ensures feedback is easy to find, consistently organised, and feeds cleanly into `Context/Roles/revision_protocol.md`.
 
 **Alternatives considered:** Storing feedback inside `Context/Flow/` alongside the research log. Rejected because feedback is external input, not internally generated documentation. Also considered a flat naming scheme without prefixes, but the `referee_report_` / `comments_` distinction makes the origin immediately scannable.
 
-**Action:** Created `Feedback/` with `.gitkeep`. Added Feedback section to `Context/context.md` with naming convention, examples, and rules. Added Feedback section and directory entry to `README.md`. Updated directory tree in `Context/context.md` and `README.md`. Updated `Context/Agents/subagent_protocol.md` document file-writing protocol to reference `Feedback/` for external feedback. Updated `Context/Agents/revision_protocol.md` file location summary.
+**Action:** Created `Feedback/` with `.gitkeep`. Added Feedback section to `Context/context.md` with naming convention, examples, and rules. Added Feedback section and directory entry to `README.md`. Updated directory tree in `Context/context.md` and `README.md`. Updated `Context/Roles/subagent_protocol.md` document file-writing protocol to reference `Feedback/` for external feedback. Updated `Context/Roles/revision_protocol.md` file location summary.
 
 ### 2026-02-23 — 🧹 Fixed outdated numbered script references across Context files
 
@@ -57,4 +57,4 @@ Copy this template for each new decision. Prefix the title with the appropriate 
 
 **Alternatives considered:** None — the old names are simply wrong and must be corrected.
 
-**Action:** Updated references in `Context/Skills/graphs.md`, `Context/Skills/tables.md`, `Context/Roles/researcher_profile.md`, `Context/Agents/subagent_protocol.md`, `Context/Agents/results_review_checklist.md`, `Context/Agents/revision_protocol.md`, and `Context/context.md` (output naming examples table).
+**Action:** Updated references in `Context/Roles/skill_graphs.md`, `Context/Roles/skill_tables.md`, `Context/Roles/researcher_profile.md`, `Context/Roles/subagent_protocol.md`, `Context/Roles/results_review_checklist.md`, `Context/Roles/revision_protocol.md`, and `Context/context.md` (output naming examples table).

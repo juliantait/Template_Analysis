@@ -25,7 +25,7 @@ The first step is selecting a research personality (experimentalist, empiricist,
 - **Experimentalist** → `pre_analysis_plan.md` — pre-registered commitments (hypotheses, DVs, conditions, analyses, exclusion rules, sample size).
 - **Empiricist / IO** → `research_intention.md` — planned empirical strategy (research question, identification, data, specifications).
 
-These files do not exist in the project root until a project begins. Claude copies the template and either populates it from an uploaded document (AsPredicted, OSF, grant proposal, working paper) or guides you through creating one via a structured interview (`Context/Agents/researcher_interview.md`).
+These files do not exist in the project root until a project begins. Claude copies the template and either populates it from an uploaded document (AsPredicted, OSF, grant proposal, working paper) or guides you through creating one via a structured interview (`Context/Roles/researcher_interview.md`).
 
 The document has a readiness checklist at the bottom. Claude will not move on until every item is ticked.
 
@@ -60,7 +60,7 @@ All output goes to `Output/Graphs/` (.png), `Output/Tables/` (.tex), and `Output
 
 ### Phase 4: Results review (quality gate)
 
-Before any writing begins, Claude must complete a formal results review using a 50+ item checklist (`Context/Agents/results_review_checklist.md`). This covers:
+Before any writing begins, Claude must complete a formal results review using a 50+ item checklist (`Context/Roles/results_review_checklist.md`). This covers:
 
 - Balance and randomisation integrity
 - Descriptive coherence (plausible ranges, no floor/ceiling effects)
@@ -89,7 +89,7 @@ Their reports are merged into a single referee report saved as `referee_report.m
 
 ### Phase 7: Revise and resubmit
 
-Claude addresses every referee comment through a structured revision protocol (`Context/Agents/revision_protocol.md`). This includes:
+Claude addresses every referee comment through a structured revision protocol (`Context/Roles/revision_protocol.md`). This includes:
 
 - Triaging comments (agree / partially agree / disagree)
 - Identifying which scripts need re-running and managing the cascade (e.g., changing a variable definition in script 03 triggers re-runs of scripts 04-09)
@@ -114,7 +114,7 @@ Set the personality in the research plan before analysis begins. Claude applies 
 
 ## Agent system
 
-Claude uses specialised subagents to parallelise work and maintain fresh perspectives where needed. The full protocol is in `Context/Agents/subagent_protocol.md`. Five agent types are defined:
+Claude uses specialised subagents to parallelise work and maintain fresh perspectives where needed. The full protocol is in `Context/Roles/subagent_protocol.md`. Five agent types are defined:
 
 | Agent | Purpose |
 |-------|---------|
@@ -157,11 +157,6 @@ Template/
 │   ├── Templates/
 │   │   ├── pre_analysis_plan.md     # Clean PAP template (experimentalist)
 │   │   └── research_intention.md    # Clean research intention template (empiricist/IO)
-│   ├── Agents/
-│   │   ├── researcher_interview.md  # Decision-tree PAP / research intention elicitation script
-│   │   ├── results_review_checklist.md  # 50+ item results review gate
-│   │   ├── subagent_protocol.md     # Agent spawning, output, and handoff rules
-│   │   └── revision_protocol.md     # Multi-cycle revision and re-analysis protocol
 │   ├── Roles/
 │   │   ├── researcher_profile.md    # Background, journal, writing style, R prefs
 │   │   ├── profile_experimentalist.md  # Experiment-specific conventions
@@ -169,10 +164,13 @@ Template/
 │   │   ├── profile_io.md            # Industrial organisation conventions
 │   │   ├── profile_referee.md       # Simulated referee persona (orchestration)
 │   │   ├── profile_referee_cycle1.md  # Referee Cycle 1: Theory & Framework
-│   │   └── profile_referee_cycle2.md  # Referee Cycle 2: Results & Integration
-│   ├── Tasks/
-│   │   ├── graphs.md                # Graph style guidelines
-│   │   └── tables.md                # Table style guidelines
+│   │   ├── profile_referee_cycle2.md  # Referee Cycle 2: Results & Integration
+│   │   ├── researcher_interview.md  # Decision-tree PAP / research intention elicitation script
+│   │   ├── results_review_checklist.md  # 50+ item results review gate
+│   │   ├── subagent_protocol.md     # Agent spawning, output, and handoff rules
+│   │   ├── revision_protocol.md     # Multi-cycle revision and re-analysis protocol
+│   │   ├── skill_graphs.md          # Graph style guidelines
+│   │   └── skill_tables.md          # Table style guidelines
 │   └── Flow/
 │       ├── timeline.md              # Project progress tracker
 │       ├── codebook.md              # Variable-level data documentation

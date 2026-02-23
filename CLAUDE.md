@@ -24,13 +24,13 @@ Once the personality is set, create the **research basis document** before movin
 
 1. Check if the user has a PAP to upload (from AsPredicted, OSF, or similar).
 2. **If a PAP exists**: copy the template from `Context/Templates/pre_analysis_plan.md` to the project root as `pre_analysis_plan.md`, then populate it from the uploaded document. Use it as the basis for `research_plan.md`.
-3. **If no PAP exists**: copy the template to root and guide the user through creating one using `Context/Agents/researcher_interview.md`. The PAP must be completed before the research plan.
+3. **If no PAP exists**: copy the template to root and guide the user through creating one using `Context/Roles/researcher_interview.md`. The PAP must be completed before the research plan.
 
 ### Empiricist / IO path
 
 1. Ask the user if they have an existing research intention document — a grant proposal, working paper draft, internal planning document, or anything describing the research question, data, and approach.
 2. **If a document exists**: copy the template from `Context/Templates/research_intention.md` to the project root as `research_intention.md`, then populate it from the uploaded document. Use it as the basis for `research_plan.md`.
-3. **If no document exists**: copy the template to root and guide the user through creating one using `Context/Agents/researcher_interview.md`. The research intention must be completed before the research plan.
+3. **If no document exists**: copy the template to root and guide the user through creating one using `Context/Roles/researcher_interview.md`. The research intention must be completed before the research plan.
 
 ### Templates
 
@@ -52,6 +52,36 @@ This is a self-contained empirical analysis project. The entry point is `main.R`
 - Data-source adapters: `Helper/otree.R` (oTree), `Helper/csv.R` (generic CSV)
 - Analysis: `Scripts/balance_table.R` through `Scripts/exploratory.R`
 
+## Draft Snapshots
+
+At the end of every to-do part or agent session that changes LaTeX content, copy `LaTeX/main.pdf` to the project root as a numbered draft snapshot.
+
+**Naming convention:**
+
+```
+{paper_title}_DRAFT_{N}.pdf
+```
+
+The paper title is taken from the `\title{}` field in `LaTeX/main.tex`, converted to lowercase with underscores (no spaces, no special characters). `N` is a simple incrementing integer starting at 1.
+
+**Examples:**
+
+```
+hiding_in_plain_sight_DRAFT_1.pdf
+hiding_in_plain_sight_DRAFT_2.pdf
+hiding_in_plain_sight_DRAFT_3.pdf
+```
+
+**Procedure:**
+
+1. Read the `\title{}` from `LaTeX/main.tex` and convert it to a filename-safe slug (lowercase, underscores, strip punctuation).
+2. Check the project root for existing `*_DRAFT_*.pdf` files.
+3. Find the highest draft number. If none exist, the next number is `1`.
+4. Copy `LaTeX/main.pdf` to `{paper_title}_DRAFT_{N}.pdf` in the project root.
+5. Log the snapshot in `Context/Flow/research_log.md` alongside the other changes from that session.
+
+Draft snapshots are **immutable** — never overwrite or delete a previous draft. If `LaTeX/main.pdf` does not exist yet (e.g. pre-writing phases), skip the snapshot.
+
 ## Decision Log
 
 See `Context/Flow/research_log.md` for a chronological record of all design and analytical decisions with rationale.
@@ -66,6 +96,7 @@ The researcher populates the to-do with specific, actionable work items grouped 
 2. Implement each task, ticking off items as they are completed.
 3. When a part is finished, mark it `DONE` and write a completion report to `Context/Flow/todo_report_<part_label>.md` listing every file changed, what was changed, and any judgement calls.
 4. Log all changes in `Context/Flow/research_log.md`.
+5. If `LaTeX/main.pdf` exists, take a draft snapshot (see **Draft Snapshots** above).
 
 When all parts are done, the researcher resets the file for the next batch.
 
@@ -195,7 +226,7 @@ Files use a descriptive prefix indicating the source type, followed by the origi
 - Use `referee_report_` for formal journal referee reports.
 - Use `comments_` for everything else: seminars, conferences, committee members, co-authors, informal reviews.
 - Files are **immutable** — never edit a feedback file after it is saved. If a new round of feedback arrives, create a new file.
-- Feedback files are inputs to the revision protocol (`Context/Agents/revision_protocol.md`). When starting a revision cycle, read all files in `Feedback/` to identify the full set of comments to address.
+- Feedback files are inputs to the revision protocol (`Context/Roles/revision_protocol.md`). When starting a revision cycle, read all files in `Feedback/` to identify the full set of comments to address.
 
 ## Research Plan
 
@@ -204,10 +235,10 @@ See `research_plan.md` for the full study design. It builds on the research basi
 ## Task-Specific Context
 
 ### Graphs
-If you are making a graph, study `Context/Skills/graphs.md`.
+If you are making a graph, study `Context/Roles/skill_graphs.md`.
 
 ### Tables
-If you are making a table, study `Context/Skills/tables.md`.
+If you are making a table, study `Context/Roles/skill_tables.md`.
 
 ### Writing
 If you are writing paper text or LaTeX, study `Context/Roles/researcher_profile.md` and the active personality profile for journal conventions.
@@ -248,7 +279,7 @@ If you are acting as a referee, study `Context/Roles/profile_referee.md` for the
 
 **After making a decision**: Add an entry to `Context/Flow/research_log.md` (date, decision, rationale, action). If it changes the study design, also update `research_plan.md`.
 
-**After completing a task**: Update `Context/Flow/timeline.md` — set Status to `Done`, fill in the Date Done, and add any relevant notes. Update the "Last updated" date at the top. If the completed work revealed new tasks, add them as new rows.
+**After completing a task**: Update `Context/Flow/timeline.md` — set Status to `Done`, fill in the Date Done, and add any relevant notes. Update the "Last updated" date at the top. If the completed work revealed new tasks, add them as new rows. If the task changed LaTeX content, take a draft snapshot (see **Draft Snapshots**).
 
 **After all analyses are complete, before writing**: You must complete the Results Review gate described in `research_plan.md`. Read all output, critically evaluate the empirical strategy in light of the actual results, make any necessary adjustments to scripts or the research plan, and log decisions. You must produce a `results_review.md` file in the project root documenting the review (see `research_plan.md` for the required contents). Do not begin writing until this review is done, `results_review.md` exists, and the timeline marks the phase as complete.
 
@@ -260,7 +291,7 @@ If you are acting as a referee, study `Context/Roles/profile_referee.md` for the
 
 ## Agent Strategy
 
-Spare no expense. Spawn as many subagents as necessary to parallelise independent tasks and preserve context in the main conversation. See `Context/Agents/subagent_protocol.md` for the full protocol on when to spawn, output format, handoff rules, and context isolation.
+Spare no expense. Spawn as many subagents as necessary to parallelise independent tasks and preserve context in the main conversation. See `Context/Roles/subagent_protocol.md` for the full protocol on when to spawn, output format, handoff rules, and context isolation.
 
 Use agents liberally for:
 
@@ -273,12 +304,12 @@ Keep the main thread lean. Delegate freely.
 
 ## Agent Resources
 
-| Resource                    | Location                                     | When to use                                                                      |
-| --------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------- |
-| Researcher interview script | `Context/Agents/researcher_interview.md`     | When eliciting a PAP or research intention from a user with no existing document |
-| Results review checklist    | `Context/Agents/results_review_checklist.md` | At the results review gate, before writing begins                                |
-| Subagent protocol           | `Context/Agents/subagent_protocol.md`        | Before spawning any subagent                                                     |
-| Revision protocol           | `Context/Agents/revision_protocol.md`        | When a referee report triggers re-analysis                                       |
+| Resource                    | Location                                      | When to use                                                                      |
+| --------------------------- | --------------------------------------------- | -------------------------------------------------------------------------------- |
+| Researcher interview script | `Context/Roles/researcher_interview.md`       | When eliciting a PAP or research intention from a user with no existing document |
+| Results review checklist    | `Context/Roles/results_review_checklist.md`   | At the results review gate, before writing begins                                |
+| Subagent protocol           | `Context/Roles/subagent_protocol.md`          | Before spawning any subagent                                                     |
+| Revision protocol           | `Context/Roles/revision_protocol.md`          | When a referee report triggers re-analysis                                       |
 
 ## Change Log Enforcement
 
@@ -322,11 +353,6 @@ Template/
 │   ├── Templates/
 │   │   ├── pre_analysis_plan.md     # Clean PAP template (experimentalist)
 │   │   └── research_intention.md    # Clean research intention template (empiricist/IO)
-│   ├── Agents/
-│   │   ├── researcher_interview.md  # Decision-tree PAP / research intention elicitation script
-│   │   ├── results_review_checklist.md # Item-by-item results review gate checklist
-│   │   ├── subagent_protocol.md     # Subagent spawning, output, and handoff rules
-│   │   └── revision_protocol.md     # Multi-cycle revision and re-analysis protocol
 │   ├── Roles/
 │   │   ├── researcher_profile.md    # General: background, writing style, LaTeX, R prefs
 │   │   ├── profile_experimentalist.md  # Experimental economics — targets JEBO
@@ -334,10 +360,13 @@ Template/
 │   │   ├── profile_io.md            # Industrial organisation — targets RAND, JIE, IJIO, JEMS
 │   │   ├── profile_referee.md       # Simulated referee persona (orchestration)
 │   │   ├── profile_referee_cycle1.md  # Referee Cycle 1: Theory & Framework
-│   │   └── profile_referee_cycle2.md  # Referee Cycle 2: Results & Integration
-│   ├── Skills/
-│   │   ├── graphs.md                # Graph style guidelines
-│   │   └── tables.md                # Table style guidelines
+│   │   ├── profile_referee_cycle2.md  # Referee Cycle 2: Results & Integration
+│   │   ├── researcher_interview.md  # Decision-tree PAP / research intention elicitation script
+│   │   ├── results_review_checklist.md # Item-by-item results review gate checklist
+│   │   ├── subagent_protocol.md     # Subagent spawning, output, and handoff rules
+│   │   ├── revision_protocol.md     # Multi-cycle revision and re-analysis protocol
+│   │   ├── skill_graphs.md          # Graph style guidelines
+│   │   └── skill_tables.md          # Table style guidelines
 │   └── Flow/
 │       ├── timeline.md              # Project progress snapshot
 │       ├── todo.md                  # Agent task queue (actionable work items)

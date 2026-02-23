@@ -65,7 +65,7 @@ This pre-analysis plan (PAP) captures the core pre-registered commitments of an 
 ### Agent instructions
 
 1. **Check whether the user has a PAP to upload** (from AsPredicted, OSF, or a PDF). If yes, extract the content and populate this template.
-2. **If no PAP exists**, guide the user through creating one by asking questions that follow this template's structure. Use the experimentalist sections of the interview script in `Context/Agents/researcher_interview.md`.
+2. **If no PAP exists**, guide the user through creating one by asking questions that follow this template's structure. Use the experimentalist sections of the interview script in `Context/Roles/researcher_interview.md`.
 3. **Once this PAP is complete**, proceed to `research_plan.md`. The research plan expands the PAP with theoretical framework, detailed variable definitions, codebook references, timeline, and review gates.
 
 ### PAP Readiness Checklist

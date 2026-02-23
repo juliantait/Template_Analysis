@@ -21,12 +21,12 @@ This file is the authoritative snapshot of project progress. Update it whenever 
 | Hypothesis tests | | Pending | Balance table, Descriptives | | |
 | Robustness checks | | Pending | Hypothesis tests | | |
 | Exploratory analyses | | Pending | Hypothesis tests | | |
-| **Results review** | | Pending | Robustness checks, Exploratory analyses | | Gate — produce `results_review.md` using `Context/Agents/results_review_checklist.md` before writing |
+| **Results review** | | Pending | Robustness checks, Exploratory analyses | | Gate — produce `results_review.md` using `Context/Roles/results_review_checklist.md` before writing |
 | Writing | | Pending | Results review | | |
 | **Referee report — Cycle 1** | | Pending | Writing | | Gate — Theory & Framework review; see `Context/Roles/profile_referee_cycle1.md` |
 | **Referee report — Cycle 2** | | Pending | Writing | | Gate — Results & Integration review; see `Context/Roles/profile_referee_cycle2.md` |
 |   ↳ Referee report synthesised | | Pending | Referee report — Cycle 1, Referee report — Cycle 2 | | Merge into final `referee_report.md`; see `Context/Roles/profile_referee.md` |
-| **Revise & resubmit** | | Pending | Referee report synthesised | | Address all referee comments; see `Context/Agents/revision_protocol.md` |
+| **Revise & resubmit** | | Pending | Referee report synthesised | | Address all referee comments; see `Context/Roles/revision_protocol.md` |
 | Submission | | Pending | Revise & resubmit | | |
 
 ## How to maintain this timeline
@@ -38,5 +38,5 @@ This file is the authoritative snapshot of project progress. Update it whenever 
 - If a phase has sub-tasks, indent them beneath the parent phase (prefix with `  ↳`).
 - **Before starting a task**: check its `Blocked By` column. If any listed phase is not `Done`, the task cannot begin.
 - **After completing a task**: check if any downstream tasks were blocked only by this one — if so, they are now unblocked and can begin.
-- During **revision cycles**: add sub-rows for each cycle (e.g., "Revise & resubmit (cycle 2)") following `Context/Agents/revision_protocol.md`.
+- During **revision cycles**: add sub-rows for each cycle (e.g., "Revise & resubmit (cycle 2)") following `Context/Roles/revision_protocol.md`.
 - **Always update "Last updated"** at the top of this file when making changes.

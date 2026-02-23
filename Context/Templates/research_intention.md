@@ -84,7 +84,7 @@ This research intention document captures the planned empirical strategy for an 
 
 1. **Ask the user if they have an existing research intention document** — this could be a grant proposal, working paper draft, internal planning document, or any document that describes the research question, data, and empirical approach.
 2. **If the user uploads a document**, extract the relevant information and populate this template.
-3. **If no document exists**, guide the user through creating one by asking questions that follow this template's structure. Use the empiricist/IO sections of the interview script in `Context/Agents/researcher_interview.md`.
+3. **If no document exists**, guide the user through creating one by asking questions that follow this template's structure. Use the empiricist/IO sections of the interview script in `Context/Roles/researcher_interview.md`.
 4. **Once this document is complete**, proceed to `research_plan.md`. The research plan expands the intention with theoretical framework, detailed variable definitions, codebook references, timeline, and review gates.
 
 ### Readiness Checklist

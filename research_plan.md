@@ -169,7 +169,7 @@ The agent must:
 
 1. **Read all generated output** — every table, graph, and text file in `Output/`.
 2. **Compare results against hypotheses** — which were supported, which were not, and which were ambiguous? Are effect sizes meaningful or trivially small?
-3. **Stress-test the empirical strategy** using the item-by-item checklist in `Context/Agents/results_review_checklist.md`. Work through every section (balance, descriptive coherence, hypothesis verdicts, robustness, exploratory, cross-analysis coherence, technical quality, red flags) and tick each item.
+3. **Stress-test the empirical strategy** using the item-by-item checklist in `Context/Roles/results_review_checklist.md`. Work through every section (balance, descriptive coherence, hypothesis verdicts, robustness, exploratory, cross-analysis coherence, technical quality, red flags) and tick each item.
 4. **Check for coherence across analyses** — do descriptives, hypothesis tests, robustness checks, and exploratory results tell a consistent story? Flag any contradictions.
 5. **Identify necessary adjustments** — if the results call for changes to variable definitions, sample restrictions, additional controls, alternative specifications, or reframing of hypotheses, make those changes now. Update the relevant scripts, re-run, and log the decision in `Context/Flow/research_log.md`.
 6. **Update the research plan** — revise the Analysis Strategy, Hypotheses, or Variables sections of this file if anything changed.
@@ -200,7 +200,7 @@ The referee-then-revise cycle is **iterative**. After a Revise & Resubmit round,
 
 ### Revise and resubmit
 
-Once the referee report is complete, a new session begins to address every comment. This is a full revise-and-resubmit cycle, not a cosmetic pass. Follow `Context/Agents/revision_protocol.md` for the full multi-cycle protocol, including cascade rules for re-running scripts and output versioning.
+Once the referee report is complete, a new session begins to address every comment. This is a full revise-and-resubmit cycle, not a cosmetic pass. Follow `Context/Roles/revision_protocol.md` for the full multi-cycle protocol, including cascade rules for re-running scripts and output versioning.
 
 The revising agent must:
 
