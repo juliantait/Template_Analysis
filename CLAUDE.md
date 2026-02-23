@@ -78,9 +78,38 @@ hiding_in_plain_sight_DRAFT_3.pdf
 2. Check the project root for existing `*_DRAFT_*.pdf` files.
 3. Find the highest draft number. If none exist, the next number is `1`.
 4. Copy `LaTeX/main.pdf` to `{paper_title}_DRAFT_{N}.pdf` in the project root.
-5. Log the snapshot in `Context/Flow/research_log.md` alongside the other changes from that session.
+5. Add a sticky note annotation to the draft PDF (see **Sticky Note** below).
+6. Log the snapshot in `Context/Flow/research_log.md` alongside the other changes from that session.
 
 Draft snapshots are **immutable** — never overwrite or delete a previous draft. If `LaTeX/main.pdf` does not exist yet (e.g. pre-writing phases), skip the snapshot.
+
+### Sticky Note
+
+Every draft snapshot in the project root **must** have a sticky note annotation added to the first page summarising the changes implemented in that session. This gives the researcher an at-a-glance record of what changed in each draft without opening the log.
+
+**Content:** A concise, bulleted list of the changes made in the session that triggered the snapshot. Write in plain language — no file paths or technical detail. Focus on what changed from the reader's perspective (e.g. "Rewrote introduction framing around identification strategy", "Added robustness table for alternative clustering", "Fixed typo in Proposition 2 proof").
+
+**Implementation:** Use Python with the `pymupdf` (fitz) library to add a sticky note (text annotation) to page 1 of the draft PDF:
+
+```python
+import fitz  # pymupdf
+
+doc = fitz.open("path/to/draft.pdf")
+page = doc[0]
+page.add_text_annot(
+    fitz.Point(72, 72),  # top-left area of first page
+    "Draft N — YYYY-MM-DD\n\nChanges:\n- First change\n- Second change\n- Third change",
+    icon="Note"
+)
+doc.save("path/to/draft.pdf", incremental=True, encryption=fitz.PDF_ENCRYPT_KEEP)
+doc.close()
+```
+
+**Rules:**
+- The note title line is `Draft N — YYYY-MM-DD` (matching the draft number and today's date).
+- Keep the change list short — aim for 3–7 bullet points. Group small related changes into a single bullet.
+- The sticky note is added to the **root draft snapshot only** (`{paper_title}_DRAFT_{N}.pdf`), not to `LaTeX/main.pdf`.
+- If `pymupdf` is not available, install it (`pip install pymupdf`) before proceeding.
 
 ## Decision Log
 
