@@ -2,7 +2,7 @@
 
 This document governs how the main agent spawns, coordinates, and integrates work from subagents within this research template. It is read by AI agents, not humans. Follow it literally.
 
-Read `Context/context.md` first for project structure. Read `Context/Flow/timeline.md` for current project status.
+Read `CLAUDE.md` first for project structure. Read `Context/Flow/timeline.md` for current project status.
 
 ---
 
@@ -42,7 +42,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 **Purpose:** Reads and summarises context files, codebase structure, data files, or output files. Produces structured summaries for the main agent to use in decision-making.
 
 **Required context on spawn:**
-- `Context/context.md` (always)
+- `CLAUDE.md` (always)
 - Specific files relevant to the exploration task
 
 **Produces:** A structured summary returned to the main agent. Does not write files unless explicitly instructed.
@@ -62,7 +62,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 **Purpose:** Writes, modifies, or runs R scripts. Produces analysis output (tables, graphs, text files).
 
 **Required context on spawn:**
-- `Context/context.md`
+- `CLAUDE.md`
 - `research_plan.md` (for variable definitions, hypotheses, analysis strategy)
 - `Context/Flow/codebook.md` (for variable-level documentation)
 - `Scripts/config_toolkit.R` (for output functions, palette, theme)
@@ -77,7 +77,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 **Constraints:**
 - All packages must be loaded in `Scripts/config_toolkit.R`, never mid-script.
 - All output must use `save_graph()`, `save_table()`, `save_text()` -- never hardcoded paths.
-- File naming follows the `{script}_{analysis}_{descriptor}.{ext}` convention in `Context/context.md`.
+- File naming follows the `{script}_{analysis}_{descriptor}.{ext}` convention in `CLAUDE.md`.
 - Must add `cat()` progress messages.
 - Must use tidyverse style.
 
@@ -90,7 +90,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 **Purpose:** Writes LaTeX sections, markdown documents, or structured text. Produces paper content.
 
 **Required context on spawn:**
-- `Context/context.md`
+- `CLAUDE.md`
 - `Context/Roles/researcher_profile.md` (writing style, JEBO conventions, LaTeX templates)
 - `research_plan.md` (study design, hypotheses, framing)
 - For Results/Discussion: all relevant output files in `Output/` and `results_review.md`
@@ -147,7 +147,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 **Purpose:** Interviews the user to elicit information needed for the project. Asks structured questions, records answers, and populates project documents.
 
 **Required context on spawn:**
-- `Context/context.md`
+- `CLAUDE.md`
 - The document being populated (e.g., `pre_analysis_plan.md` or `research_plan.md`)
 - Any existing content in those documents (to avoid re-asking settled questions)
 
@@ -286,13 +286,13 @@ File conflicts are the most common coordination failure in multi-agent work. The
 ### Output Files
 
 - All R output must go through `save_graph()`, `save_table()`, `save_text()`.
-- Follow the naming convention in `Context/context.md`: `{script}_{analysis}_{descriptor}.{ext}`.
+- Follow the naming convention in `CLAUDE.md`: `{script}_{analysis}_{descriptor}.{ext}`.
 - Never overwrite existing output files without explicit instruction from the main agent or user.
 
 ### Document Files
 
 - Research documents (`results_review.md`, `referee_response.md`, etc.) go in the project root.
-- External feedback (referee reports, seminar comments, committee feedback) goes in `Feedback/` using the naming convention in `Context/context.md`.
+- External feedback (referee reports, seminar comments, committee feedback) goes in `Feedback/` using the naming convention in `CLAUDE.md`.
 - Feedback files are immutable — never overwrite. New rounds of feedback get new files.
 - Context files go in their designated subdirectory under `Context/`.
 

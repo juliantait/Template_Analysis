@@ -153,7 +153,7 @@ Address each of the following:
 - Additional outcomes not in PAP §2
 - Mechanism tests or mediation analyses
 
-**Output naming convention:** See `Context/context.md` for the `{script}_{analysis}_{descriptor}.{ext}` naming standard used by all `save_graph()`, `save_table()`, and `save_text()` calls.
+**Output naming convention:** See `CLAUDE.md` for the `{script}_{analysis}_{descriptor}.{ext}` naming standard used by all `save_graph()`, `save_table()`, and `save_text()` calls.
 
 ## Timeline
 

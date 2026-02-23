@@ -182,7 +182,7 @@ These checks address the mechanical correctness of the statistical implementatio
   - *What to look for:* Any discrepancy that is not explained by the analytical design.
   - *If this fails:* Identify where the leak occurs. Check `sample_restrictions.R` for exclusions that may be applied inconsistently. Fix and re-run affected scripts.
 
-- [ ] **Output files are complete and correctly named.** Verify that all expected output files exist in `Output/Graphs/`, `Output/Tables/`, and `Output/Text/`, and that they follow the naming convention defined in `Context/context.md`.
+- [ ] **Output files are complete and correctly named.** Verify that all expected output files exist in `Output/Graphs/`, `Output/Tables/`, and `Output/Text/`, and that they follow the naming convention defined in `CLAUDE.md`.
   - *What to look for:* Missing files that should have been generated. Files with incorrect naming patterns. Empty files.
   - *If this fails:* Re-run the relevant script. If a file was not generated, check the script for conditional logic that may have skipped the output. Fix and re-run.
 

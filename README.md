@@ -14,7 +14,7 @@ You do not need to manage the workflow yourself. Open Claude Code in this direct
 2. **Open Claude Code** in the project root (the folder containing `CLAUDE.md`).
 3. **Tell Claude what you are working on.** If you are starting from scratch, say so. If you have an existing pre-analysis plan (from AsPredicted, OSF, or a PDF), upload it or paste it in.
 
-Claude will read `CLAUDE.md`, which points it to `Context/context.md` and `Context/Flow/timeline.md`. From there, it knows the full project structure, the current status, and what to do next.
+Claude will read `CLAUDE.md`, which points it to `Context/Flow/timeline.md` and the rest of the project structure. From there, it knows the current status and what to do next.
 
 ## How it works
 
@@ -154,7 +154,6 @@ Template/
 ├── Template.Rproj
 │
 ├── Context/
-│   ├── context.md                   # Master index linking all context files
 │   ├── Templates/
 │   │   ├── pre_analysis_plan.md     # Clean PAP template (experimentalist)
 │   │   └── research_intention.md    # Clean research intention template (empiricist/IO)

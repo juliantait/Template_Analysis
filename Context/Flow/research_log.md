@@ -57,4 +57,4 @@ Copy this template for each new decision. Prefix the title with the appropriate 
 
 **Alternatives considered:** None — the old names are simply wrong and must be corrected.
 
-**Action:** Updated references in `Context/Tasks/graphs.md`, `Context/Tasks/tables.md`, `Context/Roles/researcher_profile.md`, `Context/Agents/subagent_protocol.md`, `Context/Agents/results_review_checklist.md`, `Context/Agents/revision_protocol.md`, and `Context/context.md` (output naming examples table).
+**Action:** Updated references in `Context/Skills/graphs.md`, `Context/Skills/tables.md`, `Context/Roles/researcher_profile.md`, `Context/Agents/subagent_protocol.md`, `Context/Agents/results_review_checklist.md`, `Context/Agents/revision_protocol.md`, and `Context/context.md` (output naming examples table).
