@@ -167,16 +167,16 @@ See the gate descriptions below for requirements that must be met before certain
 
 The agent must:
 
-1. **Read all generated output** — every table, graph, and text file in `Output/`.
+1. **Read all generated output** — every table, figure, and text file in `LaTeX/Tables/`, `LaTeX/Figures/`, and `LaTeX/Text/`.
 2. **Compare results against hypotheses** — which were supported, which were not, and which were ambiguous? Are effect sizes meaningful or trivially small?
 3. **Stress-test the empirical strategy** using the item-by-item checklist in `Context/Roles/results_review_checklist.md`. Work through every section (balance, descriptive coherence, hypothesis verdicts, robustness, exploratory, cross-analysis coherence, technical quality, red flags) and tick each item.
 4. **Check for coherence across analyses** — do descriptives, hypothesis tests, robustness checks, and exploratory results tell a consistent story? Flag any contradictions.
 5. **Identify necessary adjustments** — if the results call for changes to variable definitions, sample restrictions, additional controls, alternative specifications, or reframing of hypotheses, make those changes now. Update the relevant scripts, re-run, and log the decision in `Context/Flow/research_log.md`.
 6. **Update the research plan** — revise the Analysis Strategy, Hypotheses, or Variables sections of this file if anything changed.
 7. **Record lessons** — add any non-obvious findings to the Notes for Future Agents table below.
-8. **Produce the review artefact** — save a structured `results_review.md` file to the project root. It must contain: (a) a summary of each hypothesis and whether it was supported, with effect sizes; (b) a coherence assessment across analyses; (c) any concerns flagged; (d) changes made to scripts or the research plan during the review. This file is required — without it, the review is not complete.
+8. **Produce the review artefact** — save a structured `results_review.md` file to `Context/Flow/`. It must contain: (a) a summary of each hypothesis and whether it was supported, with effect sizes; (b) a coherence assessment across analyses; (c) any concerns flagged; (d) changes made to scripts or the research plan during the review. This file is required — without it, the review is not complete.
 
-Only once this review is done, `results_review.md` exists, and the results are stable should the timeline move to Writing.
+Only once this review is done, `Context/Flow/results_review.md` exists, and the results are stable should the timeline move to Writing.
 
 ### Referee report (gate before submission)
 

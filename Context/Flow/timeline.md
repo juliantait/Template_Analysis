@@ -21,7 +21,7 @@ This file is the authoritative snapshot of project progress. Update it whenever 
 | Hypothesis tests | | Pending | Balance table, Descriptives | | |
 | Robustness checks | | Pending | Hypothesis tests | | |
 | Exploratory analyses | | Pending | Hypothesis tests | | |
-| **Results review** | | Pending | Robustness checks, Exploratory analyses | | Gate — produce `results_review.md` using `Context/Roles/results_review_checklist.md` before writing |
+| **Results review** | | Pending | Robustness checks, Exploratory analyses | | Gate — produce `Context/Flow/results_review.md` using `Context/Roles/results_review_checklist.md` before writing |
 | Writing | | Pending | Results review | | |
 | **Referee report — Cycle 1** | | Pending | Writing | | Gate — Theory & Framework review; see `Context/Roles/profile_referee_cycle1.md` |
 | **Referee report — Cycle 2** | | Pending | Writing | | Gate — Results & Integration review; see `Context/Roles/profile_referee_cycle2.md` |

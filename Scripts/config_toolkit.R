@@ -74,8 +74,8 @@ output_paths <- c(OUTPUT_ROOT)
 
 save_graph <- function(plot, filename, width = 10, height = 6, dpi = 300) {
   for (path in output_paths) {
-    dir.create(file.path(path, "Graphs"), recursive = TRUE, showWarnings = FALSE)
-    ggsave(file.path(path, "Graphs", paste0(filename, ".png")),
+    dir.create(file.path(path, "Figures"), recursive = TRUE, showWarnings = FALSE)
+    ggsave(file.path(path, "Figures", paste0(filename, ".png")),
            plot = plot, width = width, height = height, dpi = dpi)
   }
 }

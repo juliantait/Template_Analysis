@@ -52,11 +52,11 @@ Claude writes and runs R scripts from `main.R` in the project root:
 | `Scripts/robustness.R` | Regression robustness checks |
 | `Scripts/exploratory.R` | Exploratory analyses |
 | `Scripts/Further Analysis/` | Additional analyses beyond the core pipeline |
-| `Helper/config_sync_to_folder.R` | Copy Output/ to external destinations (e.g. Overleaf) |
+| `Helper/config_sync_to_folder.R` | Copy output to external destinations (e.g. Overleaf) |
 
 Cleaning runs once to produce `Data/data_cleaned.RData`. Normal analysis loads the pre-cleaned data and runs the analysis scripts sequentially. Claude manages this automatically.
 
-All output goes to `Output/Graphs/` (.png), `Output/Tables/` (.tex), and `Output/Text/` (.txt) via helper functions in `Scripts/config_toolkit.R`. Files follow a consistent naming convention: `{script}_{analysis}_{descriptor}.{ext}`.
+All output goes directly to the `LaTeX/` folder — `LaTeX/Figures/` (.png), `LaTeX/Tables/` (.tex), and `LaTeX/Text/` (.txt) — via helper functions in `Scripts/config_toolkit.R`. This keeps output co-located with the manuscript so LaTeX can reference files with simple relative paths. Files follow a consistent naming convention: `{script}_{analysis}_{descriptor}.{ext}`.
 
 ### Phase 4: Results review (quality gate)
 
@@ -70,7 +70,7 @@ Before any writing begins, Claude must complete a formal results review using a 
 - Technical quality (correct clustering, multiple-testing corrections)
 - Red flags (implausible effect sizes, suspicious p-value clustering)
 
-The review produces `results_review.md` with a Green/Amber/Red verdict. Writing cannot begin until this exists and the verdict is at least Amber.
+The review produces `Context/Flow/results_review.md` with a Green/Amber/Red verdict. Writing cannot begin until this exists and the verdict is at least Amber.
 
 ### Phase 5: Paper drafting
 
@@ -194,7 +194,7 @@ Template/
 ├── Helper/
 │   ├── otree.R                         # oTree adapter: config + load_data()
 │   ├── csv.R                           # Generic CSV adapter: config + load_data()
-│   └── config_sync_to_folder.R         # Copy Output/ to external destinations
+│   └── config_sync_to_folder.R         # Copy output to external destinations
 │
 ├── Feedback/                           # Referee reports, committee comments, external feedback
 │   └── .gitkeep
@@ -203,10 +203,6 @@ Template/
 │   │   └── .gitkeep
 │   ├── [data_cleaned.RData]            # Output of cleaning pipeline
 │   └── [checkpoint_prepared.RData]     # Checkpoint after sample restrictions
-├── Output/
-│   ├── Graphs/                      # .png files
-│   ├── Tables/                      # .tex files
-│   └── Text/                        # .txt files
 └── LaTeX/
     ├── main.tex                     # Article document
     ├── abstract.tex
@@ -216,17 +212,20 @@ Template/
     ├── results.tex
     ├── discussion.tex
     ├── appendix.tex
-    └── references.bib
+    ├── references.bib
+    ├── Figures/                     # .png files (output from save_graph)
+    ├── Tables/                      # .tex files (output from save_table)
+    └── Text/                        # .txt files (output from save_text)
 ```
 
 ## Output paths
 
-The save functions in `Scripts/config_toolkit.R` write to all paths in the `output_paths` vector. Sync destinations are configured in `Scripts/config_init.R` and applied automatically by `Helper/config_sync_to_folder.R` at the end of each run. To send output to multiple locations (e.g., local + Overleaf), add paths to `SYNC_DESTINATIONS`:
+Output is written directly to `LaTeX/Figures/`, `LaTeX/Tables/`, and `LaTeX/Text/` by the save functions in `Scripts/config_toolkit.R`. To also replicate output to external locations (e.g. Overleaf), add paths to `SYNC_DESTINATIONS` in `Scripts/config_init.R`:
 
 ```r
 # In Scripts/config_init.R:
 SYNC_DESTINATIONS <- c(
-  path.expand("/path/to/Overleaf/project/Output")
+  path.expand("/path/to/Overleaf/project")
 )
 ```
 

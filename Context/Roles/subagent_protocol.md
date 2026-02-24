@@ -20,7 +20,7 @@ Subagents exist to parallelise independent work and to isolate context when fres
 ### Never Parallel
 
 - **Sequential data pipeline.** `config_cleaning.R` (cleaning + variable generation) -> `sample_restrictions.R` (exclusion criteria) must run in strict order. Each depends on the output of the previous.
-- **Results before writing.** No drafting agent may begin the Results section until all analysis scripts have run and the results review gate is complete (`results_review.md` exists).
+- **Results before writing.** No drafting agent may begin the Results section until all analysis scripts have run and the results review gate is complete (`Context/Flow/results_review.md` exists).
 - **Discussion before Results.** The Discussion section depends on what the Results section reports. Draft Results first.
 - **Referee before revision.** The referee report must be complete before the revise-and-resubmit cycle begins.
 - **PAP before Research Plan.** `pre_analysis_plan.md` must be complete before `research_plan.md` is drafted.
@@ -70,7 +70,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 - If modifying an existing script: the current contents of that script
 - If the task depends on data structure: `Scripts/config_cleaning.R`, the active adapter in `Helper/`, and any relevant upstream scripts
 
-**Produces:** Modified or new R script files saved to `Scripts/`. Output files saved to `Output/Graphs/`, `Output/Tables/`, or `Output/Text/` via the helper functions.
+**Produces:** Modified or new R script files saved to `Scripts/`. Output files saved to `LaTeX/Figures/`, `LaTeX/Tables/`, or `LaTeX/Text/` via the helper functions.
 
 **Output format:** Uses the standard subagent report format (Section 3 below). The "Output" field must list every file written or modified, with the full path.
 
@@ -93,7 +93,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 - `CLAUDE.md`
 - `Context/Roles/researcher_profile.md` (writing style, JEBO conventions, LaTeX templates)
 - `research_plan.md` (study design, hypotheses, framing)
-- For Results/Discussion: all relevant output files in `Output/` and `results_review.md`
+- For Results/Discussion: all relevant output files in `LaTeX/Figures/`, `LaTeX/Tables/`, `LaTeX/Text/` and `Context/Flow/results_review.md`
 - For Introduction/Theory: relevant literature and theoretical framework from the research plan
 - For Methods/Design: full design details from the research plan and PAP
 - The active personality profile (for statistical reporting conventions)
@@ -109,7 +109,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 - Figure and table environments follow the templates in the researcher profile.
 - Captions and notes are added in LaTeX, not embedded in R output.
 
-**When to use:** Writing any section of the paper, drafting the abstract, producing response documents, writing `results_review.md`.
+**When to use:** Writing any section of the paper, drafting the abstract, producing response documents, writing `Context/Flow/results_review.md`.
 
 ---
 
@@ -121,7 +121,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 - Depends on the specific review task. See below.
 
 **For Results Review:**
-- All output files in `Output/`
+- All output files in `LaTeX/Figures/`, `LaTeX/Tables/`, `LaTeX/Text/`
 - `research_plan.md` (hypotheses, analysis strategy)
 - `pre_analysis_plan.md` (pre-registered commitments)
 - `Context/Flow/research_log.md` (decision history)
@@ -129,7 +129,7 @@ Each subagent is spawned with a defined role. The role determines what context t
 **For Referee Report:**
 - Follow the spawning rules in `Context/Roles/profile_referee.md` exactly. Two parallel subagents, each with a clean context window, receiving only the manuscript and PAP. No conversation history from the writing process.
 
-**Produces:** A structured assessment document. For results review: `results_review.md` in the project root. For referee reports: `referee_report.md` (or numbered variant) in the project root.
+**Produces:** A structured assessment document. For results review: `Context/Flow/results_review.md`. For referee reports: `referee_report.md` (or numbered variant) in the project root.
 
 **Output format:** Follows the specific format defined in the task (see `profile_referee.md` for referee reports, or `research_plan.md` for results review structure).
 
@@ -199,7 +199,7 @@ Every subagent must return its results in this format. No exceptions. The main a
 Every task assignment from the main agent to a subagent must include:
 
 1. **Role.** Which subagent type (Explorer, Analyst, Drafter, Reviewer, Researcher).
-2. **Task description.** A clear, specific statement of what the subagent must do. Not "look at the data" but "read `Output/Tables/` and summarise all balance table results, flagging any variable where the treatment-control difference is significant at p < .10."
+2. **Task description.** A clear, specific statement of what the subagent must do. Not "look at the data" but "read `LaTeX/Tables/` and summarise all balance table results, flagging any variable where the treatment-control difference is significant at p < .10."
 3. **Required context.** A list of files the subagent must read. For Reviewer agents that need isolation, specify what context is deliberately withheld and why.
 4. **Expected output.** What the subagent should produce -- a file (with path), a summary, an assessment, an edited script. Be specific about the deliverable.
 5. **Constraints.** Any restrictions beyond the role defaults. Example: "Do not modify any script files -- describe the needed changes and I will apply them."
@@ -291,7 +291,7 @@ File conflicts are the most common coordination failure in multi-agent work. The
 
 ### Document Files
 
-- Research documents (`results_review.md`, `referee_response.md`, etc.) go in the project root.
+- Research documents (`referee_response.md`, etc.) go in the project root. The results review (`results_review.md` and versioned variants) goes in `Context/Flow/`.
 - External feedback (referee reports, seminar comments, committee feedback) goes in `Feedback/` using the naming convention in `CLAUDE.md`.
 - Feedback files are immutable — never overwrite. New rounds of feedback get new files.
 - Context files go in their designated subdirectory under `Context/`.
@@ -386,7 +386,7 @@ These are the standard parallelisation patterns for each project phase. The main
 
 **Dependencies:** All analysis scripts complete. All output generated.
 
-**Output:** `results_review.md` in the project root.
+**Output:** `Context/Flow/results_review.md`.
 
 ---
 

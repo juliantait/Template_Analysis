@@ -8,7 +8,7 @@ rm(list = ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # === OUTPUT PATHS ===
-OUTPUT_ROOT <- file.path(getwd(), "Output")
+OUTPUT_ROOT <- file.path(getwd(), "LaTeX")
 
 # === SYNC DESTINATIONS ===
 # Destinations to replicate Output structure (e.g. Overleaf). Add or remove paths.

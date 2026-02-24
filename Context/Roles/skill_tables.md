@@ -65,7 +65,7 @@ All tables must be publication-ready for the Journal of Economic Behavior & Orga
 
 ## Export
 - Use `save_table(content, filename)` from `Scripts/config_toolkit.R`.
-- Output as `.tex` files to `Output/Tables/`.
+- Output as `.tex` files to `LaTeX/Tables/`.
 - No manual spacing hacks beyond `\addlinespace`.
 - Same variable names and ordering across all tables.
 
@@ -82,7 +82,7 @@ When a table in `LaTeX/` is a direct, unmodified `\input` of an R-generated `.te
 
 Example:
 ```latex
-% \input{../Output/Tables/balance_means_by_fee_level.tex}
+% \input{Tables/balance_means_by_fee_level.tex}
 \begin{table}[htbp]
 ... (reformatted table content) ...
 \end{table}

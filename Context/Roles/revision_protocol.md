@@ -87,7 +87,7 @@ When a cascade is triggered:
 
 ### Before Re-Running: Backup
 
-Before re-running any script that produces output, create a versioned backup of the current `Output/` directory.
+Before re-running any script that produces output, create a versioned backup of the current output subdirectories (`LaTeX/Figures/`, `LaTeX/Tables/`, `LaTeX/Text/`).
 
 **Naming convention:**
 
@@ -100,31 +100,38 @@ Where `{N}` is the revision cycle number (matching the referee report that trigg
 **Procedure:**
 
 1. Determine the current revision cycle number `N` (see Section 5).
-2. Copy the entire `Output/` directory:
+2. Create the backup directory and copy the output subdirectories:
    ```bash
-   cp -r Output/ Output_v{N}/
+   mkdir -p Output_v{N}/Figures Output_v{N}/Tables Output_v{N}/Text
+   cp -r LaTeX/Figures/ Output_v{N}/Figures/
+   cp -r LaTeX/Tables/ Output_v{N}/Tables/
+   cp -r LaTeX/Text/ Output_v{N}/Text/
    ```
 3. Verify the backup is complete:
    ```bash
-   diff -rq Output/ Output_v{N}/
+   diff -rq LaTeX/Figures/ Output_v{N}/Figures/
+   diff -rq LaTeX/Tables/ Output_v{N}/Tables/
+   diff -rq LaTeX/Text/ Output_v{N}/Text/
    ```
 4. Log the backup in `Context/Flow/research_log.md`:
    ```
    ### {DATE} --- Output backup before revision cycle {N}
-   **Decision:** Backed up Output/ to Output_v{N}/ before re-running scripts.
+   **Decision:** Backed up LaTeX/Figures/, LaTeX/Tables/, LaTeX/Text/ to Output_v{N}/ before re-running scripts.
    **Rationale:** Preserving pre-revision outputs for comparison.
    **Action:** Created Output_v{N}/.
    ```
 
 ### After Re-Running: Compare
 
-After re-running scripts, compare the new `Output/` against the backup to detect unexpected changes.
+After re-running scripts, compare the new output against the backup to detect unexpected changes.
 
 **Procedure:**
 
 1. Run a file-level diff:
    ```bash
-   diff -rq Output/ Output_v{N}/
+   diff -rq LaTeX/Figures/ Output_v{N}/Figures/
+   diff -rq LaTeX/Tables/ Output_v{N}/Tables/
+   diff -rq LaTeX/Text/ Output_v{N}/Text/
    ```
 2. For each file that differs, determine whether the change is expected (caused by the script modifications) or unexpected (caused by a cascade effect or unintended side-effect).
 3. Log every change in `Context/Flow/research_log.md` using this format:
@@ -145,7 +152,7 @@ After re-running scripts, compare the new `Output/` against the backup to detect
 
 If a revision removes an analysis (and therefore its output files):
 
-1. Do **not** silently delete the files from `Output/`. They are preserved in `Output_v{N}/`.
+1. Do **not** silently delete the files from `LaTeX/Figures/`, `LaTeX/Tables/`, or `LaTeX/Text/`. They are preserved in `Output_v{N}/`.
 2. Log the deletion explicitly in the research log, including which analysis was removed and why.
 3. Ensure the referee response document explains the removal.
 
@@ -153,7 +160,7 @@ If a revision removes an analysis (and therefore its output files):
 
 ## 4. Results Review Re-Do Criteria
 
-The results review (`results_review.md`) is the quality gate between analysis and writing. During revision, this gate may need to be repeated.
+The results review (`Context/Flow/results_review.md`) is the quality gate between analysis and writing. During revision, this gate may need to be repeated.
 
 ### Decision Matrix
 
@@ -170,8 +177,8 @@ The results review (`results_review.md`) is the quality gate between analysis an
 
 ### Full Redo Procedure
 
-1. Produce a new results review document: `results_review_v{N}.md` where `{N}` is the revision cycle number.
-2. Do **not** overwrite the original `results_review.md` or any previous versioned review. These are immutable records.
+1. Produce a new results review document: `Context/Flow/results_review_v{N}.md` where `{N}` is the revision cycle number.
+2. Do **not** overwrite the original `Context/Flow/results_review.md` or any previous versioned review. These are immutable records.
 3. The new review must follow the same structure as the original (see `research_plan.md` for required contents):
    - Summary of each hypothesis and whether it was supported, with effect sizes.
    - Coherence assessment across analyses.
@@ -182,7 +189,7 @@ The results review (`results_review.md`) is the quality gate between analysis an
 
 ### Partial Redo Procedure
 
-1. Produce a focused addendum: `results_review_v{N}_partial.md`.
+1. Produce a focused addendum: `Context/Flow/results_review_v{N}_partial.md`.
 2. Cover only the sections affected by the script changes.
 3. Reference the most recent full review for unchanged sections.
 4. The partial review must still include the comparison section noting what changed.
@@ -215,7 +222,7 @@ N = (number of existing referee_report*.md files that have a corresponding refer
 
 This `N` is used for:
 - Naming `Output_v{N}/` backups.
-- Naming `results_review_v{N}.md` or `results_review_v{N}_partial.md`.
+- Naming `Context/Flow/results_review_v{N}.md` or `Context/Flow/results_review_v{N}_partial.md`.
 - Naming the next `referee_response*.md`.
 - Adding timeline sub-rows.
 
@@ -350,7 +357,7 @@ For each affected script:
 For each LaTeX section affected by the analysis changes or the referee's comments:
 
 1. Revise the text to reflect the new results.
-2. Ensure all tables and figures referenced in the text match the current `Output/` contents.
+2. Ensure all tables and figures referenced in the text match the current `LaTeX/Tables/` and `LaTeX/Figures/` contents.
 3. Ensure that any new analyses are correctly labelled as exploratory if they were not in the pre-analysis plan.
 4. Do not patch --- rewrite the affected passages so the paper reads as a coherent whole.
 
@@ -470,7 +477,7 @@ These situations require deviation from the standard loop. Handle them as specif
 2. Document the error in `Context/Flow/research_log.md` with full detail.
 3. Fix `config_cleaning.R` or the adapter in `Helper/` (whichever contains the error).
 4. Re-run the entire pipeline from `config_cleaning.R` onward (full cascade).
-5. Produce a full results review redo (`results_review_v{N}.md`).
+5. Produce a full results review redo (`Context/Flow/results_review_v{N}.md`).
 6. Compare all outputs against the backup. If any substantive result changes (sign, significance, or large magnitude shift), ESCALATE TO USER before continuing with the revision response.
 7. If results are stable after fixing the error, resume the revision loop at Step 10 (rewriting paper sections).
 8. Disclose the data error and correction in the referee response document.
@@ -563,7 +570,7 @@ Revision Cycle {N} Checklist:
 [ ] Completed results review redo (if required) or documented why it was skipped
 [ ] Updated research_plan.md (if design changed)
 [ ] Revised all affected LaTeX sections
-[ ] Verified all table/figure references in text match current Output/
+[ ] Verified all table/figure references in text match current LaTeX/Tables/ and LaTeX/Figures/
 [ ] Wrote the point-by-point response document
 [ ] Logged all decisions in the research log
 [ ] Updated the timeline
@@ -581,11 +588,11 @@ Quick reference for all files produced or consumed during revision.
 | `referee_report_*.md` | `Feedback/` | Referee agent / external | No --- immutable |
 | `referee_response.md` | Project root | Revising agent (cycle 1) | No --- immutable |
 | `referee_response_{N}.md` | Project root | Revising agent (cycle N) | No --- immutable |
-| `results_review.md` | Project root | Results review (original) | No --- immutable |
-| `results_review_v{N}.md` | Project root | Results review redo (cycle N) | No --- immutable |
-| `results_review_v{N}_partial.md` | Project root | Partial results review (cycle N) | No --- immutable |
+| `results_review.md` | `Context/Flow/` | Results review (original) | No --- immutable |
+| `results_review_v{N}.md` | `Context/Flow/` | Results review redo (cycle N) | No --- immutable |
+| `results_review_v{N}_partial.md` | `Context/Flow/` | Partial results review (cycle N) | No --- immutable |
 | `Output_v{N}/` | Project root | Backup before cycle N | No --- immutable |
-| `Output/` | Project root | Pipeline | Yes --- overwritten on re-run |
+| `LaTeX/Figures/`, `LaTeX/Tables/`, `LaTeX/Text/` | LaTeX/ | Pipeline | Yes --- overwritten on re-run |
 | `Context/Flow/research_log.md` | Context/Flow/ | All agents | Yes --- append only |
 | `Context/Flow/timeline.md` | Context/Flow/ | All agents | Yes --- update in place |
 | `Context/Flow/codebook.md` | Context/Flow/ | All agents | Yes --- update in place |

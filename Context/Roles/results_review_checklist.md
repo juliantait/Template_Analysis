@@ -1,10 +1,10 @@
 # Results Review Checklist
 
-> **When to use:** After all analysis scripts (`balance_table.R` through `exploratory.R`) have run and output has been generated in `Output/`. This checklist must be completed before any writing begins. It replaces the vague instruction to "stress-test the empirical strategy" with a concrete, item-by-item review protocol.
+> **When to use:** After all analysis scripts (`balance_table.R` through `exploratory.R`) have run and output has been generated in `LaTeX/Figures/`, `LaTeX/Tables/`, and `LaTeX/Text/`. This checklist must be completed before any writing begins. It replaces the vague instruction to "stress-test the empirical strategy" with a concrete, item-by-item review protocol.
 >
 > **How to use:** Work through every item in order. For each check, tick the box when satisfied, or follow the failure action if the check does not pass. Record your findings as you go — they feed directly into the `results_review.md` artefact produced at the end.
 >
-> **Inputs required:** All files in `Output/Graphs/`, `Output/Tables/`, and `Output/Text/`. The pre-analysis plan (`pre_analysis_plan.md`), the research plan (`research_plan.md`), and the codebook (`Context/Flow/codebook.md`).
+> **Inputs required:** All files in `LaTeX/Figures/`, `LaTeX/Tables/`, and `LaTeX/Text/`. The pre-analysis plan (`pre_analysis_plan.md`), the research plan (`research_plan.md`), and the codebook (`Context/Flow/codebook.md`).
 
 ---
 
@@ -12,7 +12,7 @@
 
 These checks determine whether the identification strategy is credible. A failed randomisation check does not necessarily invalidate the study, but it must be addressed before writing.
 
-**Source:** `Output/Tables/balance_*.tex`, `Output/Text/balance_*.txt`, and any output from `balance_table.R`.
+**Source:** `LaTeX/Tables/balance_*.tex`, `LaTeX/Text/balance_*.txt`, and any output from `balance_table.R`.
 
 - [ ] **Treatment arms are balanced on observables.** Check each variable in the balance table. For each, confirm that the difference between arms is not statistically significant at the 5% level and that the magnitude of any difference is substantively small.
   - *What to look for:* p-values below .05, standardised mean differences above 0.25 SD, or patterns where multiple variables lean the same direction even if none is individually significant.
@@ -36,7 +36,7 @@ These checks determine whether the identification strategy is credible. A failed
 
 These checks verify that the data behave as expected and that the descriptive statistics support the rest of the analysis. Surprises here often signal data-quality problems or misspecified variables.
 
-**Source:** `Output/Tables/descriptives_*.tex`, `Output/Text/descriptives_*.txt`, `Output/Graphs/descriptives_*.png`, and any output from `descriptives.R`.
+**Source:** `LaTeX/Tables/descriptives_*.tex`, `LaTeX/Text/descriptives_*.txt`, `LaTeX/Figures/descriptives_*.png`, and any output from `descriptives.R`.
 
 - [ ] **Summary statistics are plausible.** For each key variable, confirm that means, standard deviations, minima, and maxima fall within theoretically sensible ranges.
   - *What to look for:* Means outside plausible bounds, standard deviations of zero (no variation), negative values for variables that should be non-negative, values exceeding defined scale endpoints.
@@ -64,7 +64,7 @@ These checks verify that the data behave as expected and that the descriptive st
 
 This is the core of the review. For each pre-registered hypothesis, determine whether the evidence supports it, partially supports it, or does not support it. Be honest — do not shade verdicts to make the story tidier.
 
-**Source:** `Output/Tables/hypotheses_*.tex`, `Output/Text/hypotheses_*.txt`, `Output/Graphs/hypotheses_*.png`, and any output from `hypotheses.R`. Cross-reference against the hypotheses listed in `pre_analysis_plan.md` (Section 1) and `research_plan.md`.
+**Source:** `LaTeX/Tables/hypotheses_*.tex`, `LaTeX/Text/hypotheses_*.txt`, `LaTeX/Figures/hypotheses_*.png`, and any output from `hypotheses.R`. Cross-reference against the hypotheses listed in `pre_analysis_plan.md` (Section 1) and `research_plan.md`.
 
 - [ ] **Every pre-registered hypothesis has a corresponding test.** Map each hypothesis in the PAP to a specific test in the output. No hypothesis should be left untested.
   - *What to look for:* Hypotheses in the PAP that have no matching output, or tests in the output that do not correspond to any pre-registered hypothesis.
@@ -92,7 +92,7 @@ This is the core of the review. For each pre-registered hypothesis, determine wh
 
 These checks determine whether the main findings hold up under alternative analytical choices. Results that survive only one specification are fragile and must be flagged.
 
-**Source:** `Output/Tables/robustness_*.tex`, `Output/Text/robustness_*.txt`, and any output from `robustness.R`.
+**Source:** `LaTeX/Tables/robustness_*.tex`, `LaTeX/Text/robustness_*.txt`, and any output from `robustness.R`.
 
 - [ ] **Results survive alternative specifications.** For each main finding, check whether the corresponding robustness regression produces the same qualitative conclusion (same direction, similar magnitude, still significant or at least pointing the same way).
   - *What to look for:* Sign flips, large changes in magnitude (e.g., coefficient halves when controls are added), or loss of significance in robustness specifications.
@@ -120,7 +120,7 @@ These checks determine whether the main findings hold up under alternative analy
 
 Exploratory results are not pre-registered and must be presented as such. But strong exploratory findings can add value to the paper if handled correctly.
 
-**Source:** `Output/Tables/exploratory_*.tex`, `Output/Text/exploratory_*.txt`, `Output/Graphs/exploratory_*.png`, and any output from `exploratory.R`.
+**Source:** `LaTeX/Tables/exploratory_*.tex`, `LaTeX/Text/exploratory_*.txt`, `LaTeX/Figures/exploratory_*.png`, and any output from `exploratory.R`.
 
 - [ ] **Strong exploratory results identified.** Scan all exploratory output for results that are statistically significant, meaningful in magnitude, and theoretically interpretable.
   - *What to look for:* Effect sizes comparable to or larger than the main pre-registered findings. Patterns that illuminate mechanisms or heterogeneity.
@@ -182,7 +182,7 @@ These checks address the mechanical correctness of the statistical implementatio
   - *What to look for:* Any discrepancy that is not explained by the analytical design.
   - *If this fails:* Identify where the leak occurs. Check `sample_restrictions.R` for exclusions that may be applied inconsistently. Fix and re-run affected scripts.
 
-- [ ] **Output files are complete and correctly named.** Verify that all expected output files exist in `Output/Graphs/`, `Output/Tables/`, and `Output/Text/`, and that they follow the naming convention defined in `CLAUDE.md`.
+- [ ] **Output files are complete and correctly named.** Verify that all expected output files exist in `LaTeX/Figures/`, `LaTeX/Tables/`, and `LaTeX/Text/`, and that they follow the naming convention defined in `CLAUDE.md`.
   - *What to look for:* Missing files that should have been generated. Files with incorrect naming patterns. Empty files.
   - *If this fails:* Re-run the relevant script. If a file was not generated, check the script for conditional logic that may have skipped the output. Fix and re-run.
 
@@ -247,7 +247,7 @@ After completing all checks above, assign an overall verdict using the template 
 
 ## Producing the `results_review.md` Artefact
 
-Once the checklist is complete, produce a `results_review.md` file and save it to the project root. This file is **required** before writing can begin (see the Results Review gate in `research_plan.md`).
+Once the checklist is complete, produce a `results_review.md` file and save it to `Context/Flow/`. This file is **required** before writing can begin (see the Results Review gate in `research_plan.md`).
 
 ### Required contents of `results_review.md`
 
@@ -279,6 +279,6 @@ The review document must contain all of the following sections:
 2. If any check triggers a fix (script change, re-run, additional analysis), make the fix, re-run the affected scripts, and re-verify the relevant checks.
 3. Log all changes in `Context/Flow/research_log.md`.
 4. Update `research_plan.md` if any design or analysis decisions changed.
-5. Compile findings into `results_review.md` using the structure above.
+5. Compile findings into `Context/Flow/results_review.md` using the structure above.
 6. Update `Context/Flow/timeline.md` to mark the Results Review phase as Done.
 7. Only then may writing begin.

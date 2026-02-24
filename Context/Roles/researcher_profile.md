@@ -43,7 +43,7 @@ Choose one of the personalities below based on the type of study. Load the selec
 \begin{figure}[H]
     \centering
     \caption{Descriptive title of the figure.}
-    \includegraphics[width=0.9\textwidth]{Output/Graphs/filename.png}
+    \includegraphics[width=0.9\textwidth]{Figures/filename.png}
     \label{fig:label}
     \begin{minipage}{0.8\linewidth}
         \footnotesize
@@ -61,13 +61,13 @@ Choose one of the personalities below based on the type of study. Load the selec
     \begin{subfigure}{0.35\textwidth}
         \centering
         \caption{Panel (a) title}
-        \includegraphics[width=\textwidth]{Output/Graphs/panel_a.png}
+        \includegraphics[width=\textwidth]{Figures/panel_a.png}
         \label{fig:panel_a}
     \end{subfigure}
     \begin{subfigure}{0.35\textwidth}
         \centering
         \caption{Panel (b) title}
-        \includegraphics[width=\textwidth]{Output/Graphs/panel_b.png}
+        \includegraphics[width=\textwidth]{Figures/panel_b.png}
         \label{fig:panel_b}
     \end{subfigure}
     \label{fig:combined_label}

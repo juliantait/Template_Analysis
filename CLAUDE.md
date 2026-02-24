@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This is a self-contained template for a single-study empirical analysis paper in economics. Run the analysis from `main.R` in the project root; output goes to `Output/`.
+This is a self-contained template for a single-study empirical analysis paper in economics. Run the analysis from `main.R` in the project root; output goes directly to `LaTeX/Figures/`, `LaTeX/Tables/`, and `LaTeX/Text/`.
 
 Check `Context/Flow/timeline.md` for the current project status — it shows which phases are done, in progress, or pending.
 
@@ -45,7 +45,7 @@ See `Context/Roles/researcher_profile.md` for general background on the research
 
 ## Project Structure
 
-This is a self-contained empirical analysis project. The entry point is `main.R` in the project root. Output is written to `Output/Graphs/`, `Output/Tables/`, and `Output/Text/` via the `save_graph()`, `save_table()`, and `save_text()` helper functions defined in `Scripts/config_toolkit.R`.
+This is a self-contained empirical analysis project. The entry point is `main.R` in the project root. Output is written directly to the `LaTeX/` folder — `LaTeX/Figures/` (.png), `LaTeX/Tables/` (.tex), and `LaTeX/Text/` (.txt) — via the `save_graph()`, `save_table()`, and `save_text()` helper functions defined in `Scripts/config_toolkit.R`. This keeps analysis output co-located with the manuscript source files, so LaTeX can reference them with simple relative paths (e.g. `Figures/filename.png`, `Tables/filename.tex`).
 
 - Settings, palette, and theme: `Scripts/config_toolkit.R`
 - Data preparation: `Scripts/config_cleaning.R` (uses a data-source adapter from `Helper/`) → variable generation → `Scripts/sample_restrictions.R`
@@ -310,7 +310,7 @@ If you are acting as a referee, study `Context/Roles/profile_referee.md` for the
 
 **After completing a task**: Update `Context/Flow/timeline.md` — set Status to `Done`, fill in the Date Done, and add any relevant notes. Update the "Last updated" date at the top. If the completed work revealed new tasks, add them as new rows. If the task changed LaTeX content, take a draft snapshot (see **Draft Snapshots**).
 
-**After all analyses are complete, before writing**: You must complete the Results Review gate described in `research_plan.md`. Read all output, critically evaluate the empirical strategy in light of the actual results, make any necessary adjustments to scripts or the research plan, and log decisions. You must produce a `results_review.md` file in the project root documenting the review (see `research_plan.md` for the required contents). Do not begin writing until this review is done, `results_review.md` exists, and the timeline marks the phase as complete.
+**After all analyses are complete, before writing**: You must complete the Results Review gate described in `research_plan.md`. Read all output, critically evaluate the empirical strategy in light of the actual results, make any necessary adjustments to scripts or the research plan, and log decisions. You must produce a `Context/Flow/results_review.md` file documenting the review (see `research_plan.md` for the required contents). Do not begin writing until this review is done, `Context/Flow/results_review.md` exists, and the timeline marks the phase as complete.
 
 **After writing is complete, before submission**: Spawn a dedicated referee agent. It must read `Context/Roles/profile_referee.md`, adopt that persona, read the full manuscript and output, and write a critical referee report. Follow the instructions in the "Referee report" section of `research_plan.md`. Then begin a Revise & Resubmit session to address all comments — this may require changes to analysis, not just prose. See the "Revise and resubmit" section of `research_plan.md` for the full process.
 
@@ -405,7 +405,7 @@ Template/
 ├── Helper/
 │   ├── otree.R                      # oTree adapter: config + load_data()
 │   ├── csv.R                        # Generic CSV adapter: config + load_data()
-│   └── config_sync_to_folder.R      # Copy Output/ to external destinations
+│   └── config_sync_to_folder.R      # Copy output to external destinations
 │
 ├── Scripts/
 │   ├── config_init.R                # Clear env, set wd, define paths
@@ -423,10 +423,6 @@ Template/
 ├── Feedback/                        # Referee reports, committee comments, external feedback
 │   └── .gitkeep
 ├── Data/                            # Raw data files (+ any shipped codebook)
-├── Output/
-│   ├── Graphs/                      # .png files
-│   ├── Tables/                      # .tex files
-│   └── Text/                        # .txt files
 └── LaTeX/
     ├── main.tex                     # Article document
     ├── abstract.tex
@@ -437,5 +433,8 @@ Template/
     ├── discussion.tex
     ├── app_further.tex              # Further analyses appendix (available upon request)
     ├── appendix.tex
-    └── references.bib
+    ├── references.bib
+    ├── Figures/                     # .png files (output from save_graph)
+    ├── Tables/                      # .tex files (output from save_table)
+    └── Text/                        # .txt files (output from save_text)
 ```

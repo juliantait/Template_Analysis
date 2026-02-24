@@ -7,7 +7,7 @@ if (!exists("SYNC_DESTINATIONS")) source("Scripts/config_init.R")
 if (length(SYNC_DESTINATIONS) == 0) {
   cat("  -> No sync destinations configured. Skipping.\n")
 } else {
-  output_dirs <- c("Graphs", "Tables", "Text")
+  output_dirs <- c("Figures", "Tables", "Text")
 
   for (dest_root in SYNC_DESTINATIONS) {
     dest_root <- path.expand(dest_root)
