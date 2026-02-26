@@ -54,7 +54,7 @@ This is a self-contained empirical analysis project. The entry point is `main.R`
 
 ## Draft Snapshots
 
-At the end of every to-do part or agent session that changes LaTeX content, copy `LaTeX/main.pdf` to the project root as a numbered draft snapshot.
+At the end of every to-do part or agent session that changes LaTeX content, save a PDF snapshot to the project root. This happens at the same time as updating the research log — both are end-of-session obligations. Do not skip this step. If `LaTeX/main.pdf` does not exist yet (e.g. pre-writing phases), skip the snapshot.
 
 **Naming convention:**
 
@@ -72,22 +72,39 @@ hiding_in_plain_sight_DRAFT_2.pdf
 hiding_in_plain_sight_DRAFT_3.pdf
 ```
 
-**Procedure:**
+### Step 1: Ask the user — new draft or merge?
 
-1. Read the `\title{}` from `LaTeX/main.tex` and convert it to a filename-safe slug (lowercase, underscores, strip punctuation).
-2. Check the project root for existing `*_DRAFT_*.pdf` files.
-3. Find the highest draft number. If none exist, the next number is `1`.
-4. Copy `LaTeX/main.pdf` to `{paper_title}_DRAFT_{N}.pdf` in the project root.
-5. Add a sticky note annotation to the draft PDF (see **Sticky Note** below).
-6. Log the snapshot in `Context/Flow/research_log.md` alongside the other changes from that session.
+Before doing anything with drafts, **use `AskUserQuestion`** to present a formal choice:
 
-Draft snapshots are **immutable** — never overwrite or delete a previous draft. If `LaTeX/main.pdf` does not exist yet (e.g. pre-writing phases), skip the snapshot.
+- **Question:** "Draft snapshot: create a new draft or merge into the current one?"
+- **Option 1:** "New draft (DRAFT_{N+1})" — with description: "Increments the draft number. Use when this session represents a distinct milestone."
+- **Option 2:** "Merge into current draft (DRAFT_{N})" — with description: "Overwrites the current draft PDF, preserving its sticky note history. Use when this session continues work on the same draft."
+
+To populate `N`, first read the `\title{}` from `LaTeX/main.tex`, convert it to a filename-safe slug, then list existing `*_DRAFT_*.pdf` files and find the highest number (if none exist, `N = 0` and only the "New draft" option should be offered).
+
+The user can also trigger a merge at any time by saying **"merge into current draft"** — in that case, skip the question and proceed directly with the merge path.
+
+### Step 2a: New draft path
+
+1. Copy `LaTeX/main.pdf` → `{paper_title}_DRAFT_{N+1}.pdf` in the project root.
+2. Add a **new sticky note** (see **Sticky Note** below) with header `Draft {N+1} — YYYY-MM-DD` and bullet points listing this session's changes.
+3. Log the snapshot in `Context/Flow/research_log.md`.
+
+### Step 2b: Merge path
+
+1. Open the existing `{paper_title}_DRAFT_{N}.pdf` and **extract the text content of any existing sticky note annotations** on page 0. Store this as `previous_note_text`.
+2. Copy `LaTeX/main.pdf` → `{paper_title}_DRAFT_{N}.pdf` (overwrite the PDF content).
+3. Add a **merged sticky note** that contains:
+   - The full `previous_note_text` (preserving all prior session history verbatim).
+   - A new section appended at the bottom: `--- Session {S} — YYYY-MM-DD ---` (where `S` is the next session number, inferred by counting existing `--- Session` headers in the previous note text, plus one; if there are no session headers the original note counts as session 1).
+   - Bullet points listing this session's changes.
+4. Log the merge in `Context/Flow/research_log.md`.
 
 ### Sticky Note
 
-Every draft snapshot in the project root **must** have a sticky note annotation added to the first page summarising the changes implemented in that session. This gives the researcher an at-a-glance record of what changed in each draft without opening the log.
+Every draft snapshot **must** have a sticky note annotation on the first page summarising the changes. This gives the researcher an at-a-glance record of what changed in each draft without opening the log.
 
-**Content:** A concise, bulleted list of the changes made in the session that triggered the snapshot. Write in plain language — no file paths or technical detail. Focus on what changed from the reader's perspective (e.g. "Rewrote introduction framing around identification strategy", "Added robustness table for alternative clustering", "Fixed typo in Proposition 2 proof").
+**Content:** A concise, bulleted list of the changes made in the session. Write in plain language — no file paths or technical detail. Focus on what changed from the reader's perspective (e.g. "Rewrote introduction framing around identification strategy", "Added robustness table for alternative clustering", "Fixed typo in Proposition 2 proof").
 
 **Implementation:** Use Python with the `pymupdf` (fitz) library to add a sticky note (text annotation) to page 1 of the draft PDF:
 
@@ -105,11 +122,30 @@ doc.save("path/to/draft.pdf", incremental=True, encryption=fitz.PDF_ENCRYPT_KEEP
 doc.close()
 ```
 
+**Extracting existing sticky notes (for merge path):**
+
+```python
+import fitz  # pymupdf
+
+doc = fitz.open("path/to/existing_draft.pdf")
+page = doc[0]
+previous_note_text = ""
+for annot in page.annots():
+    if annot.type[0] == 0:  # Text annotation (sticky note)
+        previous_note_text = annot.info.get("content", "")
+        break
+doc.close()
+```
+
 **Rules:**
 - The note title line is `Draft N — YYYY-MM-DD` (matching the draft number and today's date).
 - Keep the change list short — aim for 3–7 bullet points. Group small related changes into a single bullet.
 - The sticky note is added to the **root draft snapshot only** (`{paper_title}_DRAFT_{N}.pdf`), not to `LaTeX/main.pdf`.
 - If `pymupdf` is not available, install it (`pip install pymupdf`) before proceeding.
+
+### Overleaf Sync Prompt
+
+After the draft snapshot and sticky note, check whether Overleaf sync is configured (`cd LaTeX && git remote -v` — look for `git.overleaf.com`). If configured and `.tex` files changed in this session, prompt the user to sync using `AskUserQuestion` with a proposed commit message. See `Context/Roles/skill_overleaf_sync.md` for the full protocol. If not configured, skip silently — do not mention Overleaf.
 
 ## Decision Log
 
@@ -126,6 +162,7 @@ The researcher populates the to-do with specific, actionable work items grouped 
 3. When a part is finished, mark it `DONE` and write a completion report to `Context/Flow/todo_report_<part_label>.md` listing every file changed, what was changed, and any judgement calls.
 4. Log all changes in `Context/Flow/research_log.md`.
 5. If `LaTeX/main.pdf` exists, take a draft snapshot (see **Draft Snapshots** above).
+6. If Overleaf sync is configured and `.tex` files changed, prompt the user to sync (see **Draft Snapshots > Overleaf Sync Prompt**).
 
 When all parts are done, the researcher resets the file for the next batch.
 
@@ -275,6 +312,12 @@ If you are writing paper text or LaTeX, study `Context/Roles/researcher_profile.
 ### Referee Report
 If you are acting as a referee, study `Context/Roles/profile_referee.md` for the persona and report structure.
 
+### Overleaf Sync
+If you need to sync LaTeX to Overleaf, study `Context/Roles/skill_overleaf_sync.md`.
+
+### GitHub Sync
+If you need to push the project to GitHub, study `Context/Roles/skill_github_sync.md`.
+
 ## What Goes Where
 
 ### Design decisions (variable choices, test selection, exclusion rules, coding schemes)
@@ -339,6 +382,8 @@ Keep the main thread lean. Delegate freely.
 | Results review checklist    | `Context/Roles/results_review_checklist.md`   | At the results review gate, before writing begins                                |
 | Subagent protocol           | `Context/Roles/subagent_protocol.md`          | Before spawning any subagent                                                     |
 | Revision protocol           | `Context/Roles/revision_protocol.md`          | When a referee report triggers re-analysis                                       |
+| Overleaf sync guide         | `Context/Roles/skill_overleaf_sync.md`        | When syncing LaTeX to Overleaf                                                   |
+| GitHub sync guide           | `Context/Roles/skill_github_sync.md`          | When pushing project to GitHub                                                   |
 
 ## Change Log Enforcement
 
@@ -395,12 +440,18 @@ Template/
 │   │   ├── subagent_protocol.md     # Subagent spawning, output, and handoff rules
 │   │   ├── revision_protocol.md     # Multi-cycle revision and re-analysis protocol
 │   │   ├── skill_graphs.md          # Graph style guidelines
-│   │   └── skill_tables.md          # Table style guidelines
-│   └── Flow/
-│       ├── timeline.md              # Project progress snapshot
-│       ├── todo.md                  # Agent task queue (actionable work items)
-│       ├── codebook.md              # Variable-level data documentation
-│       └── research_log.md          # Chronological decision log
+│   │   ├── skill_tables.md          # Table style guidelines
+│   │   ├── skill_overleaf_sync.md   # Overleaf sync protocol and setup
+│   │   └── skill_github_sync.md     # GitHub sync protocol and setup
+│   ├── Flow/
+│   │   ├── timeline.md              # Project progress snapshot
+│   │   ├── todo.md                  # Agent task queue (actionable work items)
+│   │   ├── codebook.md              # Variable-level data documentation
+│   │   └── research_log.md          # Chronological decision log
+│   └── Helpers/
+│       ├── latexsync.sh             # Blueprint: Overleaf sync shell function
+│       ├── gdone.sh                 # Blueprint: Git commit-and-push shell function
+│       └── gsync.sh                 # Blueprint: Git sync (commit, pull, push) shell function
 │
 ├── Helper/
 │   ├── otree.R                      # oTree adapter: config + load_data()
