@@ -15,17 +15,44 @@ A self-contained R + LaTeX template for a single-study empirical economics paper
 
 Analysis outputs are written to `LaTeX/Output/`, split across `Figures/`, `Tables/`, and `Text/` subfolders. The LaTeX paper sources in `LaTeX/` reference them with relative paths like `Output/Figures/foo.png`, so the whole `LaTeX/` folder is self-contained and compiles wherever it lands.
 
-Need outputs in more than one place — e.g. a local Overleaf clone alongside the in-repo copy? Add the extra path to `SYNC_DESTINATIONS` in `Scripts/config_init.R` and every `save_graph` / `save_table` / `save_text` call writes to both:
+Need outputs mirrored into _more than one local folder_ — e.g. a separate per-paper bundle, or a sibling Overleaf working tree alongside the canonical `LaTeX/Output`? Add the extra path to `SYNC_DESTINATIONS` in `Scripts/config_init.R` and every `save_graph` / `save_table` / `save_text` call writes to both:
 
 ```r
 SYNC_DESTINATIONS <- c(
-  path.expand("~/Overleaf/your-project/Output")
+  path.expand("~/Some/Other/Output")
 )
 ```
 
+`SYNC_DESTINATIONS` is _not_ required for the standard Overleaf-sync workflow below: in that workflow Overleaf and `LaTeX/` are the same working tree, so there is only one place outputs need to land.
+
 ### Sync to Overleaf via git
 
-The `LaTeX/` folder is structured so it can be the working tree of an Overleaf project. Overleaf supports git access on most paid plans — clone the Overleaf project, point `SYNC_DESTINATIONS` at its `Output/` subfolder, and push the `LaTeX/` contents up with git when you want the manuscript to sync. Overleaf has a help page for the git workflow: <https://www.overleaf.com/learn/how-to/Using_Git_to_track_your_work_on_Overleaf>.
+The `LaTeX/` folder is the source of truth. Overleaf is just another remote you push it to. Setup:
+
+1. Create a new, empty project in Overleaf via the web UI.
+2. Inside the local `LaTeX/` folder, initialise a git repo if it is not one already: `cd LaTeX && git init`. `LaTeX/` becomes its own working tree, independent from the outer `Template_Analysis` repo.
+3. Get the Overleaf project's git URL from its share menu.
+4. Add it as a remote and push:
+
+   ```sh
+   git remote add overleaf <overleaf-git-url>
+   git push -u overleaf main:master
+   ```
+
+   Overleaf's default branch is `master`; the `main:master` refspec pushes your local `main` to Overleaf's `master`.
+5. On subsequent edits, push from inside `LaTeX/`:
+
+   ```sh
+   git push overleaf main:master
+   ```
+
+   To pull collaborator edits back from Overleaf:
+
+   ```sh
+   git pull overleaf master
+   ```
+
+See <https://www.overleaf.com/learn/how-to/Using_Git_to_track_your_work_on_Overleaf> for the Overleaf-side specifics (where to find the git URL, auth tokens, etc.).
 
 ## Project documentation
 
