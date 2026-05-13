@@ -4,10 +4,10 @@ This file is here for anyone using Claude Code (or another AI assistant) inside 
 
 ## Style references
 
-Two reference documents live in `Tools/`:
+Two reference documents live in `Flow/Tools/`:
 
-- `Tools/skill_graphs.md` — JEBO publication-ready figure conventions used across this project.
-- `Tools/skill_tables.md` — JEBO publication-ready table conventions.
+- `Flow/Tools/skill_graphs.md` — JEBO publication-ready figure conventions used across this project.
+- `Flow/Tools/skill_tables.md` — JEBO publication-ready table conventions.
 
 When generating figures or tables, follow these. If the target journal changes, swap them out for that journal's conventions.
 

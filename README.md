@@ -68,15 +68,14 @@ See <https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-gith
 | `Helper/` | Data-source adapters (`otree.R`, `csv.R`) and an optional output-sync helper. |
 | `Data/` | Raw data files. Not under version control by default. |
 | `LaTeX/` | Manuscript source. Figures, tables, and text snippets are written here by the analysis scripts. |
-| `Flow/` | Project tracking: `personality.md`, `timeline.md`, `todo.md`, `research_log.md`, `codebook.md`. |
-| `Tools/` | Reusable style references — currently graph and table conventions. |
+| `Flow/` | Project tracking — `codebook.md`, `research_log.md`, `timeline.md`, `todo.md`, `personality.md` — plus `Flow/Tools/`, which holds skill references (graphs and tables conventions) for integrating with Claude or other LLM agents. |
 | `Literature/` | Project-relevant papers and reading notes. |
 | `Feedback/` | Referee reports, seminar comments, and other external feedback. |
 
-`Tools/` contains JEBO journal style conventions for graphs and tables; reuse them or replace with your own journal's conventions.
+`Flow/Tools/` holds publication-style references (graphs and tables) intended both as a human style guide and as the place to drop additional skill files when integrating with Claude or other LLM agents. The shipped references encode JEBO conventions; reuse them or replace with your own journal's.
 
 ## Using Claude Code (optional)
 
-This template is designed for manual use. If you do use Claude Code, the short `CLAUDE.md` at the root points it at the style references in `Tools/` and the project state in `Flow/`.
+This template is designed for manual use. If you do use Claude Code, the short `CLAUDE.md` at the root points it at the style references in `Flow/Tools/` and the project state in `Flow/`.
 
 If you want a Claude-Code-orchestrated variant of this template (with role profiles, phase walks, structured `Context/`), see [github.com/juliantait/Template_Analysis_Claude](https://github.com/juliantait/Template_Analysis_Claude).
