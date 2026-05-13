@@ -25,4 +25,4 @@ Read the relevant `Flow/` files before doing any analysis-touching work, and upd
 
 ## Pipeline
 
-The analysis runs from `main.R` in the project root. Output is written to `LaTeX/Figures/`, `LaTeX/Tables/`, and `LaTeX/Text/` via the `save_graph()`, `save_table()`, and `save_text()` helpers defined in `Scripts/config_toolkit.R`. British English throughout.
+The analysis runs from `main.R` in the project root. Output is written to `LaTeX/Output/Figures/`, `LaTeX/Output/Tables/`, and `LaTeX/Output/Text/` via the `save_graph()`, `save_table()`, and `save_text()` helpers defined in `Scripts/config_toolkit.R`. British English throughout.

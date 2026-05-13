@@ -8,8 +8,24 @@ A self-contained R + LaTeX template for a single-study empirical economics paper
 2. **Drop your raw data** into `Data/` (a `Data/DataSets/` subfolder is provided).
 3. **Wire up the data source** by editing one of the adapters in `Helper/` — `otree.R` for oTree experiments, `csv.R` for generic CSVs. The adapter exposes a `load_data()` function that the cleaning pipeline calls.
 4. **Run the pipeline** by opening `main.R` and executing it. The scripts in `Scripts/` run in order: init → toolkit → cleaning → sample restrictions → balance → descriptives → hypotheses → robustness → exploratory.
-5. **Write the paper** in `LaTeX/`. The analysis scripts save figures, tables, and inline numbers directly into `LaTeX/Figures/`, `LaTeX/Tables/`, and `LaTeX/Text/`, so the manuscript can reference them with simple relative paths.
+5. **Write the paper** in `LaTeX/`. The analysis scripts save figures, tables, and inline numbers directly into `LaTeX/Output/Figures/`, `LaTeX/Output/Tables/`, and `LaTeX/Output/Text/`, so the manuscript can reference them with simple relative paths.
 6. **Compile** `LaTeX/main.tex` to get the PDF.
+
+### Outputs
+
+Analysis outputs are written to `LaTeX/Output/`, split across `Figures/`, `Tables/`, and `Text/` subfolders. The LaTeX paper sources in `LaTeX/` reference them with relative paths like `Output/Figures/foo.png`, so the whole `LaTeX/` folder is self-contained and compiles wherever it lands.
+
+Need outputs in more than one place — e.g. a local Overleaf clone alongside the in-repo copy? Add the extra path to `SYNC_DESTINATIONS` in `Scripts/config_init.R` and every `save_graph` / `save_table` / `save_text` call writes to both:
+
+```r
+SYNC_DESTINATIONS <- c(
+  path.expand("~/Overleaf/your-project/Output")
+)
+```
+
+### Sync to Overleaf via git
+
+The `LaTeX/` folder is structured so it can be the working tree of an Overleaf project. Overleaf supports git access on most paid plans — clone the Overleaf project, point `SYNC_DESTINATIONS` at its `Output/` subfolder, and push the `LaTeX/` contents up with git when you want the manuscript to sync. Overleaf has a help page for the git workflow: <https://www.overleaf.com/learn/how-to/Using_Git_to_track_your_work_on_Overleaf>.
 
 ## Project documentation
 

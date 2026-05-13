@@ -8,12 +8,14 @@ rm(list = ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 # === OUTPUT PATHS ===
-OUTPUT_ROOT <- file.path(getwd(), "LaTeX")
+OUTPUT_ROOT <- file.path(getwd(), "LaTeX", "Output")
 
 # === SYNC DESTINATIONS ===
-# Destinations to replicate Output structure (e.g. Overleaf). Add or remove paths.
+# Extra folders to mirror the Output structure into. The canonical use-case
+# is a local Overleaf clone — point this at the Output/ subfolder of the
+# cloned project and every save_graph/save_table/save_text writes there too.
 SYNC_DESTINATIONS <- c(
-  # path.expand("/path/to/Overleaf/project/Output")
+  # path.expand("~/Overleaf/your-project/Output")
 )
 
 # Reset package namespaces (prevents cached modifications from prior runs)
