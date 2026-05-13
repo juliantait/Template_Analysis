@@ -27,11 +27,13 @@ SYNC_DESTINATIONS <- c(
 
 ### Sync to Overleaf via git
 
-The `LaTeX/` folder is the source of truth. Overleaf is just another remote you push it to. Setup:
+The `LaTeX/` folder is the source of truth. Overleaf is just another remote you push it to. Note: Overleaf's git integration is a premium feature — available on paid individual or group subscriptions and to Overleaf Commons participants. On the free plan the Git option does not appear under Integrations.
+
+Setup:
 
 1. Create a new, empty project in Overleaf via the web UI.
 2. Inside the local `LaTeX/` folder, initialise a git repo if it is not one already: `cd LaTeX && git init`. `LaTeX/` becomes its own working tree, independent from the outer `Template_Analysis` repo.
-3. Get the Overleaf project's git URL from its share menu.
+3. Get the Overleaf project's git URL: in the project, open the sidebar → **Integrations** → **Git**. The URL has the format `https://git.overleaf.com/<project-id>`.
 4. Add it as a remote and push:
 
    ```sh
@@ -39,7 +41,7 @@ The `LaTeX/` folder is the source of truth. Overleaf is just another remote you 
    git push -u overleaf main:master
    ```
 
-   Overleaf's default branch is `master`; the `main:master` refspec pushes your local `main` to Overleaf's `master`.
+   Push your local `main` to whatever default branch Overleaf reports on first push — historically this has been `master`. If `git push -u overleaf main:master` is rejected, run `git ls-remote overleaf` to see the actual branch name and substitute it for `master`.
 5. On subsequent edits, push from inside `LaTeX/`:
 
    ```sh
@@ -52,7 +54,7 @@ The `LaTeX/` folder is the source of truth. Overleaf is just another remote you 
    git pull overleaf master
    ```
 
-See <https://www.overleaf.com/learn/how-to/Using_Git_to_track_your_work_on_Overleaf> for the Overleaf-side specifics (where to find the git URL, auth tokens, etc.).
+See <https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-github-synchronization/git-integration> for the Overleaf-side specifics (auth tokens, branch behaviour, etc.).
 
 ## Project documentation
 
