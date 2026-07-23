@@ -58,3 +58,13 @@ Copy this template for each new decision. Prefix the title with the appropriate 
 **Alternatives considered:** None — the old names are simply wrong and must be corrected.
 
 **Action:** Updated references in `Context/Roles/skill_graphs.md`, `Context/Roles/skill_tables.md`, `Context/Roles/researcher_profile.md`, `Context/Roles/subagent_protocol.md`, `Context/Roles/results_review_checklist.md`, `Context/Roles/revision_protocol.md`, and `Context/context.md` (output naming examples table).
+
+### 2026-07-23 — 🧹 Reconciled output folders under LaTeX/Output/ and polished front matter
+
+**Decision:** Canonical output location is `LaTeX/Output/Figures`, `LaTeX/Output/Tables`, `LaTeX/Output/Text`. Removed the stray bare `LaTeX/Figures`, `LaTeX/Tables`, `LaTeX/Text` folders (empty placeholders only). Replaced the bold "ABSTRACT." block in `main.tex` with a proper `abstract` environment and aligned the `\thanks` footnote wording with the Honesty Penalty paper structure.
+
+**Rationale:** `OUTPUT_ROOT` in `Scripts/config_init.R` already pointed at `LaTeX/Output`, and all `.tex` example paths already referenced `Output/...`, but bare sibling folders on disk contradicted the canonical layout. The front-matter changes match the target journal-paper conventions.
+
+**Alternatives considered:** Pointing `OUTPUT_ROOT` at the bare folders instead. Rejected — the `Output/` wrapper keeps generated artefacts in one syncable subtree (see `SYNC_DESTINATIONS`).
+
+**Action:** Created `LaTeX/Output/{Figures,Tables,Text}` each with `.gitkeep`; deleted the bare placeholder folders. Verified `save_graph`/`save_table`/`save_text` in `Scripts/config_toolkit.R` already create and write to `OUTPUT_ROOT` subfolders (no code change needed; confirmed with a standalone Rscript test). Edited `LaTeX/main.tex` (abstract environment, `\thanks` wording). Installed `threeparttable` and `babel-english` into the user texmf tree; `latexmk -pdf` now builds cleanly.
