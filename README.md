@@ -68,14 +68,14 @@ See <https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-gith
 | `Helper/` | Data-source adapters (`otree.R`, `csv.R`) and an optional output-sync helper. |
 | `Data/` | Raw data files. Not under version control by default. |
 | `LaTeX/` | Manuscript source. Figures, tables, and text snippets are written here by the analysis scripts. |
-| `Flow/` | Project tracking — `codebook.md`, `research_log.md`, `timeline.md`, `todo.md`, `personality.md` — plus `Flow/Tools/`, which holds skill references (graphs and tables conventions) for integrating with Claude or other LLM agents. |
+| `Flow/` | All AI-facing material, kept behind this one folder at the project root: project tracking — `codebook.md`, `research_log.md`, `timeline.md`, `todo.md`, `personality.md` — plus the skill references `skill_graphs.md` and `skill_tables.md` (graphs and tables conventions) for integrating with Claude or other LLM agents. |
 | `Literature/` | Project-relevant papers and reading notes. |
 | `Feedback/` | Referee reports, seminar comments, and other external feedback. |
 
-`Flow/Tools/` holds publication-style references (graphs and tables) intended both as a human style guide and as the place to drop additional skill files when integrating with Claude or other LLM agents. The shipped references encode JEBO conventions; reuse them or replace with your own journal's.
+`Flow/` holds the publication-style skill references (`skill_graphs.md`, `skill_tables.md`) intended both as a human style guide and as the place to drop additional skill files when integrating with Claude or other LLM agents. Keeping them in `Flow/` at the project root — not inside `LaTeX/` or `Scripts/` — means a worker with the whole project in view finds them whatever it is working on. The shipped references encode JEBO conventions; reuse them or replace with your own journal's.
 
 ## Using Claude Code (optional)
 
-This template is designed for manual use. If you do use Claude Code, the short `CLAUDE.md` at the root points it at the style references in `Flow/Tools/` and the project state in `Flow/`.
+This template is designed for manual use. If you do use Claude Code, the short `CLAUDE.md` at the root points it at the style references in `Flow/` (`skill_graphs.md`, `skill_tables.md`) and the project state in `Flow/`.
 
 If you want a Claude-Code-orchestrated variant of this template (with role profiles, phase walks, structured `Context/`), see [github.com/juliantait/Template_Analysis_Claude](https://github.com/juliantait/Template_Analysis_Claude).

@@ -4,10 +4,10 @@ This file is here for anyone using Claude Code (or another AI assistant) inside 
 
 ## Style references
 
-Two reference documents live in `Flow/Tools/`:
+Two skill references live in `Flow/` at the **project root**. All AI-facing material stays behind `Flow/`, and `Flow/` sits at the true project root — never inside `LaTeX/` or a scripts subfolder — so a worker with the whole project in view finds them whatever it is working on (the work is split between `LaTeX/` and `Scripts/`, and which skill applies varies by task):
 
-- `Flow/Tools/skill_graphs.md` — JEBO publication-ready figure conventions used across this project.
-- `Flow/Tools/skill_tables.md` — JEBO publication-ready table conventions.
+- `Flow/skill_graphs.md` — JEBO publication-ready figure conventions used across this project.
+- `Flow/skill_tables.md` — JEBO publication-ready table conventions.
 
 When generating figures or tables, follow these. If the target journal changes, swap them out for that journal's conventions.
 
@@ -27,6 +27,8 @@ Read the relevant `Flow/` files before doing any analysis-touching work, and upd
 
 The analysis runs from `main.R` in the project root. Output is written to `LaTeX/Output/Figures/`, `LaTeX/Output/Tables/`, and `LaTeX/Output/Text/` via the `save_graph()`, `save_table()`, and `save_text()` helpers defined in `Scripts/config_toolkit.R`. British English throughout.
 
+A result mentioned anywhere in the manuscript has its generating code in the **main pipeline**. The test for main-versus-supplementary is whether the paper *mentions* the numbers, not whether an `\input` exists — a table reached by no `\input` can still back live prose, so "compiled nowhere" is not "depended on nowhere". Route numbers through shared `fmt_p()` / `fmt_est()` helpers in `Scripts/config_toolkit.R`, defined once — a duplicated or dead helper of the same name sourced into the global environment can shadow the shared one and break the run in a way that looks unrelated to the change.
+
 ## Reporting conventions
 
 These apply to every script, table, figure note, and line of prose. They are the house style; do not relax them per-analysis.
@@ -38,6 +40,9 @@ These apply to every script, table, figure note, and line of prose. They are the
 - **Fix formatting in the generating R script**, never by patching the `.tex` it produced. Route numbers through shared `fmt_p()` and `fmt_est()` helpers in `Scripts/config_toolkit.R` so tables and prose cannot drift apart. These helpers are not yet defined in this template — add them there when first needed, rather than re-implementing rounding in each script.
 - **Aggregation unit**: report at the unit of the statistical test. Never mix observation-level and group-level aggregation within one paragraph or one table.
 - **Every scalar quoted in the paper is computed by a script** and exported via `save_text()` — the `OutputValues` pattern in `Scripts/descriptives.R` writing to `LaTeX/Output/Text/`. Never hand-derive or eyeball a number, including in the abstract, footnotes, and float notes. Re-check all quoted scalars after any re-run.
+- **Numbers inside captions and float notes go in as LaTeX macros, not typed literals.** Export each with an `add_value(name, x)` helper in `Scripts/config_toolkit.R` that appends `\newcommand{\valName}{x}` to `LaTeX/Output/Text/note_values.txt`, which `main.tex` `\input`s once in its preamble. A note then reads `$N = \valMirrorNCond$`, not `$N = 279$`, so the number tracks the data across re-runs instead of silently rotting when the data changes. (Like the `fmt_*` helpers, `add_value()` is added to `config_toolkit.R` when first needed.)
+- **Every prose number is verifiable from the source, not the PDF.** It is backed by a live artifact the pipeline regenerates: either an exported scalar in a values `.txt`, or a cell in a script-generated table — compiled, or its `\input` left commented out with a bare `% source` marker on the line above (un-mute to check). A number with neither backing — quoted from a table no script produces, or hand-copied from a run — is not allowed. See the `% source` mechanism in `Flow/skill_tables.md`.
+- **Distinguish estimated quantities from design constants** before applying "compute it, never type it". Fees, grid sizes, screen timings and sample-design facts are written in prose as-is; means, coefficients, sample sizes and test statistics are computed and must come from the scripts.
 - **Inline reporting carries p-values, not raw estimates.** Running text gives the p-value, the test name, and sidedness where that is not already obvious. The test is not where the number came from but what the number is doing in the sentence: *is this number doing interpretive work here, or is it a raw estimate quoted as a credential?* **Banned** — raw model output quoted in brackets as a credential: `\hat{\beta} = 3.091`, `coefficient = 0.018`, `R^2 = 0.224`, standard errors. Those add nothing at the point of the claim and belong in the tables, which is what the tables are for; a raw estimate quoted in prose duplicates a table cell and the two drift apart. **Kept** — a magnitude written out in words, in units that mean something to the reader: `42 percentage points`, `roughly three dots larger`, `virtually unchanged`, `triple`, `about a third`. Those *are* the finding stated in human terms, and a paper is worse without them. Two exceptions: **correlations** keep their statistic inline (`Spearman rho = -0.231, p = .006`), because a correlation usually has no table and the sign and magnitude are the result; and **descriptive means, shares and percentages** stay in prose (`49% versus 38% (p = .035, one-sided)`), because those are results rather than model output. Before: `the interaction reaches significance (\hat{\beta}_3 = 3.091, p = .044)`. After: `the interaction reaches significance (p = .044, one-sided)`.
 - **Correlations**: state Pearson or Spearman, and the unit of observation. Use the independent unit (e.g. participant, not participant × block).
 
@@ -61,4 +66,4 @@ These apply to every script, table, figure note, and line of prose. They are the
 - **Notes always sit in a `minipage` below the tabular or graphic**, `\footnotesize`, flowing text — never a `\multicolumn` row inside the tabular.
 - Generated `.tex` files hold the **tabular only**. Caption and notes are written in the LaTeX file that `\input`s them.
 
-Full detail lives in `Flow/Tools/skill_graphs.md` and `Flow/Tools/skill_tables.md`; running lessons behind these rules are in `lessons_from_mistakes_paper.md`.
+Full detail lives in `Flow/skill_graphs.md` and `Flow/skill_tables.md`; running lessons behind these rules are in `Flow/lessons_from_mistakes_paper.md`.

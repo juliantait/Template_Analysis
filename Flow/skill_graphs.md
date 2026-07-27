@@ -26,7 +26,7 @@ Self-check for these before considering a figure script finished:
 
 - A ggplot carrying `ggtitle()` or `labs(title = ...)` — a `.png` must never carry a title.
 - Caption or note text baked into the graphic (`labs(caption = ...)`, `subtitle`, an annotation layer used as a note).
-- The table-side equivalents, for the same reason: a generated `.tex` containing `\begin{table}`, `\caption`, `\label`, or `\textit{Notes:}`; a `stargazer()` call without `notes = NULL`; any `kableExtra::footnote()` or `add_footnote()` call. See `Flow/Tools/skill_tables.md`.
+- The table-side equivalents, for the same reason: a generated `.tex` containing `\begin{table}`, `\caption`, `\label`, or `\textit{Notes:}`; a `stargazer()` call without `notes = NULL`; any `kableExtra::footnote()` or `add_footnote()` call. See `Flow/skill_tables.md`.
 
 Mechanics of the export itself are in [Export](#export) below.
 
@@ -42,6 +42,7 @@ Mechanics of the export itself are in [Export](#export) below.
 - Do not include plot titles (titles are added as captions in LaTeX).
 - No x-axis title unless axis labels are numeric or otherwise ambiguous.
 - Axis titles: explicit economic quantity with units (e.g. "Punishment (EUR)").
+- When an axis label is ambiguous — a signed quantity, a unit-less proportion — disambiguate at the **least-disruptive layer**. If renaming the axis would break a term the whole paper uses, keep the axis label and put the clarification in the note instead (e.g. keep "Advice quality" on the axis and let the note say it is a signed accuracy gain in dots, positive = better). Rename the construct only when the whole paper renames with it.
 - Avoid redundancy (do not repeat "Mean" in both title and axis).
 - The LaTeX caption must be **usefully descriptive**: what is plotted, for which sample or experiment. Not "Treatment effects".
 - Treatment labels in legends and axes refer to the same treatments as the paper and are spelled identically across all figures. Casing is free inside the figure — normal case ("Low stakes", "High stakes") is fine here, even though running text always uses ALL CAPS (LOW, HIGH).

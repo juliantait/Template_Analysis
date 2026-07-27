@@ -88,9 +88,12 @@ Mechanics of the export itself are in [Export](#export) below.
 ## Titles, notes and interpretation
 
 - The caption is **usefully descriptive**: what is estimated or compared, for which sample, experiment, or specification.
+- The caption is **authored LaTeX text, not inherited from the generating script.** Do not carry a script-name prefix into it (`Robustness:`, `Exploratory:`); and never let the script that made a table mislabel its role — a table that is the paper's main parametric evidence is not a "robustness" table just because `robustness.R` produced it. Name it for what it shows and the part it plays in the argument.
 - **Notes always go in a `minipage` below the tabular**, in `\footnotesize`, as flowing text. Never as a `\multicolumn` row inside the tabular, and never inside cells. Same rule for figures (minipage below the graphic). This keeps note text from being stretched or wrapped by the column widths, and keeps line breaks under the paragraph's control rather than the table's.
 - Do not use `threeparttable` for notes — the minipage form below is the house style, so all floats look identical.
 - Always specify: test type, pairing structure, direction of comparison, sidedness, and the unit of observation.
+- **A note must not contradict its own table.** Check every sample size, count and column claim in a note against the rows directly above it — a note that says $N = 295$ over an Observations row reading 279 is worse than no note. Notes are written once and rarely re-read against the numbers, so they rot silently while the table stays right.
+- **Regression-table stars are two-sided; an inline p-value reports the test as pre-registered and run** (often one-sided for a directional interaction). Where the two collide — a one-sided claim drawn from a cell whose star is two-sided — do not re-star the table and do not change the inline p-value: add a note stating the stars are two-sided and that one-sided p-values for that row are in the main text.
 - Keep notes as compact as possible while still self-explanatory to a reader who has only read the abstract: unit of observation, sample and conditioning, treatment abbreviations spelled out, test types, units (currency, percentage points).
 - State only what the reader cannot infer — do not restate column headers, or symbols the facing page already defines. Self-explanatory ≠ self-contained.
 - **State the fact and stop**; let the reader draw the consequence. Spell one out only where genuinely counter-intuitive.
@@ -144,6 +147,21 @@ Example:
 ```
 
 This ensures any future agent or collaborator can trace numbers back to the R source and uncomment the `\input` to restore the raw version.
+
+### Non-compiled sources for prose numbers
+
+When a prose number is backed by a generated table that is **not** compiled into the paper, keep that table's `\input` in the LaTeX, commented out, with a bare `% source` marker on the line directly above:
+
+```latex
+% source
+% \input{Output/Tables/hypothetical_performance.tex}
+```
+
+Un-comment to compile and check the numbers. `% source` is a bare flag, not a descriptive sentence — it only marks the commented line below as a source. It keeps every non-compiled source greppable, so an agent can be pointed on demand at every prose number quoting a non-compiled source. A check run when wanted, not a standing one.
+
+### A cited table must contain the numbers it is cited for
+
+When prose and a table disagree, fix the table — never soften the claim to match whatever the table happens to hold. The usual culprit is a table generated on every run but `\input` nowhere: the numbers exist, so the prose looks sourced, but the reader cannot reach them. Either compile the table or retarget the citation.
 
 ---
 
