@@ -27,6 +27,15 @@ SYNC_DESTINATIONS <- c(
 
 ### Sync to Overleaf via git
 
+**Live configuration (recorded 2026-07-28).** This template's `LaTeX/` is already its own git repo wired to Overleaf:
+
+| Repo | Remote (`origin`) | Branch |
+|---|---|---|
+| `LaTeX/` → **Overleaf** | `https://git.overleaf.com/628642ba67dbbdcff9b2acf7` | `main` |
+| project root → **GitHub** | `https://github.com/juliantait/Template_Analysis.git` | `main` |
+
+Push `LaTeX/` edits to **both** remotes (`cd LaTeX && git push origin main`, and push the root separately to GitHub). Compiled PDFs are gitignored. This replaced the retired `Template_Analysis_Claude`, which previously held the Overleaf remote. The setup steps below are kept for reference / for new projects cloned from this template.
+
 The `LaTeX/` folder is the source of truth. Overleaf is just another remote you push it to. Note: Overleaf's git integration is a premium feature — available on paid individual or group subscriptions and to Overleaf Commons participants. On the free plan the Git option does not appear under Integrations.
 
 Setup:
