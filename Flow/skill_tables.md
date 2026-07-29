@@ -41,7 +41,7 @@ Mechanics of the export itself are in [Export](#export) below.
 ## General formatting rules
 - Always use `\begin{table}...\end{table}` (not bare tabulars).
 - Use `\centering`; font size typically `\scriptsize` or `\footnotesize`.
-- Double midrules at top and bottom (`\midrule \midrule`) for regression tables.
+- Booktabs single rules (`\toprule` / `\midrule` / `\bottomrule`) for all tables, regression tables included. (Doubled `\midrule \midrule` rules are a legacy Stata esttab default, not journal style.)
 - Avoid column numbers unless strictly necessary.
 - Align coefficients and SEs vertically; SEs always in parentheses below estimates.
 - British English spelling throughout.

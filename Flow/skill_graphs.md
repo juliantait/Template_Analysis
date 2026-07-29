@@ -57,7 +57,7 @@ Mechanics of the export itself are in [Export](#export) below.
 
 ## Data presentation
 - Plot means with +/- 1 SE (controlled by `se_plot` in `Scripts/config_toolkit.R`).
-- Use points with error bars for cross-sectional comparisons.
+- Bar charts of group means with +/- 1 SE whiskers for cross-sectional treatment comparisons, main-hypothesis figures included (standard in experimental economics). No raw-data jitter overlays.
 - Use lines only for time trends or ordered rounds.
 
 ## Legends
