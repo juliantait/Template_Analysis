@@ -29,6 +29,19 @@ The analysis runs from `main.R` in the project root. Output is written to `LaTeX
 
 A result mentioned anywhere in the manuscript has its generating code in the **main pipeline**. The test for main-versus-supplementary is whether the paper *mentions* the numbers, not whether an `\input` exists — a table reached by no `\input` can still back live prose, so "compiled nowhere" is not "depended on nowhere". Route numbers through shared `fmt_p()` / `fmt_est()` helpers in `Scripts/config_toolkit.R`, defined once — a duplicated or dead helper of the same name sourced into the global environment can shadow the shared one and break the run in a way that looks unrelated to the change.
 
+### Multiple studies: script prefixes and per-study output
+
+This template is a **single study**: scripts in `Scripts/` have plain names (`descriptives.R`, `hypotheses.R`, ...) and outputs land in the flat `LaTeX/Output/{Figures,Tables,Text}`. Keep it plain for one study — do not add prefixes prematurely.
+
+**When this repo grows to hold more than one study or wave** (a pilot plus a main experiment, `exp1` plus `exp2`, several waves), adopt this convention:
+
+- **Analysis scripts take the prefix of the study they belong to** — `pilot_`, `exp1_`, `exp2_`, `wave1_` (`pilot_descriptives.R`, `exp1_hypotheses.R`).
+- **Cross-study comparisons take the `both_` prefix**, naming the studies they span (`both_exp1_vs_exp2.R`).
+- **Config and helper scripts stay unprefixed** because every study sources them (`config_init.R`, `config_cleaning.R`, `config_toolkit.R`).
+- **Each study writes into its own `LaTeX/Output/<study>/` subfolder** (`Output/pilot/figures/`, `Output/pilot/tables/`, `Output/exp1/...`, `Output/both/...`) so results never collide. Point each study's `save_graph` / `save_table` / `save_text` calls at its own subfolder.
+
+Worked placeholders already sit in the tree so the pattern is visible, not just described: `Scripts/pilot_descriptives.R`, `Scripts/exp1_hypotheses.R`, `Scripts/both_exp1_vs_exp2.R` (commented headers — copy or delete), and `LaTeX/Output/pilot/{figures,tables}/` with a README in each. None are wired into `main.R`.
+
 ## Reporting conventions
 
 These apply to every script, table, figure note, and line of prose. They are the house style; do not relax them per-analysis.

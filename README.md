@@ -15,6 +15,19 @@ A self-contained R + LaTeX template for a single-study empirical economics paper
 
 Analysis outputs are written to `LaTeX/Output/`, split across `Figures/`, `Tables/`, and `Text/` subfolders. The LaTeX paper sources in `LaTeX/` reference them with relative paths like `Output/Figures/foo.png`, so the whole `LaTeX/` folder is self-contained and compiles wherever it lands.
 
+### Scaling to several studies or waves (script prefixes)
+
+The template ships as a **single-study** project: the scripts in `Scripts/` have plain names (`descriptives.R`, `hypotheses.R`, ...) and everything writes into the flat `Output/Figures`, `Output/Tables`, `Output/Text` layout. Keep it that way for one study — do not prefix prematurely.
+
+**Once the same repo grows to hold more than one study or wave** (a pilot plus a main experiment, `exp1` plus `exp2`, several data-collection waves), adopt study prefixes so it stays legible:
+
+- **Analysis scripts take the prefix of the study they belong to** — `pilot_`, `exp1_`, `exp2_`, `wave1_`. So `descriptives.R` becomes `pilot_descriptives.R`, `hypotheses.R` becomes `exp1_hypotheses.R`, and so on.
+- **Cross-study comparisons take the `both_` prefix**, naming the studies they span: `both_exp1_vs_exp2.R`.
+- **Config and helper scripts stay unprefixed**, because every study sources them: `config_init.R`, `config_cleaning.R`, `config_toolkit.R`.
+- **Each study writes into its own `Output/<study>/` subfolder** so results never collide: `Output/pilot/figures/`, `Output/pilot/tables/`, `Output/exp1/figures/`, and so on (with `Output/both/...` for comparison outputs). Point each study's `save_graph` / `save_table` / `save_text` calls at its own subfolder.
+
+Worked placeholders show the pattern in place rather than only describing it: example scripts `Scripts/pilot_descriptives.R`, `Scripts/exp1_hypotheses.R`, and `Scripts/both_exp1_vs_exp2.R` (each a commented header — copy or delete), and the matching output tree under `LaTeX/Output/pilot/figures/` and `LaTeX/Output/pilot/tables/`, each with a short README. These examples are not wired into `main.R`; they exist to be copied or removed.
+
 Need outputs mirrored into _more than one local folder_ — e.g. a separate per-paper bundle, or a sibling Overleaf working tree alongside the canonical `LaTeX/Output`? Add the extra path to `SYNC_DESTINATIONS` in `Scripts/config_init.R` and every `save_graph` / `save_table` / `save_text` call writes to both:
 
 ```r
@@ -73,7 +86,7 @@ See <https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-gith
 
 | Folder | What lives there |
 |---|---|
-| `Scripts/` | The analysis pipeline. Each script corresponds to a section of the paper. |
+| `Scripts/` | The analysis pipeline. Each script corresponds to a section of the paper. With multiple studies, scripts take a study prefix (`pilot_`, `exp1_`, `both_`) — see [Scaling to several studies or waves](#scaling-to-several-studies-or-waves-script-prefixes). |
 | `Helper/` | Data-source adapters (`otree.R`, `csv.R`) and an optional output-sync helper. |
 | `Data/` | Raw data files. Not under version control by default. |
 | `LaTeX/` | Manuscript source. Figures, tables, and text snippets are written here by the analysis scripts. |
