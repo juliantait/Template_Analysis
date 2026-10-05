@@ -5,8 +5,8 @@ A self-contained R + LaTeX template for a single-study empirical economics paper
 ## What you do with it
 
 1. **Clone** this repository to a new project folder.
-2. **Drop your raw data** into `Data/` (a `Data/DataSets/` subfolder is provided).
-3. **Wire up the data source** by editing one of the adapters in `Helper/` — `otree.R` for oTree experiments, `csv.R` for generic CSVs. The adapter exposes a `load_data()` function that the cleaning pipeline calls.
+2. **Drop your raw data** into `Data/` (a `Data/DataSets/` subfolder is provided). Any raw file that carries identifiers — Prolific IDs, participant labels, user agents, free text — goes in `Data/raw_SENSITIVE/` instead (see [Sensitive raw data](#sensitive-raw-data)).
+3. **Wire up the data source** by editing one of the adapters in `Scripts/Helper/` — `otree.R` for oTree experiments, `csv.R` for generic CSVs. The adapter exposes a `load_data()` function that the cleaning pipeline calls.
 4. **Run the pipeline** by opening `main.R` and executing it. The scripts in `Scripts/` run in order: init → toolkit → cleaning → sample restrictions → balance → descriptives → hypotheses → robustness → exploratory.
 5. **Write the paper** in `LaTeX/`. The analysis scripts save figures, tables, and inline numbers directly into `LaTeX/Output/Figures/`, `LaTeX/Output/Tables/`, and `LaTeX/Output/Text/`, so the manuscript can reference them with simple relative paths.
 6. **Compile** `LaTeX/main.tex` to get the PDF.
@@ -78,6 +78,13 @@ Setup:
 
 See <https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-github-synchronization/git-integration> for the Overleaf-side specifics (auth tokens, branch behaviour, etc.).
 
+## Sensitive raw data
+
+`Data/raw_SENSITIVE/` is the **single place identifiable raw data lives**: any raw file carrying identifiers — Prolific IDs, participant labels, user agents, free-text responses. It is kept clearly separate from everything else in the project:
+
+- **Never committed.** `.gitignore` ignores everything in it except `.gitkeep`, so the folder exists in clones but its contents never reach git.
+- **Never copied elsewhere.** Do not duplicate these files into `Data/`, `Data/DataSets/`, `_ai/`, `LaTeX/` or anywhere else. Cleaning code reads identifiable files in place from here and writes only de-identified data to the rest of `Data/`, which *is* tracked.
+
 ## Project documentation
 
 `Flow/personality.md` is where you record what the project is about — research question, theoretical framing, methods snapshot, status, deliverables. Fill it in early; it is the orientation document for anyone (including future-you) coming back to the project.
@@ -87,8 +94,10 @@ See <https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-gith
 | Folder | What lives there |
 |---|---|
 | `Scripts/` | The analysis pipeline. Each script corresponds to a section of the paper. With multiple studies, scripts take a study prefix (`pilot_`, `exp1_`, `both_`) — see [Scaling to several studies or waves](#scaling-to-several-studies-or-waves-script-prefixes). |
-| `Helper/` | Data-source adapters (`otree.R`, `csv.R`) and an optional output-sync helper. |
-| `Data/` | Raw data files. Not under version control by default. |
+| `Scripts/Helper/` | Data-source adapters (`otree.R`, `csv.R`) and an optional output-sync helper. |
+| `Data/` | Data files. Tracked in git — except `Data/raw_SENSITIVE/`, which is gitignored (only its `.gitkeep` is tracked). |
+| `Data/raw_SENSITIVE/` | The single place identifiable raw data lives. Never committed, never copied elsewhere. See [Sensitive raw data](#sensitive-raw-data). |
+| `_ai/` | Agent/worker scratch, briefs and intermediate notes. Gitignored (only its `.gitkeep` is tracked). |
 | `LaTeX/` | Manuscript source. Figures, tables, and text snippets are written here by the analysis scripts. |
 | `Flow/` | All AI-facing material, kept behind this one folder at the project root: project tracking — `codebook.md`, `research_log.md`, `timeline.md`, `todo.md`, `personality.md` — plus the skill references `skill_graphs.md` and `skill_tables.md` (graphs and tables conventions) for integrating with Claude or other LLM agents. |
 | `Literature/` | Project-relevant papers and reading notes. |

@@ -1,5 +1,5 @@
 # config_cleaning.R
-# Orchestrator: loads raw data via a data-source adapter in Helper/,
+# Orchestrator: loads raw data via a data-source adapter in Scripts/Helper/,
 # generates derived variables, and saves cleaned dataset(s) to Data/.
 # Run once when starting analysis, then comment out in main.R.
 
@@ -13,10 +13,10 @@ library(dplyr)
 library(stringr)
 
 # === DATA SOURCE ===
-# Set to "otree" or "csv" to select the adapter in Helper/.
+# Set to "otree" or "csv" to select the adapter in Scripts/Helper/.
 data_source <- "otree"
 
-source(paste0("Helper/", data_source, ".R"))
+source(paste0("Scripts/Helper/", data_source, ".R"))
 
 # === LOAD AND RESHAPE ===
 data <- load_data(subfolder = "Data/DataSets/")

@@ -1,4 +1,4 @@
-# Helper/otree.R — oTree data-source adapter
+# Scripts/Helper/otree.R — oTree data-source adapter
 # Reads oTree session CSVs (wide format, one row per participant) and reshapes
 # to long format (one row per participant × app × round).
 #

@@ -1,4 +1,4 @@
-# Helper/csv.R — Generic CSV data-source adapter
+# Scripts/Helper/csv.R — Generic CSV data-source adapter
 # Reads CSV files that are already in long format (one row per observation).
 # Stacks multiple files, renames columns, and returns a data.frame.
 #

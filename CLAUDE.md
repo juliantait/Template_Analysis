@@ -23,6 +23,11 @@ Project aim and current status are tracked in:
 
 Read the relevant `Flow/` files before doing any analysis-touching work, and update `Flow/research_log.md` after meaningful changes.
 
+## Sensitive data and agent scratch
+
+- **`Data/raw_SENSITIVE/` is the single place identifiable raw data lives** — any raw file carrying identifiers (Prolific IDs, participant labels, user agents, free text). It is kept clearly separate from everything else: never copy its files anywhere else in the project (not into `Data/`, `_ai/`, `LaTeX/` or a log), never commit it (it is gitignored except for its `.gitkeep`). Read it in place; write only de-identified data to the rest of `Data/`, which is tracked.
+- **Worker/agent scratch, briefs and intermediate notes go in `_ai/`** at the project root (gitignored except for its `.gitkeep`). Only deliverables go at top level or into the project folders.
+
 ## Pipeline
 
 The analysis runs from `main.R` in the project root. Output is written to `LaTeX/Output/Figures/`, `LaTeX/Output/Tables/`, and `LaTeX/Output/Text/` via the `save_graph()`, `save_table()`, and `save_text()` helpers defined in `Scripts/config_toolkit.R`. British English throughout.
