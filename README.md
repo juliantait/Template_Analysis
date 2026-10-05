@@ -5,34 +5,24 @@ A self-contained R + LaTeX template for a single-study empirical economics paper
 ## What you do with it
 
 1. **Clone** this repository to a new project folder.
-2. **Drop your raw data** into `Data/` (a `Data/DataSets/` subfolder is provided). Any raw file that carries identifiers — Prolific IDs, participant labels, user agents, free text — goes in `Data/raw_SENSITIVE/` instead (see [Sensitive raw data](#sensitive-raw-data)).
-3. **Wire up the data source** by editing one of the adapters in `Scripts/Helper/` — `otree.R` for oTree experiments, `csv.R` for generic CSVs. The adapter exposes a `load_data()` function that the cleaning pipeline calls.
-4. **Run the pipeline** by opening `main.R` and executing it. The scripts in `Scripts/` run in order: init → toolkit → cleaning → sample restrictions → balance → descriptives → hypotheses → robustness → exploratory.
-5. **Write the paper** in `LaTeX/`. The analysis scripts save figures, tables, and inline numbers directly into `LaTeX/Output/Figures/`, `LaTeX/Output/Tables/`, and `LaTeX/Output/Text/`, so the manuscript can reference them with simple relative paths.
-6. **Compile** `LaTeX/main.tex` to get the PDF.
+2. **Drop your anonymised raw exports** into `data/datasets/`. Any raw file that carries identifiers — Prolific IDs, participant labels, user agents, free text — goes in `data/raw_SENSITIVE/` instead (see [Sensitive raw data](#sensitive-raw-data)). `data/README.md` maps the folder.
+3. **Wire up the data source** by editing one of the adapters in `scripts/helper/` — `otree.R` for oTree experiments, `csv.R` for generic CSVs. The adapter exposes a `load_data()` function that the cleaning pipeline calls.
+4. **Build the cleaned data once** by uncommenting the CLEANING block in `main.R`, running it, and commenting it out again. This writes one combined dataset to `data/data_cleaned.csv` and `data/data_cleaned.RData`.
+5. **Run the pipeline** by opening `main.R` and executing it. The scripts in `scripts/` run in order: init → toolkit → cleaning → sample restrictions → balance → descriptives → hypotheses → robustness → exploratory.
+6. **Write the paper** in `LaTeX/`. The analysis scripts save figures, tables, and inline numbers directly into `LaTeX/output/figures/`, `LaTeX/output/tables/`, and `LaTeX/output/text/`, so the manuscript can reference them with simple relative paths.
+7. **Compile** `LaTeX/main.tex` to get the PDF.
 
 ### Outputs
 
-Analysis outputs are written to `LaTeX/Output/`, split across `Figures/`, `Tables/`, and `Text/` subfolders. The LaTeX paper sources in `LaTeX/` reference them with relative paths like `Output/Figures/foo.png`, so the whole `LaTeX/` folder is self-contained and compiles wherever it lands.
+Analysis outputs are written to `LaTeX/output/`, split across `figures/`, `tables/`, and `text/` subfolders. The LaTeX paper sources in `LaTeX/` reference them with relative paths like `output/figures/foo.png`, so the whole `LaTeX/` folder is self-contained and compiles wherever it lands.
 
-### Scaling to several studies or waves (script prefixes)
+Outputs are generated in this one folder only — there are no per-study subfolders. The optional `SYNC_DESTINATIONS` mirror below is empty by default.
 
-The template ships as a **single-study** project: the scripts in `Scripts/` have plain names (`descriptives.R`, `hypotheses.R`, ...) and everything writes into the flat `Output/Figures`, `Output/Tables`, `Output/Text` layout. Keep it that way for one study — do not prefix prematurely.
-
-**Once the same repo grows to hold more than one study or wave** (a pilot plus a main experiment, `exp1` plus `exp2`, several data-collection waves), adopt study prefixes so it stays legible:
-
-- **Analysis scripts take the prefix of the study they belong to** — `pilot_`, `exp1_`, `exp2_`, `wave1_`. So `descriptives.R` becomes `pilot_descriptives.R`, `hypotheses.R` becomes `exp1_hypotheses.R`, and so on.
-- **Cross-study comparisons take the `both_` prefix**, naming the studies they span: `both_exp1_vs_exp2.R`.
-- **Config and helper scripts stay unprefixed**, because every study sources them: `config_init.R`, `config_cleaning.R`, `config_toolkit.R`.
-- **Each study writes into its own `Output/<study>/` subfolder** so results never collide: `Output/pilot/figures/`, `Output/pilot/tables/`, `Output/exp1/figures/`, and so on (with `Output/both/...` for comparison outputs). Point each study's `save_graph` / `save_table` / `save_text` calls at its own subfolder.
-
-Worked placeholders show the pattern in place rather than only describing it: example scripts `Scripts/pilot_descriptives.R`, `Scripts/exp1_hypotheses.R`, and `Scripts/both_exp1_vs_exp2.R` (each a commented header — copy or delete), and the matching output tree under `LaTeX/Output/pilot/figures/` and `LaTeX/Output/pilot/tables/`, each with a short README. These examples are not wired into `main.R`; they exist to be copied or removed.
-
-Need outputs mirrored into _more than one local folder_ — e.g. a separate per-paper bundle, or a sibling Overleaf working tree alongside the canonical `LaTeX/Output`? Add the extra path to `SYNC_DESTINATIONS` in `Scripts/config_init.R` and every `save_graph` / `save_table` / `save_text` call writes to both:
+Need outputs mirrored into _more than one local folder_ — e.g. a separate per-paper bundle, or a sibling Overleaf working tree alongside the canonical `LaTeX/output`? Add the extra path to `SYNC_DESTINATIONS` in `scripts/config_init.R` and every `save_graph` / `save_table` / `save_text` call writes to both:
 
 ```r
 SYNC_DESTINATIONS <- c(
-  path.expand("~/Some/Other/Output")
+  path.expand("~/Some/Other/output")
 )
 ```
 
@@ -80,33 +70,46 @@ See <https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-gith
 
 ## Sensitive raw data
 
-`Data/raw_SENSITIVE/` is the **single place identifiable raw data lives**: any raw file carrying identifiers — Prolific IDs, participant labels, user agents, free-text responses. It is kept clearly separate from everything else in the project:
+`data/raw_SENSITIVE/` is the **single place identifiable raw data lives**: any raw file carrying identifiers — Prolific IDs, participant labels, user agents, free-text responses. It is kept clearly separate from everything else in the project:
 
 - **Never committed.** `.gitignore` ignores everything in it except `.gitkeep`, so the folder exists in clones but its contents never reach git.
-- **Never copied elsewhere.** Do not duplicate these files into `Data/`, `Data/DataSets/`, `_ai/`, `LaTeX/` or anywhere else. Cleaning code reads identifiable files in place from here and writes only de-identified data to the rest of `Data/`, which *is* tracked.
+- **Never copied elsewhere.** Do not duplicate these files into `data/datasets/`, `_ai/`, `LaTeX/` or anywhere else. Cleaning code reads identifiable files in place from here and writes only de-identified data to the rest of `data/`, which *is* tracked.
+
+### Pre-commit sensitive-data check
+
+A bash-only git hook, `.githooks/pre-commit`, refuses any commit whose staged files contain identifiers. Install it once per clone, from the project root:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+It scans every tracked file as staged in the index for Prolific IDs (24 hex characters), email addresses, IPv4 addresses and browser user-agent strings, and checks the header row of every CSV/TSV for identifying column names (`name`, `email`, `ip_address`, `participant.label`, `PROLIFIC_PID`, …, case-insensitive). On a hit it prints file, line and pattern and aborts the commit. The patterns, the column list and an allowlist of files to skip are editable lists at the top of the script. `.RData` files are binary and are **not** scanned; their CSV twin (`data/data_cleaned.csv`) is, which is why cleaning writes both.
 
 ## Project documentation
 
-`Flow/personality.md` is where you record what the project is about — research question, theoretical framing, methods snapshot, status, deliverables. Fill it in early; it is the orientation document for anyone (including future-you) coming back to the project.
+`flow/personality.md` is where you record what the project is about — research question, theoretical framing, methods snapshot, status, deliverables. Fill it in early; it is the orientation document for anyone (including future-you) coming back to the project.
 
 ## Top-level folders
 
 | Folder | What lives there |
 |---|---|
-| `Scripts/` | The analysis pipeline. Each script corresponds to a section of the paper. With multiple studies, scripts take a study prefix (`pilot_`, `exp1_`, `both_`) — see [Scaling to several studies or waves](#scaling-to-several-studies-or-waves-script-prefixes). |
-| `Scripts/Helper/` | Data-source adapters (`otree.R`, `csv.R`) and an optional output-sync helper. |
-| `Data/` | Data files. Tracked in git — except `Data/raw_SENSITIVE/`, which is gitignored (only its `.gitkeep` is tracked). |
-| `Data/raw_SENSITIVE/` | The single place identifiable raw data lives. Never committed, never copied elsewhere. See [Sensitive raw data](#sensitive-raw-data). |
+| `scripts/` | The analysis pipeline. Each script corresponds to a section of the paper. |
+| `scripts/helper/` | Data-source adapters (`otree.R`, `csv.R`) and an optional output-sync helper. |
+| `data/` | Tracked. One combined cleaned dataset at its root (`data_cleaned.csv` + `data_cleaned.RData`), plus `README.md` (folder map, rebuild steps) and `CODEBOOK.md` (variable template). |
+| `data/datasets/` | Anonymised raw exports — the cleaning input. Tracked, so everything rebuilds from GitHub. |
+| `data/raw_SENSITIVE/` | The single place identifiable raw data lives. Gitignored (only `.gitkeep` tracked), never copied elsewhere. See [Sensitive raw data](#sensitive-raw-data). |
 | `_ai/` | Agent/worker scratch, briefs and intermediate notes. Gitignored (only its `.gitkeep` is tracked). |
-| `LaTeX/` | Manuscript source. Figures, tables, and text snippets are written here by the analysis scripts. |
-| `Flow/` | All AI-facing material, kept behind this one folder at the project root: project tracking — `codebook.md`, `research_log.md`, `timeline.md`, `todo.md`, `personality.md` — plus the skill references `skill_graphs.md` and `skill_tables.md` (graphs and tables conventions) for integrating with Claude or other LLM agents. |
-| `Literature/` | Project-relevant papers and reading notes. |
-| `Feedback/` | Referee reports, seminar comments, and other external feedback. |
+| `.githooks/` | The pre-commit sensitive-data check. See [Pre-commit sensitive-data check](#pre-commit-sensitive-data-check). |
+| `DECISIONS.md` | Project and template decisions, newest first: date, decision, reason. |
+| `LaTeX/` | Manuscript source. Figures, tables, and text snippets are written by the analysis scripts to `LaTeX/output/{figures,tables,text}` (tracked). |
+| `flow/` | All AI-facing material, kept behind this one folder at the project root: project tracking — `codebook.md`, `research_log.md`, `timeline.md`, `todo.md`, `personality.md` — plus the skill references `skill_graphs.md` and `skill_tables.md` (graphs and tables conventions) for integrating with Claude or other LLM agents. |
+| `literature/` | Project-relevant papers and reading notes. |
+| `feedback/` | Referee reports, seminar comments, and other external feedback. Meeting notes are named `meetings_YYYY-MM-DD.md` (optional topic suffix: `meetings_2026-09-03_pilot.md`; transcripts: `meetings_YYYY-MM-DD_transcript.md`) — see the example `feedback/meetings_2026-09-03.md`. |
 
-`Flow/` holds the publication-style skill references (`skill_graphs.md`, `skill_tables.md`) intended both as a human style guide and as the place to drop additional skill files when integrating with Claude or other LLM agents. Keeping them in `Flow/` at the project root — not inside `LaTeX/` or `Scripts/` — means a worker with the whole project in view finds them whatever it is working on. The shipped references encode JEBO conventions; reuse them or replace with your own journal's.
+`flow/` holds the publication-style skill references (`skill_graphs.md`, `skill_tables.md`) intended both as a human style guide and as the place to drop additional skill files when integrating with Claude or other LLM agents. Keeping them in `flow/` at the project root — not inside `LaTeX/` or `scripts/` — means a worker with the whole project in view finds them whatever it is working on. The shipped references encode JEBO conventions; reuse them or replace with your own journal's.
 
 ## Using Claude Code (optional)
 
-This template is designed for manual use. If you do use Claude Code, the short `CLAUDE.md` at the root points it at the style references in `Flow/` (`skill_graphs.md`, `skill_tables.md`) and the project state in `Flow/`.
+This template is designed for manual use. If you do use Claude Code, the short `CLAUDE.md` at the root points it at the style references in `flow/` (`skill_graphs.md`, `skill_tables.md`) and the project state in `flow/`.
 
 If you want a Claude-Code-orchestrated variant of this template (with role profiles, phase walks, structured `Context/`), see [github.com/juliantait/Template_Analysis_Claude](https://github.com/juliantait/Template_Analysis_Claude).

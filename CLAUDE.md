@@ -4,10 +4,10 @@ This file is here for anyone using Claude Code (or another AI assistant) inside 
 
 ## Style references
 
-Two skill references live in `Flow/` at the **project root**. All AI-facing material stays behind `Flow/`, and `Flow/` sits at the true project root — never inside `LaTeX/` or a scripts subfolder — so a worker with the whole project in view finds them whatever it is working on (the work is split between `LaTeX/` and `Scripts/`, and which skill applies varies by task):
+Two skill references live in `flow/` at the **project root**. All AI-facing material stays behind `flow/`, and `flow/` sits at the true project root — never inside `LaTeX/` or a scripts subfolder — so a worker with the whole project in view finds them whatever it is working on (the work is split between `LaTeX/` and `scripts/`, and which skill applies varies by task):
 
-- `Flow/skill_graphs.md` — JEBO publication-ready figure conventions used across this project.
-- `Flow/skill_tables.md` — JEBO publication-ready table conventions.
+- `flow/skill_graphs.md` — JEBO publication-ready figure conventions used across this project.
+- `flow/skill_tables.md` — JEBO publication-ready table conventions.
 
 When generating figures or tables, follow these. If the target journal changes, swap them out for that journal's conventions.
 
@@ -15,37 +15,33 @@ When generating figures or tables, follow these. If the target journal changes, 
 
 Project aim and current status are tracked in:
 
-- `Flow/personality.md` — what the project is about, theoretical framing, methods snapshot.
-- `Flow/timeline.md` — phase-level progress.
-- `Flow/todo.md` — current actionable work.
-- `Flow/research_log.md` — chronological decision log.
-- `Flow/codebook.md` — variable-level documentation.
+- `flow/personality.md` — what the project is about, theoretical framing, methods snapshot.
+- `flow/timeline.md` — phase-level progress.
+- `flow/todo.md` — current actionable work.
+- `flow/research_log.md` — chronological decision log.
+- `flow/codebook.md` — variable-level documentation.
 
-Read the relevant `Flow/` files before doing any analysis-touching work, and update `Flow/research_log.md` after meaningful changes.
+Read the relevant `flow/` files before doing any analysis-touching work, and update `flow/research_log.md` after meaningful changes.
 
-## Sensitive data and agent scratch
+Project and template **decisions** are logged in `DECISIONS.md` at the root: newest first, each entry with date, decision and the reason. Log a decision there when you make one.
 
-- **`Data/raw_SENSITIVE/` is the single place identifiable raw data lives** — any raw file carrying identifiers (Prolific IDs, participant labels, user agents, free text). It is kept clearly separate from everything else: never copy its files anywhere else in the project (not into `Data/`, `_ai/`, `LaTeX/` or a log), never commit it (it is gitignored except for its `.gitkeep`). Read it in place; write only de-identified data to the rest of `Data/`, which is tracked.
+## Data, sensitive data and agent scratch
+
+- **`data/` is tracked** so everything rebuilds from GitHub. `data/datasets/` holds the anonymised raw exports; the root of `data/` holds **one** combined cleaned dataset as both `data_cleaned.csv` and `data_cleaned.RData` (the object `main.R` loads). Document its variables in `data/CODEBOOK.md`; `data/README.md` maps the folder.
+- **`data/raw_SENSITIVE/` is the single place identifiable raw data lives** — any raw file carrying identifiers (Prolific IDs, participant labels, user agents, free text). It is kept clearly separate from everything else: never copy its files anywhere else in the project (not into `data/datasets/`, `_ai/`, `LaTeX/` or a log), never commit it (it is gitignored except for its `.gitkeep`). Read it in place; write only de-identified data to the rest of `data/`.
+- **Cleaning is commented out in `main.R`.** Uncomment it only to rebuild the cleaned data from `data/datasets/`, run once, re-comment.
+- **Pre-commit sensitive-data check.** `.githooks/pre-commit` (bash only) refuses any commit whose staged files contain Prolific IDs, emails, IPv4 addresses, user-agent strings, or identifying CSV/TSV column headers. Install once per clone: `git config core.hooksPath .githooks`. Patterns, column names and the allowlist are editable lists at the top of the script. `.RData` is binary and is not scanned — its CSV twin is. Never bypass a refusal with `--no-verify`; fix the file or, for a genuine false positive in a doc, allowlist it.
 - **Worker/agent scratch, briefs and intermediate notes go in `_ai/`** at the project root (gitignored except for its `.gitkeep`). Only deliverables go at top level or into the project folders.
 
 ## Pipeline
 
-The analysis runs from `main.R` in the project root. Output is written to `LaTeX/Output/Figures/`, `LaTeX/Output/Tables/`, and `LaTeX/Output/Text/` via the `save_graph()`, `save_table()`, and `save_text()` helpers defined in `Scripts/config_toolkit.R`. British English throughout.
+The analysis runs from `main.R` in the project root. Output is written to `LaTeX/output/figures/`, `LaTeX/output/tables/`, and `LaTeX/output/text/` via the `save_graph()`, `save_table()`, and `save_text()` helpers defined in `scripts/config_toolkit.R`. British English throughout.
 
-A result mentioned anywhere in the manuscript has its generating code in the **main pipeline**. The test for main-versus-supplementary is whether the paper *mentions* the numbers, not whether an `\input` exists — a table reached by no `\input` can still back live prose, so "compiled nowhere" is not "depended on nowhere". Route numbers through shared `fmt_p()` / `fmt_est()` helpers in `Scripts/config_toolkit.R`, defined once — a duplicated or dead helper of the same name sourced into the global environment can shadow the shared one and break the run in a way that looks unrelated to the change.
+A result mentioned anywhere in the manuscript has its generating code in the **main pipeline**. The test for main-versus-supplementary is whether the paper *mentions* the numbers, not whether an `\input` exists — a table reached by no `\input` can still back live prose, so "compiled nowhere" is not "depended on nowhere". Route numbers through shared `fmt_p()` / `fmt_est()` helpers in `scripts/config_toolkit.R`, defined once — a duplicated or dead helper of the same name sourced into the global environment can shadow the shared one and break the run in a way that looks unrelated to the change.
 
-### Multiple studies: script prefixes and per-study output
+### Single output folder
 
-This template is a **single study**: scripts in `Scripts/` have plain names (`descriptives.R`, `hypotheses.R`, ...) and outputs land in the flat `LaTeX/Output/{Figures,Tables,Text}`. Keep it plain for one study — do not add prefixes prematurely.
-
-**When this repo grows to hold more than one study or wave** (a pilot plus a main experiment, `exp1` plus `exp2`, several waves), adopt this convention:
-
-- **Analysis scripts take the prefix of the study they belong to** — `pilot_`, `exp1_`, `exp2_`, `wave1_` (`pilot_descriptives.R`, `exp1_hypotheses.R`).
-- **Cross-study comparisons take the `both_` prefix**, naming the studies they span (`both_exp1_vs_exp2.R`).
-- **Config and helper scripts stay unprefixed** because every study sources them (`config_init.R`, `config_cleaning.R`, `config_toolkit.R`).
-- **Each study writes into its own `LaTeX/Output/<study>/` subfolder** (`Output/pilot/figures/`, `Output/pilot/tables/`, `Output/exp1/...`, `Output/both/...`) so results never collide. Point each study's `save_graph` / `save_table` / `save_text` calls at its own subfolder.
-
-Worked placeholders already sit in the tree so the pattern is visible, not just described: `Scripts/pilot_descriptives.R`, `Scripts/exp1_hypotheses.R`, `Scripts/both_exp1_vs_exp2.R` (commented headers — copy or delete), and `LaTeX/Output/pilot/{figures,tables}/` with a README in each. None are wired into `main.R`.
+All outputs go to `LaTeX/output/{figures,tables,text}` and nowhere else — no per-study subfolders or study-prefixed scripts. `LaTeX/output/` is tracked in git.
 
 ## Reporting conventions
 
@@ -55,11 +51,11 @@ These apply to every script, table, figure note, and line of prose. They are the
 
 - **P-values**: 3 decimals, floored at `p<.001`; never printed as `.000`. The same format holds in prose, footnotes, float notes, and script-generated tables. Always state the test name and whether it is one- or two-sided.
 - **Estimates**: 3 decimals. An estimate with |value| < 0.0005 prints as `0.000` by plain rounding — never inequality notation such as `<0.001` or `>-0.001`. Coefficients may round to zero; p-values may not.
-- **Fix formatting in the generating R script**, never by patching the `.tex` it produced. Route numbers through shared `fmt_p()` and `fmt_est()` helpers in `Scripts/config_toolkit.R` so tables and prose cannot drift apart. These helpers are not yet defined in this template — add them there when first needed, rather than re-implementing rounding in each script.
+- **Fix formatting in the generating R script**, never by patching the `.tex` it produced. Route numbers through shared `fmt_p()` and `fmt_est()` helpers in `scripts/config_toolkit.R` so tables and prose cannot drift apart. These helpers are not yet defined in this template — add them there when first needed, rather than re-implementing rounding in each script.
 - **Aggregation unit**: report at the unit of the statistical test. Never mix observation-level and group-level aggregation within one paragraph or one table.
-- **Every scalar quoted in the paper is computed by a script** and exported via `save_text()` — the `OutputValues` pattern in `Scripts/descriptives.R` writing to `LaTeX/Output/Text/`. Never hand-derive or eyeball a number, including in the abstract, footnotes, and float notes. Re-check all quoted scalars after any re-run.
-- **Numbers inside captions and float notes go in as LaTeX macros, not typed literals.** Export each with an `add_value(name, x)` helper in `Scripts/config_toolkit.R` that appends `\newcommand{\valName}{x}` to `LaTeX/Output/Text/note_values.txt`, which `main.tex` `\input`s once in its preamble. A note then reads `$N = \valMirrorNCond$`, not `$N = 279$`, so the number tracks the data across re-runs instead of silently rotting when the data changes. (Like the `fmt_*` helpers, `add_value()` is added to `config_toolkit.R` when first needed.)
-- **Every prose number is verifiable from the source, not the PDF.** It is backed by a live artifact the pipeline regenerates: either an exported scalar in a values `.txt`, or a cell in a script-generated table — compiled, or its `\input` left commented out with a bare `% source` marker on the line above (un-mute to check). A number with neither backing — quoted from a table no script produces, or hand-copied from a run — is not allowed. See the `% source` mechanism in `Flow/skill_tables.md`.
+- **Every scalar quoted in the paper is computed by a script** and exported via `save_text()` — the `OutputValues` pattern in `scripts/descriptives.R` writing to `LaTeX/output/text/`. Never hand-derive or eyeball a number, including in the abstract, footnotes, and float notes. Re-check all quoted scalars after any re-run.
+- **Numbers inside captions and float notes go in as LaTeX macros, not typed literals.** Export each with an `add_value(name, x)` helper in `scripts/config_toolkit.R` that appends `\newcommand{\valName}{x}` to `LaTeX/output/text/note_values.txt`, which `main.tex` `\input`s once in its preamble. A note then reads `$N = \valMirrorNCond$`, not `$N = 279$`, so the number tracks the data across re-runs instead of silently rotting when the data changes. (Like the `fmt_*` helpers, `add_value()` is added to `config_toolkit.R` when first needed.)
+- **Every prose number is verifiable from the source, not the PDF.** It is backed by a live artifact the pipeline regenerates: either an exported scalar in a values `.txt`, or a cell in a script-generated table — compiled, or its `\input` left commented out with a bare `% source` marker on the line above (un-mute to check). A number with neither backing — quoted from a table no script produces, or hand-copied from a run — is not allowed. See the `% source` mechanism in `flow/skill_tables.md`.
 - **Distinguish estimated quantities from design constants** before applying "compute it, never type it". Fees, grid sizes, screen timings and sample-design facts are written in prose as-is; means, coefficients, sample sizes and test statistics are computed and must come from the scripts.
 - **Inline reporting carries p-values, not raw estimates.** Running text gives the p-value, the test name, and sidedness where that is not already obvious. The test is not where the number came from but what the number is doing in the sentence: *is this number doing interpretive work here, or is it a raw estimate quoted as a credential?* **Banned** — raw model output quoted in brackets as a credential: `\hat{\beta} = 3.091`, `coefficient = 0.018`, `R^2 = 0.224`, standard errors. Those add nothing at the point of the claim and belong in the tables, which is what the tables are for; a raw estimate quoted in prose duplicates a table cell and the two drift apart. **Kept** — a magnitude written out in words, in units that mean something to the reader: `42 percentage points`, `roughly three dots larger`, `virtually unchanged`, `triple`, `about a third`. Those *are* the finding stated in human terms, and a paper is worse without them. Two exceptions: **correlations** keep their statistic inline (`Spearman rho = -0.231, p = .006`), because a correlation usually has no table and the sign and magnitude are the result; and **descriptive means, shares and percentages** stay in prose (`49% versus 38% (p = .035, one-sided)`), because those are results rather than model output. Before: `the interaction reaches significance (\hat{\beta}_3 = 3.091, p = .044)`. After: `the interaction reaches significance (p = .044, one-sided)`.
 - **Correlations**: state Pearson or Spearman, and the unit of observation. Use the independent unit (e.g. participant, not participant × block).
@@ -84,4 +80,4 @@ These apply to every script, table, figure note, and line of prose. They are the
 - **Notes always sit in a `minipage` below the tabular or graphic**, `\footnotesize`, flowing text — never a `\multicolumn` row inside the tabular.
 - Generated `.tex` files hold the **tabular only**. Caption and notes are written in the LaTeX file that `\input`s them.
 
-Full detail lives in `Flow/skill_graphs.md` and `Flow/skill_tables.md`; running lessons behind these rules are in `Flow/lessons_from_mistakes_paper.md`.
+Full detail lives in `flow/skill_graphs.md` and `flow/skill_tables.md`; running lessons behind these rules are in `flow/lessons_from_mistakes_paper.md`.

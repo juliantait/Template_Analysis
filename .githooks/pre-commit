@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+# =============================================================================
+# .githooks/pre-commit — sensitive-data check
+# =============================================================================
+# Blocks a commit if any tracked file, AS STAGED IN THE INDEX, contains
+# identifiable participant data. Pure bash + git: no Python or R needed.
+#
+# Install once per clone (from the project root):
+#     git config core.hooksPath .githooks
+#
+# What it checks
+#   1. VALUE PATTERNS  — every text file in the index, line by line.
+#   2. COLUMN HEADERS  — the first line of every staged .csv / .tsv file.
+# Binary files (including .RData) are NOT scanned; the CSV twin
+# (data/data_cleaned.csv) is, which is why cleaning writes both.
+#
+# To extend it, edit the three lists in the EDITABLE section below.
+# =============================================================================
+
+# ============================ EDITABLE SECTION ===============================
+
+# --- 1. Value patterns -------------------------------------------------------
+# One call per pattern:  value_pattern "<label>" '<extended regex>' ['<require>']
+#   <extended regex>  POSIX ERE, as used by `git grep -E` (no \b, no lookahead).
+#   <require>         optional second ERE that the matched text itself must also
+#                     match — used to keep patterns precise on numeric data.
+define_value_patterns() {
+  # Prolific ID: exactly 24 lower-case hex characters, not part of a longer hex
+  # run (so 40-char git hashes do not match), not a URL path segment (so
+  # links such as an Overleaf project URL do not match), containing at least
+  # one letter (so a 24-digit number does not match) and at least one digit.
+  value_pattern "Prolific ID (24 hex)" \
+    '(^|[^0-9A-Za-z/])[0-9a-f]{24}([^0-9A-Za-z]|$)' \
+    '[a-f].*[0-9]|[0-9].*[a-f]'
+
+  # Email address.
+  value_pattern "Email address" \
+    '[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}'
+
+  # IPv4 address: four 0-255 octets, not embedded in a longer dotted number.
+  value_pattern "IPv4 address" \
+    '(^|[^0-9.])((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])([^0-9.]|$)'
+
+  # Browser user-agent strings: product tokens followed by a version number.
+  value_pattern "User-agent string" \
+    '(Mozilla|AppleWebKit|Gecko|Trident|Chrome|Safari|Firefox|Edg|OPR)/[0-9]+(\.[0-9]+)*|\((Windows NT [0-9]|Macintosh; |iPhone; |iPad; |Linux; Android |X11; )'
+}
+
+# --- 2. Forbidden column headers (CSV / TSV first line, case-insensitive) ----
+FORBIDDEN_COLUMNS=(
+  name first_name last_name
+  email phone
+  ip ip_address user_agent
+  birth_date dob date_of_birth
+  postcode zip postal_code
+  national_id bsn ssn
+  student_number student_id
+  participant_label participant.label
+  PROLIFIC_PID prolific_id
+)
+
+# --- 3. Allowlist: paths never scanned ---------------------------------------
+# Git pathspecs (exact paths, or globs such as 'docs/*.md'). Keep this short:
+# list the hook itself and docs that quote the patterns — never data files.
+ALLOWLIST=(
+  .githooks/pre-commit
+)
+
+# ========================== END EDITABLE SECTION =============================
+
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+VP_LABELS=(); VP_REGEX=(); VP_REQUIRE=()
+value_pattern() {
+  VP_LABELS+=("$1"); VP_REGEX+=("$2"); VP_REQUIRE+=("${3:-}")
+}
+define_value_patterns
+
+EXCLUDES=()
+for p in "${ALLOWLIST[@]}"; do EXCLUDES+=(":(exclude,glob)$p"); done
+
+lower() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
+
+findings=0
+report() {  # file line label detail
+  printf '  %s:%s  [%s]  %s\n' "$1" "$2" "$3" "$4" >&2
+  findings=$((findings + 1))
+}
+
+# --- 1. Value patterns over every text file in the index ---------------------
+for i in "${!VP_LABELS[@]}"; do
+  label=${VP_LABELS[$i]}; regex=${VP_REGEX[$i]}; require=${VP_REQUIRE[$i]}
+  # Output: path<NUL>line<NUL>match  (-z keeps odd file names intact)
+  while IFS= read -r -d '' path && IFS= read -r -d '' line && IFS= read -r -d $'\n' match; do
+    if [ -n "$require" ] && ! printf '%s' "$match" | grep -Eq -- "$require"; then
+      continue
+    fi
+    report "$path" "$line" "$label" "$match"
+  done < <(git grep --cached -I -n -o -z -E -e "$regex" -- . "${EXCLUDES[@]}" 2>/dev/null)
+done
+
+# --- 2. Column headers of staged CSV / TSV files -----------------------------
+forbidden_lc=" "
+for c in "${FORBIDDEN_COLUMNS[@]}"; do forbidden_lc+="$(lower "$c") "; done
+
+while IFS= read -r -d '' path; do
+  header=$(git show ":$path" 2>/dev/null | head -n 1 | tr -d '\r')
+  header=${header#$'\xEF\xBB\xBF'}                       # strip UTF-8 BOM
+  case "$path" in *.tsv|*.TSV) sep=$'\t' ;; *) sep=',;' ;; esac
+  IFS="$sep" read -r -a cols <<< "$header"
+  for col in "${cols[@]}"; do
+    c=$(lower "$col")
+    c=${c//\"/}; c=${c//\'/}
+    c="${c#"${c%%[![:space:]]*}"}"; c="${c%"${c##*[![:space:]]}"}"   # trim
+    [ -z "$c" ] && continue
+    case "$forbidden_lc" in *" $c "*) report "$path" 1 "Forbidden column header" "$col" ;; esac
+  done
+done < <(git ls-files -z --cached -- '*.csv' '*.CSV' '*.tsv' '*.TSV' "${EXCLUDES[@]}")
+
+# --- Verdict -----------------------------------------------------------------
+if [ "$findings" -gt 0 ]; then
+  cat >&2 <<EOF
+
+=============================================================================
+ COMMIT REFUSED: $findings possible identifier(s) found in staged files (above).
+=============================================================================
+ Identifiable raw data belongs ONLY in data/raw_SENSITIVE/ (gitignored).
+ Fix:  git restore --staged <file>   and move or de-identify it.
+ False positive in a doc?  Add its path to ALLOWLIST in .githooks/pre-commit.
+=============================================================================
+EOF
+  exit 1
+fi
+exit 0
