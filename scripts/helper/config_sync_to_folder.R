@@ -7,18 +7,18 @@ if (!exists("SYNC_DESTINATIONS")) source("scripts/config_init.R")
 if (length(SYNC_DESTINATIONS) == 0) {
   cat("  -> No sync destinations configured. Skipping.\n")
 } else {
-  output_dirs <- c("figures", "tables", "text")
+  output_dirs <- c("figures", "tables")
 
   for (dest_root in SYNC_DESTINATIONS) {
     dest_root <- path.expand(dest_root)
     if (!nzchar(dest_root)) next
 
-    # Sync root-level files
+    # Sync root-level files (values.tex, values.json)
     root_files <- list.files(OUTPUT_ROOT, full.names = TRUE, recursive = FALSE, no.. = TRUE)
     root_files <- root_files[!file.info(root_files)$isdir]
     if (length(root_files) > 0) file.copy(root_files, dest_root, overwrite = TRUE)
 
-    # Sync Graphs/, tables/, text/ subdirectories
+    # Sync figures/ and tables/ subdirectories
     for (od in output_dirs) {
       src_dir  <- file.path(OUTPUT_ROOT, od)
       dest_dir <- file.path(dest_root, od)

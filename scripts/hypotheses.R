@@ -2,7 +2,7 @@
 # HYPOTHESIS TESTS
 # =============================================================================
 # Main pre-registered hypothesis tests.
-# Output: Figures to LaTeX/output/figures/, Tables to LaTeX/output/tables/, Text to LaTeX/output/text/
+# Output: Figures to LaTeX/output/figures/, Tables to LaTeX/output/tables/, scalars to the values file (save_value)
 # =============================================================================
 cat("    -> Running hypothesis tests\n")
 
@@ -34,7 +34,5 @@ cat("    -> Running hypothesis tests\n")
 # save_graph(p_h1, "hypothesis_1")
 
 # --- EXPORT RESULTS ---------------------------------------------------------
-# h_results <- c(
-#   sprintf("H1 p-value: %.3f", wilcox_h1$p.value)
-# )
-# save_text(h_results, "hypothesis_tests")
+# Scalars quoted in the text go to the values file; in LaTeX: (\val{h1_p}, one-sided).
+# save_value("h1_p", fmt_p(wilcox_h1$p.value, with_p = TRUE))

@@ -47,7 +47,7 @@ Mechanics of the export itself are in [Export](#export) below.
 - British English spelling throughout.
 - Round **all** estimates, means, differences, and SEs to **3 decimal places**. An estimate with |value| < 0.0005 prints as `0.000` (plain rounding to zero); never inequality notation such as `<0.001` or `>-0.001`.
 - P-values to 3 decimals, floored at `p<.001`; never printed as `0.000`. Same convention as the prose — coefficients may round to zero, p-values may not. Always state the test name and sidedness.
-- **Formatting is fixed in the generating R script, not in the `.tex` file.** Route every number through shared `fmt_p()` and `fmt_est()` helpers in `scripts/config_toolkit.R` so tables and prose cannot drift apart. (These helpers are not yet defined in this template — add them to `scripts/config_toolkit.R` when you first need them, rather than re-implementing rounding in each analysis script.)
+- **Formatting is fixed in the generating R script, not in the `.tex` file.** Route every number through shared `fmt_p()` and `fmt_est()` helpers in `scripts/config_toolkit.R` so tables and prose cannot drift apart. `fmt_est(x)` gives 3 decimals with plain rounding; `fmt_p(p)` gives `.044` / `<.001` for cells, `fmt_p(p, with_p = TRUE)` gives `p = .044` / `p<.001` for prose. Never re-implement rounding in an analysis script.
 - Report figures at the **unit of the statistical test**; state that unit in the notes and do not mix aggregation levels within one table.
 - Treatment names in column headers and row stubs need not be ALL CAPS — normal case ("Low stakes", "High stakes") is fine inside the table, even though running text always uses ALL CAPS (LOW, HIGH). Keep whichever form is chosen identical across all tables. Captions and notes are prose: use ALL CAPS there.
 
@@ -158,6 +158,14 @@ When a prose number is backed by a generated table that is **not** compiled into
 ```
 
 Un-comment to compile and check the numbers. `% source` is a bare flag, not a descriptive sentence — it only marks the commented line below as a source. It keeps every non-compiled source greppable, so an agent can be pointed on demand at every prose number quoting a non-compiled source. A check run when wanted, not a standing one.
+
+### Scalars in prose, captions and notes: the values file
+
+A number quoted outside a table (in prose, a caption or a float note) is a scalar in the **values file**, not a typed literal and not a file of its own. In R: `save_value("h1_p", fmt_p(p, with_p = TRUE))`, any time during the run; `write_values()` at the end of `main.R` writes every scalar to `LaTeX/output/values.tex` (sorted `\setval{name}{value}` lines) and `LaTeX/output/values.json` (same map). In LaTeX: `\val{h1_p}`, e.g. a note reading `$N = \val{n_participants}$`. A name not in the file prints a bold `[name?]`, so a gap is visible in the PDF.
+
+- One values file per document, never one file per scalar (one per number hit Overleaf's 2000-file cap in a sibling project and made "which numbers changed" a 700-file diff). `git diff LaTeX/output/values.json` after a re-run shows exactly which quoted numbers moved.
+- Names use `[A-Za-z0-9_]` only and say what the number is (`h1_p`, `n_participants`, `bp_slope_nov`); LaTeX special characters in values are escaped by the writer.
+- A table cell quoted in prose stays backed by its table (compiled, or `% source` below); the values file is for scalars no table holds.
 
 ### A cited table must contain the numbers it is cited for
 

@@ -20,3 +20,5 @@ cat("    -> Applying sample restrictions\n")
 cat(sprintf("    -> Final sample: %d observations, %d unique participants\n",
             nrow(data),
             length(unique(data$participant_id))))
+save_value("n_obs", nrow(data))
+save_value("n_participants", length(unique(data$participant_id)))

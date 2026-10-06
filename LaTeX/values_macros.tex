@@ -1,0 +1,10 @@
+% Values file macros: \input once in the main.tex preamble.
+% Every scalar the paper quotes comes from output/values.tex, which write_values() in scripts/config_toolkit.R generates as sorted \setval{name}{value} lines (output/values.json holds the same map for reading and diffing).
+% In the text write \val{name}, e.g. $N = \val{n_participants}$ or (\val{h1_p}, one-sided Wilcoxon signed-rank test). A missing name prints a bold [name?] and logs a warning, so a gap shows in the PDF instead of failing silently.
+\makeatletter
+\newcommand{\setval}[2]{\expandafter\def\csname val@#1\endcsname{#2}}
+\DeclareRobustCommand{\val}[1]{\@ifundefined{val@#1}{\textbf{[\detokenize{#1}?]}\@latex@warning{Value `\detokenize{#1}' undefined (not in output/values.tex)}}{\csname val@#1\endcsname}}
+% In PDF bookmarks (hyperref), print the value; a missing one is dropped there but still flagged in the text.
+\AtBeginDocument{\@ifpackageloaded{hyperref}{\pdfstringdefDisableCommands{\def\val#1{\csname val@#1\endcsname}}}{}}
+\makeatother
+\IfFileExists{output/values.tex}{\input{output/values.tex}}{\PackageWarningNoLine{values}{output/values.tex not found; every \string\val\space prints [name?]. Run main.R}}

@@ -4,6 +4,10 @@ Project and template decisions, **newest first**. Each entry: date, decision, re
 
 ---
 
+### 2026-10-06 — One values file per document instead of one file per scalar
+**Decision:** Every scalar the paper quotes is registered in R with `save_value(name, value)` and written once per run by `write_values()` to a single `LaTeX/output/values.tex` (sorted `\setval{name}{value}` lines) plus `LaTeX/output/values.json` (same map). LaTeX loads it through `LaTeX/values_macros.tex` and prints a number with `\val{name}`, or a bold `[name?]` when it is missing. A full `main.R` run replaces the file; a script run on its own merges into it. `save_text()` is kept as a thin wrapper around `save_value()`; `LaTeX/output/text/` is gone. `fmt_p()` and `fmt_est()` are now defined in `scripts/config_toolkit.R`.
+**Reason:** In the Experts project, built from this template, one brief exported 692 separate `.txt` scalars: that hit Overleaf's 2000-file cap, made the output folders unbrowsable, and turned "which numbers changed" into a 700-file diff. One sorted, generated file keeps every number sourced from a script while a re-run diff shows exactly which numbers moved.
+
 ### 2026-10-06 — latexmk copies back only the PDF just built
 **Decision:** `LaTeX/.latexmkrc` keeps `$success_cmd = q{cp "%D" "./%R.pdf"}`, which copies back only the PDF of the document just built, with quoted paths.
 **Reason:** The Experts project replaced this with an `END` block that copied every PDF in `.build/` after any build, so building one document re-timestamped all others (a 7.6 MB PDF among them) and iCloud re-synced them to the laptop. Paths are quoted because the Mac iCloud path contains spaces.

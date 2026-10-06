@@ -108,3 +108,13 @@ Copy this template for each new decision. Prefix the title with the appropriate 
 **Alternatives considered:** Fully lower-case `latex/`. Rejected by Julian.
 
 **Action:** Two-step `git mv latex latex__tmp && git mv latex__tmp LaTeX` in the root repo. Rewrote `latex/` paths back to `LaTeX/` in R scripts (incl. `OUTPUT_ROOT` in `scripts/config_init.R`), root `.gitignore`, `README.md`, `CLAUDE.md`, `flow/*.md`, `literature/README.md`, `DECISIONS.md`. `.tex` paths are relative (`output/...`) and needed no change. Staged the renames and `.tex` edits in the nested Overleaf repo with `git -C LaTeX add -A`.
+
+### 2026-10-06 — ⚙️ One values file per document instead of one file per scalar
+
+**Decision:** Scalars quoted in the paper go into one generated values file, `LaTeX/output/values.tex` plus `values.json`, read in LaTeX as `\val{name}`; no more one `.txt` per number and no `LaTeX/output/text/`.
+
+**Rationale:** One file per scalar does not scale: in the Experts project 692 `.txt` scalars hit Overleaf's 2000-file cap, made the output folder unbrowsable and made re-run diffs unreviewable. See `DECISIONS.md`.
+
+**Alternatives considered:** A registry per script section (one file per script) to support partial runs. Rejected: it reintroduces multiple files; read-merge-write on `values.json` covers partial runs, and a full `main.R` run with `replace = TRUE` prunes stale names.
+
+**Action:** `scripts/config_toolkit.R`: added `fmt_est()`, `fmt_p()`, `save_value()`, `write_values()` (with LaTeX escaping, name check, duplicate check, write-only-if-changed); `save_text()` now wraps `save_value()`. `main.R` calls `write_values(replace = TRUE)` before sync. Added `LaTeX/values_macros.tex`, `\input` in `main.tex`. Migrated commented examples in `descriptives.R` and `hypotheses.R`; `sample_restrictions.R` exports `n_obs` and `n_participants`. Sync helper no longer looks for `text/`. Docs updated (CLAUDE.md, README.md, `flow/skill_tables.md`, lessons, DECISIONS.md). Verified: `main.R` end to end on a temporary toy dataset, `latexmk -pdf` builds, PDF text identical to before, `\val` tested in text, math, captions, section titles and with a missing name and a missing values file.

@@ -9,16 +9,18 @@ A self-contained R + LaTeX template for a single-study empirical economics paper
 3. **Wire up the data source** by editing one of the adapters in `scripts/helper/` — `otree.R` for oTree experiments, `csv.R` for generic CSVs. The adapter exposes a `load_data()` function that the cleaning pipeline calls.
 4. **Build the cleaned data once** by uncommenting the CLEANING block in `main.R`, running it, and commenting it out again. This writes one combined dataset to `data/data_cleaned.csv` and `data/data_cleaned.RData`.
 5. **Run the pipeline** by opening `main.R` and executing it. The scripts in `scripts/` run in order: init → toolkit → cleaning → sample restrictions → balance → descriptives → hypotheses → robustness → exploratory.
-6. **Write the paper** in `LaTeX/`. The analysis scripts save figures, tables, and inline numbers directly into `LaTeX/output/figures/`, `LaTeX/output/tables/`, and `LaTeX/output/text/`, so the manuscript can reference them with simple relative paths.
+6. **Write the paper** in `LaTeX/`. The analysis scripts save figures and tables directly into `LaTeX/output/figures/` and `LaTeX/output/tables/`, and every number quoted in the text into one values file, `LaTeX/output/values.tex`, so the manuscript can reference them with simple relative paths and `\val{name}`.
 7. **Compile** `LaTeX/main.tex` to get the PDF.
 
 ### Outputs
 
-Analysis outputs are written to `LaTeX/output/`, split across `figures/`, `tables/`, and `text/` subfolders. The LaTeX paper sources in `LaTeX/` reference them with relative paths like `output/figures/foo.png`, so the whole `LaTeX/` folder is self-contained and compiles wherever it lands.
+Analysis outputs are written to `LaTeX/output/`: figures in `figures/`, tables in `tables/`, and every scalar the paper quotes in one values file. The LaTeX paper sources in `LaTeX/` reference them with relative paths like `output/figures/foo.png`, so the whole `LaTeX/` folder is self-contained and compiles wherever it lands.
+
+**Numbers in the text.** A script registers each quoted number with `save_value("h1_p", fmt_p(p, with_p = TRUE))`; `write_values()` at the end of `main.R` writes all of them to `LaTeX/output/values.tex` (sorted `\setval{name}{value}` lines, loaded by `LaTeX/values_macros.tex`) and `LaTeX/output/values.json` (the same map, easy to read and to diff). In LaTeX write `\val{h1_p}`; a name missing from the file prints a bold `[name?]` instead of failing silently. One file per document, not one per number: per-number files hit Overleaf's file cap and make re-run diffs unreadable. A full `main.R` run replaces the file; a script run on its own (after `load_checkpoint()`) ends with `write_values()`, which merges its scalars into the existing file.
 
 Outputs are generated in this one folder only — there are no per-study subfolders. The optional `SYNC_DESTINATIONS` mirror below is empty by default.
 
-Need outputs mirrored into _more than one local folder_ — e.g. a separate per-paper bundle, or a sibling Overleaf working tree alongside the canonical `LaTeX/output`? Add the extra path to `SYNC_DESTINATIONS` in `scripts/config_init.R` and every `save_graph` / `save_table` / `save_text` call writes to both:
+Need outputs mirrored into _more than one local folder_ — e.g. a separate per-paper bundle, or a sibling Overleaf working tree alongside the canonical `LaTeX/output`? Add the extra path to `SYNC_DESTINATIONS` in `scripts/config_init.R` and every `save_graph` / `save_table` / `write_values` call writes to both:
 
 ```r
 SYNC_DESTINATIONS <- c(
@@ -101,7 +103,7 @@ It scans every tracked file as staged in the index for Prolific IDs (24 hex char
 | `_ai/` | Agent/worker scratch, briefs and intermediate notes. Gitignored (only its `.gitkeep` is tracked). |
 | `.githooks/` | The pre-commit sensitive-data check. See [Pre-commit sensitive-data check](#pre-commit-sensitive-data-check). |
 | `DECISIONS.md` | Project and template decisions, newest first: date, decision, reason. |
-| `LaTeX/` | Manuscript source. Figures, tables, and text snippets are written by the analysis scripts to `LaTeX/output/{figures,tables,text}` (tracked). |
+| `LaTeX/` | Manuscript source. Figures and tables are written by the analysis scripts to `LaTeX/output/{figures,tables}`, quoted numbers to `LaTeX/output/values.{tex,json}` (all tracked). `values_macros.tex` defines `\val{name}`. |
 | `flow/` | All AI-facing material, kept behind this one folder at the project root: project tracking — `codebook.md`, `research_log.md`, `timeline.md`, `todo.md`, `personality.md` — plus the skill references `skill_graphs.md` and `skill_tables.md` (graphs and tables conventions) for integrating with Claude or other LLM agents. |
 | `literature/` | Project-relevant papers and reading notes. |
 | `feedback/` | Referee reports, seminar comments, and other external feedback. Meeting notes are named `meetings_YYYY-MM-DD.md` (optional topic suffix: `meetings_2026-09-03_pilot.md`; transcripts: `meetings_YYYY-MM-DD_transcript.md`) — see the example `feedback/meetings_2026-09-03.md`. |

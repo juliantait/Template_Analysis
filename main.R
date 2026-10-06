@@ -52,6 +52,12 @@ source("scripts/exploratory.R")
 # cat("Section: Further analysis\n")
 # source("scripts/further_analysis/further_analysis.R")
 
+# --- VALUES FILE ------------------------------------------------------------
+# One file for every scalar the paper quotes: LaTeX/output/values.{tex,json}.
+# replace = TRUE: a full run writes exactly this run's scalars (prunes stale ones).
+cat("Section: Values file\n")
+write_values(replace = TRUE)
+
 # --- SYNC OUTPUTS -----------------------------------------------------------
 cat("Section: Sync\n")
 source("scripts/helper/config_sync_to_folder.R")

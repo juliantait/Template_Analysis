@@ -16,7 +16,7 @@ OUTPUT_ROOT <- file.path(getwd(), "LaTeX", "output")
 # === SYNC DESTINATIONS ===
 # Extra folders to mirror the output/ structure into. The canonical use-case
 # is a local Overleaf clone — point this at the output/ subfolder of the
-# cloned project and every save_graph/save_table/save_text writes there too.
+# cloned project and every save_graph/save_table/write_values writes there too.
 SYNC_DESTINATIONS <- c(
   # path.expand("~/Overleaf/your-project/output")
 )
