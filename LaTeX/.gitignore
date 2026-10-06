@@ -45,3 +45,6 @@ pythontex-files-*/
 *.tex~
 *.tex.swp
 .texpadtmp/
+
+# LaTeX build output dir (latexmkrc puts aux files here)
+.build/
