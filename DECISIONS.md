@@ -4,6 +4,10 @@ Project and template decisions, **newest first**. Each entry: date, decision, re
 
 ---
 
+### 2026-10-06 — latexmk copies back only the PDF just built
+**Decision:** `LaTeX/.latexmkrc` keeps `$success_cmd = q{cp "%D" "./%R.pdf"}`, which copies back only the PDF of the document just built, with quoted paths.
+**Reason:** The Experts project replaced this with an `END` block that copied every PDF in `.build/` after any build, so building one document re-timestamped all others (a 7.6 MB PDF among them) and iCloud re-synced them to the laptop. Paths are quoted because the Mac iCloud path contains spaces.
+
 ### 2026-10-05 — All folder names lower-case, except `LaTeX/`
 **Decision:** Every folder name starts lower-case — `scripts/`, `scripts/helper/`, `scripts/further_analysis/` (previously capitalised and containing a space), `data/datasets/`, `LaTeX/output/{figures,tables,text}`, `flow/`, `feedback/`, `literature/` — **except `LaTeX/`**, which keeps its capitalisation. All paths in code and docs updated.
 **Reason:** Case-sensitive Linux and CI break on paths that only work on case-insensitive macOS disks; one consistent convention removes the guesswork for humans and agents. `LaTeX/` is the exception because LaTeX is a brand name; its subfolders are lower-case. (`data/raw_SENSITIVE/` keeps its capitalised suffix on purpose, as a warning label.)
