@@ -39,7 +39,7 @@ SYNC_DESTINATIONS <- c(
 | `LaTeX/` → **Overleaf** | `https://git.overleaf.com/628642ba67dbbdcff9b2acf7` | `main` |
 | project root → **GitHub** | `https://github.com/juliantait/Template_Analysis.git` | `main` |
 
-Push `LaTeX/` edits to **both** remotes (`cd LaTeX && git push origin main`, and push the root separately to GitHub). Compiled PDFs are gitignored. This replaced the retired `Template_Analysis_Claude`, which previously held the Overleaf remote. The setup steps below are kept for reference / for new projects cloned from this template.
+Push `LaTeX/` edits to **both** remotes (`cd LaTeX && git push origin main`, and push the root separately to GitHub). Compiled PDFs are gitignored. The setup steps below are kept for reference / for new projects cloned from this template.
 
 The `LaTeX/` folder is the source of truth. Overleaf is just another remote you push it to. Note: Overleaf's git integration is a premium feature — available on paid individual or group subscriptions and to Overleaf Commons participants. On the free plan the Git option does not appear under Integrations.
 
@@ -112,6 +112,4 @@ It scans every tracked file as staged in the index for Prolific IDs (24 hex char
 
 ## Using Claude Code (optional)
 
-This template is designed for manual use. If you do use Claude Code, the short `CLAUDE.md` at the root points it at the style references in `flow/` (`skill_graphs.md`, `skill_tables.md`) and the project state in `flow/`.
-
-If you want a Claude-Code-orchestrated variant of this template (with role profiles, phase walks, structured `Context/`), see [github.com/juliantait/Template_Analysis_Claude](https://github.com/juliantait/Template_Analysis_Claude).
+This template is designed for manual use. If you do use Claude Code, the short `CLAUDE.md` at the root points it at the style references in `flow/` (`skill_graphs.md`, `skill_tables.md`) and the project state in `flow/`. For how Julian uses Claude in a project folder, see [juliantait.eu/ai-workflow.html](https://juliantait.eu/ai-workflow.html).
