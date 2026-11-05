@@ -128,3 +128,13 @@ Copy this template for each new decision. Prefix the title with the appropriate 
 **Alternatives considered:** Leaving the column out when an export lacks it. Rejected: long data needs one shape, and the file already gives NA for missing columns.
 
 **Action:** Added the `constant_variables` entry, `text_columns`, the re-read in `load_data()` and the character step after stacking; added the row to `data/CODEBOOK.md`. Long output otherwise identical on real oTree 6.0.15 exports.
+
+### 2026-11-05: `otree_session` in the oTree long data; `otree.R` set up for the current oTree template
+
+**Decision:** `scripts/helper/otree.R` carries `session.code` as `otree_session`, character, right after `lab_session`, and its shipped config now describes the current oTree template. The public download follows this file.
+
+**Rationale:** See `DECISIONS.md` (2026-11-05).
+
+**Alternatives considered:** Keeping the empty `main_task` placeholder here and a separate config in the download. Rejected: the two would keep drifting, and `main_task` is not an app in the template. `intro.1.player.num_failed_attempts` for `num_failed_attempts`. Rejected: it misses failures in the re-read pass. Reading rounds from the template automatically. Rejected: a new feature; `rounds` stays a setting.
+
+**Action:** Changed the `apps` and `constant_variables` config and added `session.code` to `text_columns`; `load_data()` is unchanged. Added rows to `data/CODEBOOK.md`. Checked on real oTree 6.0.15 exports from a scratch copy of the template (two lab sessions in one CSV, real quiz failures, treatment and payoffs); `scripts/config_cleaning.R` runs in a scratch copy and the pre-commit check passes its output.
