@@ -4,6 +4,10 @@ Project and template decisions, **newest first**. Each entry: date, decision, re
 
 ---
 
+### 2026-11-05: `lab_session` in the oTree long data, as text, always present
+**Decision:** `scripts/helper/otree.R` maps `session.config.lab_session` to `lab_session` in `constant_variables`, so it is on every long row. The column is listed in `text_columns`, re-read without type guessing and with only the empty string as missing, and kept character after stacking. An empty cell is NA; an export without the column gives NA on every row.
+**Reason:** The lab session number is short text (217b, 007, NA). readr's defaults read a literal NA as missing and can read other values as numbers. A column always present matches how the file already treats missing columns (aligned to NA when stacking, NA for a missing constant variable), so the long data has one shape for old and new exports.
+
 ### 2026-10-06 — One values file per document instead of one file per scalar
 **Decision:** Every scalar the paper quotes is registered in R with `save_value(name, value)` and written once per run by `write_values()` to a single `LaTeX/output/values.tex` (sorted `\setval{name}{value}` lines) plus `LaTeX/output/values.json` (same map). LaTeX loads it through `LaTeX/values_macros.tex` and prints a number with `\val{name}`, or a bold `[name?]` when it is missing. A full `main.R` run replaces the file; a script run on its own merges into it. `save_text()` is kept as a thin wrapper around `save_value()`; `LaTeX/output/text/` is gone. `fmt_p()` and `fmt_est()` are now defined in `scripts/config_toolkit.R`.
 **Reason:** In the Experts project, built from this template, one brief exported 692 separate `.txt` scalars: that hit Overleaf's 2000-file cap, made the output folders unbrowsable, and turned "which numbers changed" into a 700-file diff. One sorted, generated file keeps every number sourced from a script while a re-run diff shows exactly which numbers moved.

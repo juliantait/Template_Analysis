@@ -118,3 +118,13 @@ Copy this template for each new decision. Prefix the title with the appropriate 
 **Alternatives considered:** A registry per script section (one file per script) to support partial runs. Rejected: it reintroduces multiple files; read-merge-write on `values.json` covers partial runs, and a full `main.R` run with `replace = TRUE` prunes stale names.
 
 **Action:** `scripts/config_toolkit.R`: added `fmt_est()`, `fmt_p()`, `save_value()`, `write_values()` (with LaTeX escaping, name check, duplicate check, write-only-if-changed); `save_text()` now wraps `save_value()`. `main.R` calls `write_values(replace = TRUE)` before sync. Added `LaTeX/values_macros.tex`, `\input` in `main.tex`. Migrated commented examples in `descriptives.R` and `hypotheses.R`; `sample_restrictions.R` exports `n_obs` and `n_participants`. Sync helper no longer looks for `text/`. Docs updated (CLAUDE.md, README.md, `flow/skill_tables.md`, lessons, DECISIONS.md). Verified: `main.R` end to end on a temporary toy dataset, `latexmk -pdf` builds, PDF text identical to before, `\val` tested in text, math, captions, section titles and with a missing name and a missing values file.
+
+### 2026-11-05: `lab_session` in the oTree long data
+
+**Decision:** `scripts/helper/otree.R` carries `session.config.lab_session` as `lab_session`, character, on every long row; NA when empty or when the export lacks the column.
+
+**Rationale:** See `DECISIONS.md` (2026-11-05).
+
+**Alternatives considered:** Leaving the column out when an export lacks it. Rejected: long data needs one shape, and the file already gives NA for missing columns.
+
+**Action:** Added the `constant_variables` entry, `text_columns`, the re-read in `load_data()` and the character step after stacking; added the row to `data/CODEBOOK.md`. Long output otherwise identical on real oTree 6.0.15 exports.
