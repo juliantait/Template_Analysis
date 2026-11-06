@@ -64,6 +64,7 @@ FORBIDDEN_COLUMNS=(
 # list the hook itself and docs that quote the patterns — never data files.
 ALLOWLIST=(
   .githooks/pre-commit
+  'literature/*.pdf'   # published papers: author emails are not participant data
 )
 
 # ========================== END EDITABLE SECTION =============================

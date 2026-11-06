@@ -4,6 +4,10 @@ Project and template decisions, **newest first**. Each entry: date, decision, re
 
 ---
 
+### 2026-11-06: Pre-commit check skips `literature/*.pdf`
+**Decision:** `.githooks/pre-commit` allowlists `literature/*.pdf`.
+**Reason:** Published papers carry author emails, which the check flagged as identifiers (first seen when a new project committed its literature). They are not participant data. Data files stay scanned.
+
 ### 2026-11-05: `otree_session` in the oTree long data; `otree.R` set up for the current oTree template
 **Decision:** `scripts/helper/otree.R` carries `session.code` as `otree_session`, right after `lab_session`, as text, NA when an export lacks it. `session` stays the CSV file name. The shipped config now describes the current oTree template instead of the empty `main_task` placeholder: app `main` with `rounds = 5` (its `num_experimental_rounds`) and `payoff` from `player.round_payoff`, plus `treatment_group` from `participant.treatment_group`, `num_failed_attempts` from `participant.comprehension_failed_attempts`, and age, gender, selected_sum, earned and sepa from `outro.1.player`. The public download `otree-wide-to-long.R` on juliantait.eu is this file with its own header and one more column: there `participant_label` is on, here it is commented out.
 **Reason:** One CSV can hold several sessions, and the file name cannot tell them apart. The download and this file had drifted, and the download's mappings had gone stale, so this file now holds one config checked against a real export and the download follows it. `num_failed_attempts` uses the participant counter because `intro.<round>.player.num_failed_attempts` counts per pass: on a real walk that failed 3 times, took the re-read and failed once more, intro.1 shows 3, intro.2 shows 1 and the counter 4, the figure the quiz bonus reads. `participant_label` stays off here because cleaning writes the tracked `data/data_cleaned.csv` and the pre-commit check refuses that header. Rounds stays a setting: `otree.R` reads no settings file, and a config that runs fewer rounds still exports every round's columns, so those rows hold NA.

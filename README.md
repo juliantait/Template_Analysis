@@ -85,7 +85,7 @@ A bash-only git hook, `.githooks/pre-commit`, refuses any commit whose staged fi
 git config core.hooksPath .githooks
 ```
 
-It scans every tracked file as staged in the index for Prolific IDs (24 hex characters), email addresses, IPv4 addresses and browser user-agent strings, and checks the header row of every CSV/TSV for identifying column names (`name`, `email`, `ip_address`, `participant.label`, `PROLIFIC_PID`, …, case-insensitive). On a hit it prints file, line and pattern and aborts the commit. The patterns, the column list and an allowlist of files to skip are editable lists at the top of the script. `.RData` files are binary and are **not** scanned; their CSV twin (`data/data_cleaned.csv`) is, which is why cleaning writes both.
+It scans every tracked file as staged in the index for Prolific IDs (24 hex characters), email addresses, IPv4 addresses and browser user-agent strings, and checks the header row of every CSV/TSV for identifying column names (`name`, `email`, `ip_address`, `participant.label`, `PROLIFIC_PID`, …, case-insensitive). On a hit it prints file, line and pattern and aborts the commit. The patterns, the column list and an allowlist of files to skip are editable lists at the top of the script. PDFs in `literature/` are on the allowlist by default: published papers carry author emails, which are not participant data. `.RData` files are binary and are **not** scanned; their CSV twin (`data/data_cleaned.csv`) is, which is why cleaning writes both.
 
 ## Project documentation
 
